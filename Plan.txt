@@ -1,0 +1,66 @@
+abstract class Sprite extends Pane;
+	double spd;
+	Shape hitbox // zero opacity, use specific shape so that hitbox is inside sprite
+	void move() //moves by a speed
+	Shape getHitBox();
+public class Player extends Sprite
+	//represents player
+	Projectile bullet;
+	void move();
+	shoot();
+	
+abstract class Enemy extends Sprite
+	//represents Enemies	
+	void move();
+	attack();
+	
+public class ShooterEnemy extends Enemy
+	//Basic enemy that shoots single bullet
+
+public class MeleeEnemy extends Enemy
+	//fast moving enemy that only can "touch" the enemy to do damage
+
+public class BomberEnemy extends Enemy
+	//slow moving enemy that explodes on the player to do a lot of damage
+	
+public class FastShooterEnemy extends Enemy
+	//shoots in bursts of rapid succession of really fast bullets
+	
+public class TurretEnemy extends Enemy
+	//stays still but has large and fast bullets
+
+public class SplitterBoss extends Enemy
+	//not sure but it splits up when it dies	
+
+abstract class Projectile extends Sprite
+	//represents all types of bullets
+	int damage;
+	move();
+	
+public class SingleBullet extends Projectile
+	//represents single type of bullet
+
+abstract class Area extends Pane
+	//represents a single room and all things in that room
+	int[] coord; //used in Maps for mapping
+	
+public class RockyArea extends Pane
+	//single type of room with specific obstacles
+public class BossArea extends Pane
+	//there are also more area types
+	
+public class Map 
+//randomly generate all areas and link them, create a minimap 
+	// represent the area on a coordinate system to map them
+//generate map to a certain size (e.g 20 areas) then force player to move up to a next level/floor or end the game
+	Pane minimap;
+	ArrayList<Area> areas;
+	
+public class Game
+//run the game and run detection
+//contains map, player, enemies
+	checkCollision(Sprite s1, Sprite s2)
+	
+	
+
+	
