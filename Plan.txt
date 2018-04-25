@@ -40,6 +40,9 @@ abstract class Projectile extends Sprite
 public class SingleBullet extends Projectile
 	//represents single type of bullet
 
+abstract class PowerUp extends Sprite
+	//represents a powerup, walk over to change stats
+
 abstract class Area extends Pane
 	//represents a single room and all things in that room
 	int[] coord; //used in Maps for mapping
@@ -60,7 +63,15 @@ public class Game
 //run the game and run detection
 //contains map, player, enemies
 	checkCollision(Sprite s1, Sprite s2)
-	
+
+public class Menu extend Scene
+//Menu system with highscores and stat tracker
+
+public class Sounds
+//contains all sounds and static methods to play them
+	playDeathSound();
+	playGameMusic();
+	stopGameMusic();
 	
 
 	
