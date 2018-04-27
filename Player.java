@@ -38,25 +38,22 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Node;
-public class Player extends Pane{
+public class Player extends Sprite{
 	
 	Rectangle plyr;
 	AnimationTimer timer;
-	double xVel;
-	double yVel;
 	
 	boolean movingN;
 	boolean movingE;
 	boolean movingW;
 	boolean movingS;
 	
-	public Player(double x, double y, double w, double h, double xv, double yv){
+	public Player(Pane outerPane, double x, double y, double w, double h, double xv, double yv){
+		super(outerPane,xv,yv);
 		plyr = new Rectangle(x,y,w,h);
-		xVel = xv;
-		yVel = yv;
 		movingN=false; movingE=false; movingW= false; movingS=false;
 		
-		setPrefHeight(600); setPrefWidth(600);
+		this.setStyle("-fx-background-color: blue");
 		
 		timer = new AnimationTimer() {
             @Override
@@ -64,7 +61,6 @@ public class Player extends Pane{
 
                getInput();
                move();
-
             }
         };
         timer.start();
@@ -77,7 +73,6 @@ public class Player extends Pane{
 	 	setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                 
                    if(event.getCode().equals(KeyCode.UP)) movingN = true;
                    if(event.getCode().equals(KeyCode.DOWN)) movingS = true; 
                    if(event.getCode().equals(KeyCode.RIGHT)) movingE = true;
@@ -97,12 +92,11 @@ public class Player extends Pane{
         });
     } 
 	
-	private void move(){
-		if(movingN){ plyr.setY(plyr.getY()-yVel); }
-		System.out.println(movingN);
-		if(movingS){ plyr.setY(plyr.getY()+yVel); }
-		if(movingE){ plyr.setX(plyr.getX()+xVel); }
-		if(movingW){ plyr.setX(plyr.getX()-xVel); }
+	public void move(){
+		if(movingN){ plyr.setY(plyr.getY()-ySpd); }
+		if(movingS){ plyr.setY(plyr.getY()+ySpd); }
+		if(movingE){ plyr.setX(plyr.getX()+xSpd); }
+		if(movingW){ plyr.setX(plyr.getX()-xSpd); }
 	}
 	
 }
