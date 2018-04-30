@@ -42,18 +42,17 @@ public class Player extends Sprite{
 	
 	Rectangle plyr;
 	AnimationTimer timer;
+	boolean movingN,movingE,movingW,movingS;
+	boolean shootingN,shootingE,shootingW,shootingS;
 	
-	boolean movingN;
-	boolean movingE;
-	boolean movingW;
-	boolean movingS;
-	
+	int delay =0;
+	int delayResetTimer=0;
 	public Player(Pane outerPane, double x, double y, double w, double h, double xv, double yv){
 		super(outerPane,xv,yv);
 		plyr = new Rectangle(x,y,w,h);
 		movingN=false; movingE=false; movingW= false; movingS=false;
+		shootingN=false; shootingE=false; shootingW= false; shootingS=false;
 		
-		this.setStyle("-fx-background-color: blue");
 		
 		timer = new AnimationTimer() {
             @Override
@@ -61,6 +60,7 @@ public class Player extends Sprite{
 
                getInput();
                move();
+               shoot();
             }
         };
         timer.start();
@@ -73,21 +73,29 @@ public class Player extends Sprite{
 	 	setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                   if(event.getCode().equals(KeyCode.UP)) movingN = true;
-                   if(event.getCode().equals(KeyCode.DOWN)) movingS = true; 
-                   if(event.getCode().equals(KeyCode.RIGHT)) movingE = true;
-                   if(event.getCode().equals(KeyCode.LEFT)) movingW= true;
-                
+                   if(event.getCode().equals(KeyCode.W)) movingN = true;
+                   if(event.getCode().equals(KeyCode.S)) movingS = true; 
+                   if(event.getCode().equals(KeyCode.D)) movingE = true;
+                   if(event.getCode().equals(KeyCode.A)) movingW= true;
+                   if(event.getCode().equals(KeyCode.UP)) shootingN=true;
+                   if(event.getCode().equals(KeyCode.DOWN)) shootingS=true;
+                   if(event.getCode().equals(KeyCode.RIGHT)) shootingE=true;
+                   if(event.getCode().equals(KeyCode.LEFT)) shootingW=true;
+                   
             }
         });
 
         setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-               if(event.getCode().equals(KeyCode.UP)) movingN = false;
-               if(event.getCode().equals(KeyCode.DOWN)) movingS = false; 
-               if(event.getCode().equals(KeyCode.RIGHT)) movingE = false;
-               if(event.getCode().equals(KeyCode.LEFT)) movingW= false;
+               if(event.getCode().equals(KeyCode.W)) movingN = false;
+               if(event.getCode().equals(KeyCode.S)) movingS = false; 
+               if(event.getCode().equals(KeyCode.D)) movingE = false;
+               if(event.getCode().equals(KeyCode.A)) movingW= false;
+            	if(event.getCode().equals(KeyCode.UP)) shootingN=false;
+                if(event.getCode().equals(KeyCode.DOWN)) shootingS=false;
+                if(event.getCode().equals(KeyCode.RIGHT)) shootingE=false;
+                if(event.getCode().equals(KeyCode.LEFT)) shootingW=false;
             }
         });
     } 
@@ -98,5 +106,35 @@ public class Player extends Sprite{
 		if(movingE){ plyr.setX(plyr.getX()+xSpd); }
 		if(movingW){ plyr.setX(plyr.getX()-xSpd); }
 	}
+	
+	private void shoot(){
+	//replace "5" with projectile.getFireRate();
+		if(delay==30){delay=0;}
+		if(!(shootingN||shootingS||shootingW||shootingE)){
+			//delayResetTimer prevents repeated tapping vs holding down
+			delayResetTimer++;
+			if(delayResetTimer==30){
+				delay=0;
+				delayResetTimer=0;
+			}
+		}else if(delay==0){
+			if(shootingN){
+				System.out.println("North shot");
+			}
+			if(shootingS){
+				System.out.println("South shot");
+			}
+			if(shootingW){
+				System.out.println("West shot");
+			}
+			if(shootingE){
+				System.out.println("East shot");
+			}
+			delay++;
+		}else{
+			delay++;
+		}
+	}
+	
 	
 }
