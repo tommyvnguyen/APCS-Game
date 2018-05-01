@@ -40,10 +40,13 @@ public abstract class Projectile extends Sprite{
 		this.setPrefSize(10,10);
 		this.setLayoutX(0);
 		this.setLayoutY(0);
-		damage = 10;
-		fireRate = 1;
+		damage = 1;
+		fireRate = 10;
 		this.dy = dy;
 		this.dx = dx;
 	}
-
+	
+	public int getFireRate(){
+		return this.fireRate;
+	}
 }
