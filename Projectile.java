@@ -34,16 +34,14 @@ public abstract class Projectile extends Sprite{
 	int damage;
 	int fireRate;
 	
-	public Projectile(Pane outerPane, double dy, double dx){
-		super(outerPane,dy,dx);
+	public Projectile(Pane outerPane, double x, double y, double dy, double dx){
+		super(outerPane,x,y,dy,dx);
 		this.setStyle("-fx-background-color: yellow");
 		this.setPrefSize(10,10);
 		this.setLayoutX(0);
 		this.setLayoutY(0);
 		damage = 1;
 		fireRate = 10;
-		this.dy = dy;
-		this.dx = dx;
 	}
 	
 	public int getFireRate(){

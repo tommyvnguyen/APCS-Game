@@ -44,6 +44,9 @@ public class Player extends Sprite{
 	AnimationTimer timer;
 	boolean movingN,movingE,movingW,movingS;
 	boolean shootingN,shootingE,shootingW,shootingS;
+	Projectile bulletType;
+	ArrayList<Projectile> bullets;
+	
 	
 	int delay =0;
 	int delayResetTimer=0;
@@ -65,6 +68,9 @@ public class Player extends Sprite{
         };
         timer.start();
         getChildren().add(plyr);
+        
+        bulletType = new SingleShot(this,0,0,1,1);
+        bullets= new ArrayList<Projectile>();
         
         
 	}
@@ -109,11 +115,11 @@ public class Player extends Sprite{
 	
 	private void shoot(){
 	//replace "5" with projectile.getFireRate();
-		if(delay==30){delay=0;}
+		if(delay==bulletType.getFireRate()){delay=0;}
 		if(!(shootingN||shootingS||shootingW||shootingE)){
 			//delayResetTimer prevents repeated tapping vs holding down
 			delayResetTimer++;
-			if(delayResetTimer==30){
+			if(delayResetTimer==bulletType.getFireRate()){
 				delay=0;
 				delayResetTimer=0;
 			}
@@ -121,13 +127,13 @@ public class Player extends Sprite{
 			if(shootingN){
 				System.out.println("North shot");
 			}
-			if(shootingS){
+			else if(shootingS){
 				System.out.println("South shot");
 			}
-			if(shootingW){
+			else if(shootingW){
 				System.out.println("West shot");
 			}
-			if(shootingE){
+			else if(shootingE){
 				System.out.println("East shot");
 			}
 			delay++;
