@@ -31,6 +31,8 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 public abstract class Sprite extends Pane{
+	double xCoord;
+	double yCoord;
 	double xSpd;
 	double ySpd;
 	Pane outerPane;
@@ -43,7 +45,6 @@ public abstract class Sprite extends Pane{
 		outerPane.getChildren().add(this);
 		
 	}
-	//Rotate method
 	public void move(){
 		this.setLayoutX(this.getLayoutX() + xSpd);
 		this.setLayoutY(this.getLayoutY() + ySpd);
