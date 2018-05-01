@@ -31,15 +31,27 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 public abstract class Sprite extends Pane{
-	double xCoord;
-	double yCoord;
+	double xStart;
+	double yStart;
 	double xSpd;
 	double ySpd;
 	Pane outerPane;
 	
-	public Sprite(Pane outerPane,double xSpd, double ySpd){
+	public Sprite(Pane outerPane, double xStart, double yStart, double xSpd, double ySpd){
 		this.xSpd = xSpd;
 		this.ySpd = ySpd;
+		this.xStart = xStart;
+		this.yStart = yStart;
+	
+		this.outerPane = outerPane;
+		outerPane.getChildren().add(this);
+		
+	}
+	public Sprite(Pane outerPane, double xSpd, double ySpd){
+		this.xSpd = xSpd;
+		this.ySpd = ySpd;
+		this.xStart = 0;
+		this.yStart = 0;
 	
 		this.outerPane = outerPane;
 		outerPane.getChildren().add(this);
