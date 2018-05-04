@@ -31,8 +31,8 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 public class SingleShot extends Projectile{
-	public SingleShot(Pane outerPane, double dy, double dx){
-		super(outerPane, dy, dx);
+	public SingleShot(Pane outerPane, double x, double y,double dy, double dx){
+		super(outerPane,x,y, dy, dx);
 	}
 	
 }

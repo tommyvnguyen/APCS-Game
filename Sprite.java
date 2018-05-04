@@ -42,9 +42,10 @@ public abstract class Sprite extends Pane{
 		this.ySpd = ySpd;
 		this.xStart = xStart;
 		this.yStart = yStart;
-	
-		this.outerPane = outerPane;
-		outerPane.getChildren().add(this);
+		setLayoutX(xStart);
+		setLayoutY(yStart);
+		//this.outerPane = outerPane;
+		//outerPane.getChildren().add(this);
 		
 	}
 	public Sprite(Pane outerPane, double xSpd, double ySpd){

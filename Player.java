@@ -44,6 +44,7 @@ public class Player extends Sprite{
 	AnimationTimer timer;
 	boolean movingN,movingE,movingW,movingS;
 	boolean shootingN,shootingE,shootingW,shootingS;
+	
 	Projectile bulletType;
 	ArrayList<Projectile> bullets;
 	
@@ -60,7 +61,6 @@ public class Player extends Sprite{
 		timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-
                getInput();
                move();
                shoot();
@@ -107,10 +107,26 @@ public class Player extends Sprite{
     } 
 	
 	public void move(){
-		if(movingN){ plyr.setY(plyr.getY()-ySpd); }
-		if(movingS){ plyr.setY(plyr.getY()+ySpd); }
-		if(movingE){ plyr.setX(plyr.getX()+xSpd); }
-		if(movingW){ plyr.setX(plyr.getX()-xSpd); }
+		if(movingN && !movingE && !movingW){ plyr.setY(plyr.getY()-ySpd); }
+		if(movingS && !movingE && !movingW){ plyr.setY(plyr.getY()+ySpd); }
+		if(movingE && !movingN && !movingS){ plyr.setX(plyr.getX()+xSpd); }
+		if(movingW && !movingN && !movingS){ plyr.setX(plyr.getX()-xSpd); }
+		if(movingN && movingE){ 
+			plyr.setY(plyr.getY()-(ySpd/Math.sqrt(2)));
+			plyr.setX(plyr.getX()+(xSpd/Math.sqrt(2)));
+		}
+		if(movingN && movingW){ 
+			plyr.setY(plyr.getY()-(ySpd/Math.sqrt(2)));
+			plyr.setX(plyr.getX()-(xSpd/Math.sqrt(2)));
+		}
+		if(movingS && movingE){ 
+			plyr.setY(plyr.getY()+(ySpd/Math.sqrt(2)));
+			plyr.setX(plyr.getX()+(xSpd/Math.sqrt(2)));
+		}
+		if(movingS && movingW){ 
+			plyr.setY(plyr.getY()+(ySpd/Math.sqrt(2)));
+			plyr.setX(plyr.getX()-(xSpd/Math.sqrt(2)));
+		}
 	}
 	
 	private void shoot(){
@@ -124,8 +140,14 @@ public class Player extends Sprite{
 				delayResetTimer=0;
 			}
 		}else if(delay==0){
+			
 			if(shootingN){
 				System.out.println("North shot");
+				System.out.println("player x" + plyr.getLayoutX());
+				Projectile shot = new SingleShot(this,plyr.getLayoutX(),plyr.getLayoutY(),1,0);
+				System.out.println("shot x" + shot.getLayoutX());
+				getChildren().add(shot);
+				bullets.add(shot);
 			}
 			else if(shootingS){
 				System.out.println("South shot");
