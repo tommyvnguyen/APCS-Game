@@ -62,7 +62,10 @@ public class Player extends Sprite{
             @Override
             public void handle(long now) {
                getInput();
-               move();
+			   move();
+			   for(Projectile p : bullets){
+				   p.move();
+			   }
                shoot();
             }
         };
@@ -71,7 +74,6 @@ public class Player extends Sprite{
         
         bulletType = new SingleShot(this,0,0,1,1);
         bullets= new ArrayList<Projectile>();
-        
         
 	}
 	
@@ -140,25 +142,37 @@ public class Player extends Sprite{
 				delayResetTimer=0;
 			}
 		}else if(delay==0){
-			
 			if(shootingN){
 				System.out.println("North shot");
-				System.out.println("player x" + plyr.getLayoutX());
-				Projectile shot = new SingleShot(this,plyr.getLayoutX(),plyr.getLayoutY(),1,0);
-				System.out.println("shot x" + shot.getLayoutX());
+				//how to determine what shot to create? possible have hard checker for type
+				Projectile shot = new SingleShot(this,plyr.getX()+0.5*plyr.getWidth(),plyr.getY(),0,-10);
 				getChildren().add(shot);
 				bullets.add(shot);
+				delay++;
 			}
 			else if(shootingS){
 				System.out.println("South shot");
+				Projectile shot = new SingleShot(this,plyr.getX()+0.5*plyr.getWidth(),plyr.getY()+plyr.getHeight(),0,10);
+				getChildren().add(shot);
+				bullets.add(shot);
+				delay++;
 			}
 			else if(shootingW){
 				System.out.println("West shot");
+				Projectile shot = new SingleShot(this,plyr.getX(),plyr.getY()+0.5*plyr.getHeight(),-10,0);
+				getChildren().add(shot);
+				bullets.add(shot);
+				delay++;
 			}
 			else if(shootingE){
 				System.out.println("East shot");
+				Projectile shot = new SingleShot(this,plyr.getX()+plyr.getWidth(),plyr.getY()+0.5*plyr.getHeight(),10,0);
+				getChildren().add(shot);
+				bullets.add(shot);
+				delay++;
 			}
-			delay++;
+			
+			
 		}else{
 			delay++;
 		}

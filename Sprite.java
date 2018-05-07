@@ -54,8 +54,8 @@ public abstract class Sprite extends Pane{
 		this.xStart = 0;
 		this.yStart = 0;
 	
-		this.outerPane = outerPane;
-		outerPane.getChildren().add(this);
+		//this.outerPane = outerPane;
+		//outerPane.getChildren().add(this);
 		
 	}
 	public void move(){
