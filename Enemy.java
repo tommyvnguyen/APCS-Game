@@ -28,16 +28,20 @@ import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.animation.Animation;
 import javafx.util.Duration;
+import javafx.scene.transform.Transform;
+import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
 public abstract class Enemy extends Sprite{
 	int damage;
+	Pane target; //The thing that the enemy is looking at
 	//Projectile projectile;
 	//jpeg
 	
-	public Enemy(Pane outerPane, double dy, double dx){
+	public Enemy(Pane outerPane, double dy, double dx, Pane target){
 		super(outerPane,dy, dx);
 		damage = 1;
+		this.target = target;
 	}
 	
 	public void move(){

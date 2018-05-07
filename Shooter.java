@@ -28,23 +28,29 @@ import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.animation.Animation;
 import javafx.util.Duration;
+import javafx.scene.transform.Transform;
+import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
 public abstract class Shooter extends Enemy{
 	//Projectile projectile;
 	//jpeg
 	
-	public Shooter(Pane outerPane, double dy, double dx){
-		super(outerPane, dy, dx);
+	public Shooter(Pane outerPane, double dy, double dx, Pane target){
+		super(outerPane, dy, dx, target);
 		//May need to receive ArrayList<Sprite>, so that fire() can add a projectile object to it.
 		//The timer will loop through the arraylist and call each move() in it.
 	}
 	
 	public void fire(){
-		SingleShot newProj = new SingleShot();
+		SingleShot newProj = new SingleShot(this.outerPane, ySpd, xSpd);
+		outerPane.getChildren().add(newProj);
 		newProj.setLayoutX(this.getLayoutX() + this.getWidth()/2);
 		newProj.setLayoutY(this.getLayoutY() + this.getHeight()/2);
-		outerPane.getChildren().add(new SingleShot());
+	
 		//this.sprites.add(singleShot);
+	}
+	public void move(){
+		super.move();
 	}
 }

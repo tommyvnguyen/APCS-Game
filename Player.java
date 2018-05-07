@@ -44,6 +44,7 @@ public class Player extends Sprite{
 	AnimationTimer timer;
 	boolean movingN,movingE,movingW,movingS;
 	boolean shootingN,shootingE,shootingW,shootingS;
+	
 	Projectile bulletType;
 	ArrayList<Projectile> bullets;
 	
@@ -60,9 +61,11 @@ public class Player extends Sprite{
 		timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-
                getInput();
-               move();
+			   move();
+			   for(Projectile p : bullets){
+				   p.move();
+			   }
                shoot();
             }
         };
@@ -71,7 +74,6 @@ public class Player extends Sprite{
         
         bulletType = new SingleShot(this,0,0,1,1);
         bullets= new ArrayList<Projectile>();
-        
         
 	}
 	
@@ -107,10 +109,26 @@ public class Player extends Sprite{
     } 
 	
 	public void move(){
-		if(movingN){ plyr.setY(plyr.getY()-ySpd); }
-		if(movingS){ plyr.setY(plyr.getY()+ySpd); }
-		if(movingE){ plyr.setX(plyr.getX()+xSpd); }
-		if(movingW){ plyr.setX(plyr.getX()-xSpd); }
+		if(movingN && !movingE && !movingW){ plyr.setY(plyr.getY()-ySpd); }
+		if(movingS && !movingE && !movingW){ plyr.setY(plyr.getY()+ySpd); }
+		if(movingE && !movingN && !movingS){ plyr.setX(plyr.getX()+xSpd); }
+		if(movingW && !movingN && !movingS){ plyr.setX(plyr.getX()-xSpd); }
+		if(movingN && movingE){ 
+			plyr.setY(plyr.getY()-(ySpd/Math.sqrt(2)));
+			plyr.setX(plyr.getX()+(xSpd/Math.sqrt(2)));
+		}
+		if(movingN && movingW){ 
+			plyr.setY(plyr.getY()-(ySpd/Math.sqrt(2)));
+			plyr.setX(plyr.getX()-(xSpd/Math.sqrt(2)));
+		}
+		if(movingS && movingE){ 
+			plyr.setY(plyr.getY()+(ySpd/Math.sqrt(2)));
+			plyr.setX(plyr.getX()+(xSpd/Math.sqrt(2)));
+		}
+		if(movingS && movingW){ 
+			plyr.setY(plyr.getY()+(ySpd/Math.sqrt(2)));
+			plyr.setX(plyr.getX()-(xSpd/Math.sqrt(2)));
+		}
 	}
 	
 	private void shoot(){
@@ -126,20 +144,51 @@ public class Player extends Sprite{
 		}else if(delay==0){
 			if(shootingN){
 				System.out.println("North shot");
+				//how to determine what shot to create? possible have hard checker for type
+				//maybe have a method which makes a copy for the projectile type, then feeds it to here and this only changes vx,vy,x,y, etc.
+				Projectile shot = new SingleShot(this,plyr.getX()+0.5*plyr.getWidth(),plyr.getY(),0,-10);
+				//Projectile shot=makeBulletCopy(plyr.getX()+0.5*plyr.getWidth(),plyr.getY(),0.0,-10.0);
+				getChildren().add(shot);
+				bullets.add(shot);
+				delay++;
 			}
 			else if(shootingS){
 				System.out.println("South shot");
+				Projectile shot = new SingleShot(this,plyr.getX()+0.5*plyr.getWidth(),plyr.getY()+plyr.getHeight(),0,10);
+				getChildren().add(shot);
+				bullets.add(shot);
+				delay++;
 			}
 			else if(shootingW){
 				System.out.println("West shot");
+				Projectile shot = new SingleShot(this,plyr.getX(),plyr.getY()+0.5*plyr.getHeight(),-10,0);
+				getChildren().add(shot);
+				bullets.add(shot);
+				delay++;
 			}
 			else if(shootingE){
 				System.out.println("East shot");
+				Projectile shot = new SingleShot(this,plyr.getX()+plyr.getWidth(),plyr.getY()+0.5*plyr.getHeight(),10,0);
+				getChildren().add(shot);
+				bullets.add(shot);
+				delay++;
 			}
-			delay++;
+			
+			
 		}else{
 			delay++;
 		}
+	}
+	private Projectile makeBulletCopy(double x,double y, double vx, double vy){
+		Projectile copy = new Projectile(this,x,y,vx,vy);
+		ArrayList<Node> copiedNodes = new ArrayList<Node>();
+		for(Node n: bulletType.getChildren()){
+			
+		}
+		copy.getChildren().addAll(copiedNodes);
+		copy.setFireRate(bulletType.getFireRate());
+		copy.setDamage(bulletType.getDamage());
+		return copy;
 	}
 	
 	

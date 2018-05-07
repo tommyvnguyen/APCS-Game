@@ -28,6 +28,8 @@ import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.animation.Animation;
 import javafx.util.Duration;
+import javafx.scene.transform.Transform;
+import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
 public class FlyingShooter extends Shooter{
@@ -35,15 +37,53 @@ public class FlyingShooter extends Shooter{
 	//Projectile projectile;
 	//jpeg
 	
-	public Shooter(Pane outerPane, double dy, double dx){
-		super(outerPane, dy, dx);
-		//May need to receive ArrayList<Sprite>, so that fire() can add a projectile object to it.
-		//The timer will loop through the arraylist and call each move() in it.
+	public FlyingShooter(Pane outerPane, double dy, double dx, Pane target){
+		super(outerPane, dy, dx, target);
+		
 	}
 	//TimeCounter counts how many times the animationTimer has called its methods. 
 	//TimeCounter acts as a unit of time.
 	public void move(int timeCounter){
-		 
+		if(this.getLayoutX() >= 0 && this.getLayoutX() + this.getWidth() < 1600){ //Be sure to make it based around the root's size, later
+			this.setLayoutX(this.getLayoutX() + xSpd);
+		}
+		else{
+			xSpd *= -1;
+			this.setLayoutX(this.getLayoutX() + xSpd);
+		}
+		if(this.getLayoutY() >= 0 && this.getLayoutY() + this.getHeight() < 900){ 
+			this.setLayoutY(this.getLayoutY() + ySpd);
+		}else{
+			ySpd *= -1;
+			this.setLayoutY(this.getLayoutY() + ySpd);
+		}
+		
+		
+	
+		this.getTransforms().clear();
+		this.getTransforms().add(new Rotate(Math.atan(((this.getLayoutY() + this.getHeight()/2) - (target.getLayoutY() + target.getHeight()/2))/((this.getLayoutX() + this.getWidth()/2) - (target.getLayoutX() + target.getWidth()/2)) ),this.getWidth()/2, this.getHeight()/2));
+		//this.getTransforms().add(new Rotate(1,this.getWidth()/2, this.getHeight()/2));
+		
+		
+		if(timeCounter%360 == 0){
+			int PosOrNeg = (int)(Math.random() * 2);
+			xSpd = Math.random();
+		 	ySpd = Math.sqrt(1 - Math.pow(xSpd,2));
+			if(PosOrNeg == 0){
+				xSpd *= -1;
+			}
+			PosOrNeg = (int)(Math.random() * 2);
+			if(PosOrNeg == 0){
+				ySpd *= -1;
+			}
+			System.out.println("     " + PosOrNeg);
+		}else if(timeCounter%360 == 270){
+			xSpd = 0;
+		 	ySpd = 0;
+		}
+		
+		//Turn towards player
+		System.out.println(ySpd + " -- " + xSpd);
 	}
 	
 }
