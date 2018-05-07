@@ -28,20 +28,23 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Node;
-public class Tester extends Application{
-	public static void main(String[] args){
+public class MapTester extends Application{
+	public static void main(String [] args){
 		launch(args);
 	}
 	public void start(Stage stage){
 
 		Pane root = new Pane();
 		Player plyr = new Player(root,200,200,50,50,4,4);
-		root.getChildren().add(plyr);
-		
-		
+
+		WallyArea wA = new WallyArea(800,800,0,0);
+		wA.addLeftDoor();
+		wA.addRightDoor();
+		root.getChildren().addAll(wA,plyr);
 		stage.setScene(new Scene(root, 800,800));
 		stage.getScene().onKeyPressedProperty().bind(plyr.onKeyPressedProperty());
 		stage.getScene().onKeyReleasedProperty().bind(plyr.onKeyReleasedProperty());
 		stage.show();
 	}
-}		
+	
+}
