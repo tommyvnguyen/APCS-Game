@@ -62,4 +62,5 @@ public abstract class Sprite extends Pane{
 		this.setLayoutX(this.getLayoutX() + xSpd);
 		this.setLayoutY(this.getLayoutY() + ySpd);
 	}
+
 }

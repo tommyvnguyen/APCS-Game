@@ -145,7 +145,9 @@ public class Player extends Sprite{
 			if(shootingN){
 				System.out.println("North shot");
 				//how to determine what shot to create? possible have hard checker for type
+				//maybe have a method which makes a copy for the projectile type, then feeds it to here and this only changes vx,vy,x,y, etc.
 				Projectile shot = new SingleShot(this,plyr.getX()+0.5*plyr.getWidth(),plyr.getY(),0,-10);
+				//Projectile shot=makeBulletCopy(plyr.getX()+0.5*plyr.getWidth(),plyr.getY(),0.0,-10.0);
 				getChildren().add(shot);
 				bullets.add(shot);
 				delay++;
@@ -176,6 +178,17 @@ public class Player extends Sprite{
 		}else{
 			delay++;
 		}
+	}
+	private Projectile makeBulletCopy(double x,double y, double vx, double vy){
+		Projectile copy = new Projectile(this,x,y,vx,vy);
+		ArrayList<Node> copiedNodes = new ArrayList<Node>();
+		for(Node n: bulletType.getChildren()){
+			
+		}
+		copy.getChildren().addAll(copiedNodes);
+		copy.setFireRate(bulletType.getFireRate());
+		copy.setDamage(bulletType.getDamage());
+		return copy;
 	}
 	
 	

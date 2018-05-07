@@ -30,19 +30,26 @@ import javafx.animation.Animation;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
-public abstract class Projectile extends Sprite{
+public class Projectile extends Sprite{
 	int damage;
 	int fireRate;
 	
 	public Projectile(Pane outerPane, double x, double y, double dy, double dx){
 		super(outerPane,x,y,dy,dx);
-		this.setStyle("-fx-background-color: black");
-		this.setPrefSize(10,10);
 		damage = 1;
 		fireRate = 10;
 	}
 	
 	public int getFireRate(){
 		return this.fireRate;
+	}
+	public void setFireRate(int fr){
+		fireRate=fr;
+	}
+	public int getDamage(){
+		return damage;
+	}
+	public void setDamage(int d){
+		damage=d;
 	}
 }

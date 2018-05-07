@@ -31,8 +31,12 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 public class SingleShot extends Projectile{
+	Rectangle bullet;
 	public SingleShot(Pane outerPane, double x, double y,double dy, double dx){
 		super(outerPane,x,y, dy, dx);
+		bullet = new Rectangle(0,0,10,10);
+		bullet.setFill(Color.BLUE);
+		getChildren().add(bullet);
 	}
 	
 }
