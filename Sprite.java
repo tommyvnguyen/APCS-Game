@@ -45,8 +45,12 @@ public abstract class Sprite extends Pane{
 		this.ySpd = ySpd;
 		this.xStart = xStart;
 		this.yStart = yStart;
-	
-		this.outerPane = outerPane;
+
+		setLayoutX(xStart);
+		setLayoutY(yStart);
+		//this.outerPane = outerPane;
+		//outerPane.getChildren().add(this);
+
 		
 		face = new Rectangle(5,5,5,5); 
 		face.setFill(Color.RED);
@@ -57,6 +61,11 @@ public abstract class Sprite extends Pane{
 		this.ySpd = ySpd;
 		this.xStart = 0;
 		this.yStart = 0;
+
+	
+		//this.outerPane = outerPane;
+		//outerPane.getChildren().add(this);
+		
 	}
 	public void move(){
 		if(this.getLayoutX() > 0 && this.getLayoutX() < this.outerPane.getWidth())
@@ -64,4 +73,5 @@ public abstract class Sprite extends Pane{
 		if(this.getLayoutY() > 0 && this.getLayoutY() < this.outerPane.getHeight())
 			this.setLayoutY(this.getLayoutY() + ySpd);
 	}
+
 }

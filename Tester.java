@@ -36,7 +36,7 @@ public class Tester extends Application{
 
 		Pane root = new Pane();
 		Player plyr = new Player(root,200,200,100,100,3,3);
-		//root.getChildren().add(plyr);
+		root.getChildren().add(plyr);
 		
 		
 		stage.setScene(new Scene(root, 600,600));
