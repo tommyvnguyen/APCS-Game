@@ -48,7 +48,7 @@ public abstract class Sprite extends Pane{
 
 		setLayoutX(xStart);
 		setLayoutY(yStart);
-		//this.outerPane = outerPane;
+		this.outerPane = outerPane;
 		//outerPane.getChildren().add(this);
 
 		
@@ -63,7 +63,7 @@ public abstract class Sprite extends Pane{
 		this.yStart = 0;
 
 	
-		//this.outerPane = outerPane;
+		this.outerPane = outerPane;
 		//outerPane.getChildren().add(this);
 		
 	}
