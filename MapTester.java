@@ -40,7 +40,10 @@ public class MapTester extends Application{
 		WallyArea wA = new WallyArea(800,800,0,0);
 		wA.addLeftDoor();
 		wA.addRightDoor();
+		wA.addTopDoor();
+		wA.addBottomDoor();
 		root.getChildren().addAll(wA,plyr);
+		
 		stage.setScene(new Scene(root, 800,800));
 		stage.getScene().onKeyPressedProperty().bind(plyr.onKeyPressedProperty());
 		stage.getScene().onKeyReleasedProperty().bind(plyr.onKeyReleasedProperty());

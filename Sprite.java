@@ -31,7 +31,7 @@ import javafx.util.Duration;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Rotate;
 
-import java.util.ArrayList;
+import java.util.*;
 public abstract class Sprite extends Pane{
 	double xStart;
 	double yStart;

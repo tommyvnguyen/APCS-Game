@@ -113,21 +113,33 @@ public class Player extends Sprite{
 		if(movingS && !movingE && !movingW){ plyr.setY(plyr.getY()+ySpd); }
 		if(movingE && !movingN && !movingS){ plyr.setX(plyr.getX()+xSpd); }
 		if(movingW && !movingN && !movingS){ plyr.setX(plyr.getX()-xSpd); }
-		if(movingN && movingE){ 
+		if(movingN && movingE &&!movingW){ 
 			plyr.setY(plyr.getY()-(ySpd/Math.sqrt(2)));
 			plyr.setX(plyr.getX()+(xSpd/Math.sqrt(2)));
-		}
-		if(movingN && movingW){ 
+		} 
+		if(movingN && movingW && !movingE){ 
 			plyr.setY(plyr.getY()-(ySpd/Math.sqrt(2)));
 			plyr.setX(plyr.getX()-(xSpd/Math.sqrt(2)));
 		}
-		if(movingS && movingE){ 
+		if(movingS && movingE && !movingW){ 
 			plyr.setY(plyr.getY()+(ySpd/Math.sqrt(2)));
 			plyr.setX(plyr.getX()+(xSpd/Math.sqrt(2)));
 		}
-		if(movingS && movingW){ 
+		if(movingS && movingW && !movingE){ 
 			plyr.setY(plyr.getY()+(ySpd/Math.sqrt(2)));
 			plyr.setX(plyr.getX()-(xSpd/Math.sqrt(2)));
+		}
+		if (movingN && movingE && movingW){
+			plyr.setY(plyr.getY()-ySpd);
+		}
+		if (movingS && movingE && movingW){
+			plyr.setY(plyr.getY()+ySpd);
+		}
+		if (movingE && movingN && movingS){
+			plyr.setX(plyr.getX()+xSpd);
+		}
+		if (movingW && movingN && movingS){
+			plyr.setX(plyr.getX()-xSpd);
 		}
 	}
 	

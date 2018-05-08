@@ -33,29 +33,38 @@ import javafx.scene.transform.Rotate;
 import java.util.*;
 public abstract class Area extends Pane{
 	ArrayList<Rectangle> walls; //each wall is represented by a rectangle
-	ArrayList<Rectangle> doors; //each door is represented by a rectangle
+	ArrayList<Door> doors; //each door is represented by a rectangle
 	int[] coord; //room represented by a coordinate for the map 
 	
 	public Area(double height, double width,int xcoord, int ycoord){
+		doors=new ArrayList<Door>();
+		walls = new ArrayList<Rectangle>();
 		setPrefWidth(width);
 		setPrefHeight(height);
 		coord = new int[]{xcoord,ycoord};
 		
 	}
 	public void addLeftDoor(){
-		Rectangle door = new Rectangle(0,getPrefHeight()/2-50,15,100);
-		getChildren().add(door);
+		Door d = new Door("left",getPrefWidth(),getPrefHeight());
+		doors.add(d);
+		getChildren().add(d);
 	}
 	public void addRightDoor(){
-		Rectangle door = new Rectangle(getPrefWidth()-15,getPrefHeight()/2-50,15,100);
-		getChildren().add(door);
+		Door d = new Door("right",getPrefWidth(),getPrefHeight());
+		doors.add(d);
+		getChildren().add(d);
 	}
 	public void addTopDoor(){
-		Rectangle door = new Rectangle(0,getPrefHeight()/2-10,20,15);
-		getChildren().add(door);
+		Door d = new Door("top",getPrefWidth(),getPrefHeight());
+		doors.add(d);
+		getChildren().add(d);
 	}
 	public void addBottomDoor(){
-		Rectangle door = new Rectangle(0,getPrefHeight()/2-10,20,15);
-		getChildren().add(door);
+		Door d = new Door("bottom",getPrefWidth(),getPrefHeight());
+		doors.add(d);
+		getChildren().add(d);
+	}
+	public String checkDoorCollision(){
+		
 	}
 }
