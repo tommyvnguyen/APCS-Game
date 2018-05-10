@@ -65,6 +65,6 @@ public abstract class Area extends Pane{
 		getChildren().add(d);
 	}
 	public String checkDoorCollision(){
-		
+		return "test";
 	}
 }

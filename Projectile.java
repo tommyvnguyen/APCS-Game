@@ -58,13 +58,5 @@ public class Projectile extends Sprite{
 		damage=d;
 
 	}
-	public void setFireRate(int fr){
-		fireRate=fr;
-	}
-	public int getDamage(){
-		return damage;
-	}
-	public void setDamage(int d){
-		damage=d;
-	}
+	
 }

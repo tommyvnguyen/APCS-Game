@@ -35,7 +35,7 @@ public class MapTester extends Application{
 	public void start(Stage stage){
 
 		Pane root = new Pane();
-		Player plyr = new Player(root,200,200,50,50,4,4);
+		Player plyr = new Player(200,200,50,50,4,4);
 
 		WallyArea wA = new WallyArea(800,800,0,0);
 		wA.addLeftDoor();

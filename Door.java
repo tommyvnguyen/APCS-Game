@@ -49,11 +49,11 @@ public class Door extends Pane {
 			getChildren().add(door);
 		}
 		else if(pos.equals("bottom")){
-			door = new Rectangle(paneWidth/2-100,paneHeight-15,15,100);
+			door = new Rectangle(paneWidth/2-50,paneHeight-15,100,15);
 			getChildren().add(door);
 		}
 		else if(pos.equals("top")){
-			door = new Rectangle(paneWidth/2-100,0,15,100);
+			door = new Rectangle(paneWidth/2-50,0,100,15);
 			getChildren().add(door);
 		}
 	}
