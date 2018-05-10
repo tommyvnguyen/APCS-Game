@@ -37,8 +37,9 @@ public class Projectile extends Sprite{
 	int fireRate;
 	
 
-	public Projectile(Pane outerPane, double x, double y, double dy, double dx){
-		super(outerPane,x,y,dy,dx);
+	public Projectile(double x, double y, double dy, double dx){
+		super(x,y,dy,dx);
+
 		damage = 1;
 		fireRate = 10;
 	}
@@ -56,5 +57,14 @@ public class Projectile extends Sprite{
 	public void setDamage(int d){
 		damage=d;
 
+	}
+	public void setFireRate(int fr){
+		fireRate=fr;
+	}
+	public int getDamage(){
+		return damage;
+	}
+	public void setDamage(int d){
+		damage=d;
 	}
 }

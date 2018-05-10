@@ -33,13 +33,18 @@ import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
 public class SingleShot extends Projectile{
-	Rectangle bullet;
-	public SingleShot(Pane outerPane, double x, double y,double dy, double dx){
-		super(outerPane,x,y, dy, dx);
-		bullet = new Rectangle(0,0,10,10);
-		bullet.setFill(Color.BLUE);
-		getChildren().add(bullet);
+
+	//NOTE : Removed Bullet and replaced it w/ hitbox (variable name change basically)
+	public SingleShot(double x, double y,double dy, double dx){
+		super(x,y, dy, dx);
+		//hitbox = new Rectangle(0,0,10,10);
+		hitbox.setWidth(10);
+		hitbox.setHeight(10);
+		hitbox.setFill(Color.BLUE);
+		getChildren().add(hitbox);
 
 	}
+	
+
 	
 }

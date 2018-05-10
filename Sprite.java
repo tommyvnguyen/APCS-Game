@@ -31,47 +31,60 @@ import javafx.util.Duration;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Rotate;
 
-import java.util.*;
-public abstract class Sprite extends Pane{
+
+import java.util.ArrayList;
+public abstract class Sprite extends Pane implements Collidable{
+
 	double xStart;
 	double yStart;
 	double xSpd;
 	double ySpd;
 	Pane outerPane; 
-	Rectangle face;//Face is a drawn point on each sprite to show which way the sprite is facing.
+
+	Rectangle hitbox;//Face is a drawn point on each sprite to show which way the sprite is facing.
 	
-	public Sprite(Pane outerPane, double xStart, double yStart, double xSpd, double ySpd){
+	public Sprite(double xStart, double yStart, double xSpd, double ySpd){
+
 		this.xSpd = xSpd;
 		this.ySpd = ySpd;
 		this.xStart = xStart;
 		this.yStart = yStart;
 
-		setLayoutX(xStart);
-		setLayoutY(yStart);
-		this.outerPane = outerPane;
-		//outerPane.getChildren().add(this);
 
+		//setLayoutX(xStart);
+		//setLayoutY(yStart);
 		
-		face = new Rectangle(5,5,5,5); 
-		face.setFill(Color.RED);
-		getChildren().add(face);
+		hitbox = new Rectangle(xStart,yStart,50,50);
+		hitbox.setFill(Color.BLACK);
+		//this.outerPane = outerPane;
+		//outerPane.getChildren().add(this);
+		//this.getChildren().add(hitbox);
+		
+
 	}
-	public Sprite(Pane outerPane, double xSpd, double ySpd){
+	
+	public Rectangle getHitbox(){
+		return this.hitbox;
+	}
+	
+	public Sprite(double xSpd, double ySpd){
+
 		this.xSpd = xSpd;
 		this.ySpd = ySpd;
 		this.xStart = 0;
 		this.yStart = 0;
 
-	
-		this.outerPane = outerPane;
-		//outerPane.getChildren().add(this);
 		
+		//setLayoutX(xStart);
+		//setLayoutY(yStart);
+		
+		hitbox = new Rectangle(xStart,yStart,50,50);
+		hitbox.setFill(Color.BLACK);
+		//getChildren().add(this.hitbox);
 	}
 	public void move(){
-		if(this.getLayoutX() > 0 && this.getLayoutX() < this.outerPane.getWidth())
-			this.setLayoutX(this.getLayoutX() + xSpd);
-		if(this.getLayoutY() > 0 && this.getLayoutY() < this.outerPane.getHeight())
-			this.setLayoutY(this.getLayoutY() + ySpd);
+		this.hitbox.setX(this.hitbox.getX() + xSpd);
+		this.hitbox.setY(this.hitbox.getY() + ySpd);
 	}
 
 }

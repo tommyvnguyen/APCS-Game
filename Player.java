@@ -40,7 +40,6 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.Node;
 public class Player extends Sprite{
 	
-	Rectangle plyr;
 	AnimationTimer timer;
 	boolean movingN,movingE,movingW,movingS;
 	boolean shootingN,shootingE,shootingW,shootingS;
@@ -51,12 +50,17 @@ public class Player extends Sprite{
 	
 	int delay =0;
 	int delayResetTimer=0;
-	public Player(Pane outerPane, double x, double y, double w, double h, double xv, double yv){
-		super(outerPane,xv,yv);
-		plyr = new Rectangle(x,y,w,h);
+
+	public Player(double x, double y, double w, double h, double xv, double yv){
+		super(xv,yv);
+		hitbox = new Rectangle(x,y,w,h);
 		movingN=false; movingE=false; movingW= false; movingS=false;
 		shootingN=false; shootingE=false; shootingW= false; shootingS=false;
 		
+		//this.hitbox = new Rectangle(10,10,10,10);
+		//this.hitbox.setFill(Color.RED);
+		//getChildren().add(this.hitbox);
+
 		
 		timer = new AnimationTimer() {
             @Override
@@ -70,9 +74,11 @@ public class Player extends Sprite{
             }
         };
         timer.start();
-        getChildren().add(plyr);
+        getChildren().add(hitbox);
         
-        bulletType = new SingleShot(this,0,0,1,1);
+
+        bulletType = new SingleShot(0,0,1,1);
+
         bullets= new ArrayList<Projectile>();
         
 	}
@@ -109,37 +115,37 @@ public class Player extends Sprite{
     } 
 	
 	public void move(){
-		if(movingN && !movingE && !movingW){ plyr.setY(plyr.getY()-ySpd); }
-		if(movingS && !movingE && !movingW){ plyr.setY(plyr.getY()+ySpd); }
-		if(movingE && !movingN && !movingS){ plyr.setX(plyr.getX()+xSpd); }
-		if(movingW && !movingN && !movingS){ plyr.setX(plyr.getX()-xSpd); }
+    if(movingN && !movingE && !movingW){ hitbox.setY(hitbox.getY()-ySpd); }
+		if(movingS && !movingE && !movingW){ hitbox.setY(hitbox.getY()+ySpd); }
+		if(movingE && !movingN && !movingS){ hitbox.setX(hitbox.getX()+xSpd); }
+		if(movingW && !movingN && !movingS){ hitbox.setX(hitbox.getX()-xSpd); }
 		if(movingN && movingE &&!movingW){ 
-			plyr.setY(plyr.getY()-(ySpd/Math.sqrt(2)));
-			plyr.setX(plyr.getX()+(xSpd/Math.sqrt(2)));
+			hitbox.setY(hitbox.getY()-(ySpd/Math.sqrt(2)));
+			hitbox.setX(hitbox.getX()+(xSpd/Math.sqrt(2)));
 		} 
 		if(movingN && movingW && !movingE){ 
-			plyr.setY(plyr.getY()-(ySpd/Math.sqrt(2)));
-			plyr.setX(plyr.getX()-(xSpd/Math.sqrt(2)));
+			hitbox.setY(hitbox.getY()-(ySpd/Math.sqrt(2)));
+			hitbox.setX(hitbox.getX()-(xSpd/Math.sqrt(2)));
 		}
 		if(movingS && movingE && !movingW){ 
-			plyr.setY(plyr.getY()+(ySpd/Math.sqrt(2)));
-			plyr.setX(plyr.getX()+(xSpd/Math.sqrt(2)));
+			hitbox.setY(hitbox.getY()+(ySpd/Math.sqrt(2)));
+			hitbox.setX(hitbox.getX()+(xSpd/Math.sqrt(2)));
 		}
 		if(movingS && movingW && !movingE){ 
-			plyr.setY(plyr.getY()+(ySpd/Math.sqrt(2)));
-			plyr.setX(plyr.getX()-(xSpd/Math.sqrt(2)));
+			hitbox.setY(hitbox.getY()+(ySpd/Math.sqrt(2)));
+			hitbox.setX(hitbox.getX()-(xSpd/Math.sqrt(2)));
 		}
 		if (movingN && movingE && movingW){
-			plyr.setY(plyr.getY()-ySpd);
+			hitbox.setY(hitbox.getY()-ySpd);
 		}
 		if (movingS && movingE && movingW){
-			plyr.setY(plyr.getY()+ySpd);
+			hitbox.setY(hitbox.getY()+ySpd);
 		}
 		if (movingE && movingN && movingS){
-			plyr.setX(plyr.getX()+xSpd);
+			hitbox.setX(hitbox.getX()+xSpd);
 		}
 		if (movingW && movingN && movingS){
-			plyr.setX(plyr.getX()-xSpd);
+			hitbox.setX(hitbox.getX()-xSpd);
 		}
 	}
 	
@@ -158,29 +164,37 @@ public class Player extends Sprite{
 				System.out.println("North shot");
 				//how to determine what shot to create? possible have hard checker for type
 				//maybe have a method which makes a copy for the projectile type, then feeds it to here and this only changes vx,vy,x,y, etc.
-				Projectile shot = new SingleShot(this,plyr.getX()+0.5*plyr.getWidth(),plyr.getY(),0,-10);
-				//Projectile shot=makeBulletCopy(plyr.getX()+0.5*plyr.getWidth(),plyr.getY(),0.0,-10.0);
+
+				Projectile shot = new SingleShot(hitbox.getX()+0.5*hitbox.getWidth(),hitbox.getY(),0,-10);
+				//Projectile shot=makeBulletCopy(hitbox.getX()+0.5*hitbox.getWidth(),hitbox.getY(),0.0,-10.0);
+
 				getChildren().add(shot);
 				bullets.add(shot);
 				delay++;
 			}
 			else if(shootingS){
 				System.out.println("South shot");
-				Projectile shot = new SingleShot(this,plyr.getX()+0.5*plyr.getWidth(),plyr.getY()+plyr.getHeight(),0,10);
+
+				Projectile shot = new SingleShot(hitbox.getX()+0.5*hitbox.getWidth(),hitbox.getY()+hitbox.getHeight(),0,10);
+
 				getChildren().add(shot);
 				bullets.add(shot);
 				delay++;
 			}
 			else if(shootingW){
 				System.out.println("West shot");
-				Projectile shot = new SingleShot(this,plyr.getX(),plyr.getY()+0.5*plyr.getHeight(),-10,0);
+
+				Projectile shot = new SingleShot(hitbox.getX(),hitbox.getY()+0.5*hitbox.getHeight(),-10,0);
+
 				getChildren().add(shot);
 				bullets.add(shot);
 				delay++;
 			}
 			else if(shootingE){
 				System.out.println("East shot");
-				Projectile shot = new SingleShot(this,plyr.getX()+plyr.getWidth(),plyr.getY()+0.5*plyr.getHeight(),10,0);
+
+				Projectile shot = new SingleShot(hitbox.getX()+hitbox.getWidth(),hitbox.getY()+0.5*hitbox.getHeight(),10,0);
+
 				getChildren().add(shot);
 				bullets.add(shot);
 				delay++;
@@ -190,18 +204,20 @@ public class Player extends Sprite{
 		}else{
 			delay++;
 		}
+
 	}
-	private Projectile makeBulletCopy(double x,double y, double vx, double vy){
-		Projectile copy = new Projectile(this,x,y,vx,vy);
-		ArrayList<Node> copiedNodes = new ArrayList<Node>();
-		for(Node n: bulletType.getChildren()){
-			
-		}
-		copy.getChildren().addAll(copiedNodes);
-		copy.setFireRate(bulletType.getFireRate());
-		copy.setDamage(bulletType.getDamage());
-		return copy;
-	}
+	//private Projectile makeBulletCopy(double x,double y, double vx, double vy){
+	//	Projectile copy = new Projectile(this,x,y,vx,vy);
+	//	ArrayList<Node> copiedNodes = new ArrayList<Node>();
+	//	for(Node n: bulletType.getChildren()){
+	//		
+	//	}
+	//	copy.getChildren().addAll(copiedNodes);
+	//	copy.setFireRate(bulletType.getFireRate());
+	//	copy.setDamage(bulletType.getDamage());
+	//	return copy;
+	//}
+	//
 	
 	
 }

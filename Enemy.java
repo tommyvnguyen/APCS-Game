@@ -34,20 +34,22 @@ import javafx.scene.transform.Rotate;
 import java.util.ArrayList;
 public abstract class Enemy extends Sprite{
 	int damage;
-	Pane target; //The thing that the enemy is looking at
+
+	Rectangle target; //The thing that the enemy is looking at
 	//Projectile projectile;
 	//jpeg
 	
-	public Enemy(Pane outerPane, double dy, double dx, Pane target){
-		super(outerPane,dy, dx);
+	public Enemy(double dy, double dx, Rectangle target){
+		super(dy, dx);
+
 		damage = 1;
 		this.target = target;
 	}
 	
-	public void move(){
-		if(this.getLayoutX() <= 0 || this.getLayoutX() + this.getWidth() >= this.outerPane.getWidth())
-			xSpd *= -1;
-		this.setLayoutX(this.getLayoutX() + xSpd);
+
+	public void track(){
+		this.hitbox.getTransforms().clear();
+		this.hitbox.getTransforms().add(new Rotate(Math.toDegrees(Math.atan2(this.hitbox.getY() - target.getY(),this.hitbox.getX()-target.getX()))+180, (this.hitbox.getWidth()/2 + this.hitbox.getX()), (this.hitbox.getHeight()/2 + this.hitbox.getY())));
 	}
-	
+
 }

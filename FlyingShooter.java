@@ -37,33 +37,35 @@ public class FlyingShooter extends Shooter{
 	//Projectile projectile;
 	//jpeg
 	
-	public FlyingShooter(Pane outerPane, double dy, double dx, Pane target){
-		super(outerPane, dy, dx, target);
-		
+
+	public FlyingShooter(double dy, double dx, Rectangle target){
+		super(dy, dx, target);
+		this.getChildren().add(hitbox);
+
 	}
 	//TimeCounter counts how many times the animationTimer has called its methods. 
 	//TimeCounter acts as a unit of time.
 	public void move(int timeCounter){
-		if(this.getLayoutX() >= 0 && this.getLayoutX() + this.getWidth() < 1600){ //Be sure to make it based around the root's size, later
-			this.setLayoutX(this.getLayoutX() + xSpd);
+
+		if(this.hitbox.getX() >= 0 && this.hitbox.getX() + this.hitbox.getWidth() < 1600){ //Be sure to make it based around the root's size, later
+			this.hitbox.setX(this.hitbox.getX() + xSpd);
 		}
 		else{
 			xSpd *= -1;
-			this.setLayoutX(this.getLayoutX() + xSpd);
+			this.hitbox.setX(this.hitbox.getX() + xSpd);
 		}
-		if(this.getLayoutY() >= 0 && this.getLayoutY() + this.getHeight() < 900){ 
-			this.setLayoutY(this.getLayoutY() + ySpd);
+		if(this.hitbox.getY() >= 0 && this.hitbox.getY() + this.hitbox.getHeight() < 900){ 
+			this.hitbox.setY(this.hitbox.getY() + ySpd);
 		}else{
 			ySpd *= -1;
-			this.setLayoutY(this.getLayoutY() + ySpd);
+			this.hitbox.setY(this.hitbox.getY() + ySpd);
 		}
 		
 		
-	
-		this.getTransforms().clear();
-		this.getTransforms().add(new Rotate(Math.atan(((this.getLayoutY() + this.getHeight()/2) - (target.getLayoutY() + target.getHeight()/2))/((this.getLayoutX() + this.getWidth()/2) - (target.getLayoutX() + target.getWidth()/2)) ),this.getWidth()/2, this.getHeight()/2));
+		//this.getTransforms().add(new Rotate(Math.atan(((this.getLayoutY() + this.getHeight()/2) - (target.getLayoutY() + target.getHeight()/2))/((this.getLayoutX() + this.getWidth()/2) - (target.getLayoutX() + target.getWidth()/2)) ),this.getWidth()/2, this.getHeight()/2));
 		//this.getTransforms().add(new Rotate(1,this.getWidth()/2, this.getHeight()/2));
-		
+		track();
+
 		
 		if(timeCounter%360 == 0){
 			int PosOrNeg = (int)(Math.random() * 2);
@@ -76,14 +78,19 @@ public class FlyingShooter extends Shooter{
 			if(PosOrNeg == 0){
 				ySpd *= -1;
 			}
-			System.out.println("     " + PosOrNeg);
+
+			//System.out.println("     " + PosOrNeg);
+
 		}else if(timeCounter%360 == 270){
 			xSpd = 0;
 		 	ySpd = 0;
 		}
 		
 		//Turn towards player
-		System.out.println(ySpd + " -- " + xSpd);
+
+		//System.out.println(ySpd + " -- " + xSpd);
 	}
 	
+	
+
 }
