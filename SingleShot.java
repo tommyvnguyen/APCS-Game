@@ -39,6 +39,7 @@ public class SingleShot extends Projectile{
 		bullet = new Rectangle(0,0,10,10);
 		bullet.setFill(Color.BLUE);
 		getChildren().add(bullet);
+
 	}
 	
 }
