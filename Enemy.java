@@ -32,14 +32,22 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
-public class SingleShot extends Projectile{
-	Rectangle bullet;
-	public SingleShot(Pane outerPane, double x, double y,double dy, double dx){
-		super(outerPane,x,y, dy, dx);
-		bullet = new Rectangle(0,0,10,10);
-		bullet.setFill(Color.BLUE);
-		getChildren().add(bullet);
-
+public abstract class Enemy extends Sprite{
+	int damage;
+	Pane target; //The thing that the enemy is looking at
+	//Projectile projectile;
+	//jpeg
+	
+	public Enemy(Pane outerPane, double dy, double dx, Pane target){
+		super(outerPane,dy, dx);
+		damage = 1;
+		this.target = target;
+	}
+	
+	public void move(){
+		if(this.getLayoutX() <= 0 || this.getLayoutX() + this.getWidth() >= this.outerPane.getWidth())
+			xSpd *= -1;
+		this.setLayoutX(this.getLayoutX() + xSpd);
 	}
 	
 }

@@ -28,24 +28,50 @@ import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.animation.Animation;
 import javafx.util.Duration;
+import javafx.scene.transform.Transform;
+import javafx.scene.transform.Rotate;
 
-import java.util.ArrayList;
+import java.util.*;
 public abstract class Sprite extends Pane{
+	double xStart;
+	double yStart;
 	double xSpd;
 	double ySpd;
-	Pane outerPane;
+	Pane outerPane; 
+	Rectangle face;//Face is a drawn point on each sprite to show which way the sprite is facing.
 	
-	public Sprite(Pane outerPane,double xSpd, double ySpd){
+	public Sprite(Pane outerPane, double xStart, double yStart, double xSpd, double ySpd){
 		this.xSpd = xSpd;
 		this.ySpd = ySpd;
+		this.xStart = xStart;
+		this.yStart = yStart;
+
+		setLayoutX(xStart);
+		setLayoutY(yStart);
+		this.outerPane = outerPane;
+		//outerPane.getChildren().add(this);
+
+		
+		face = new Rectangle(5,5,5,5); 
+		face.setFill(Color.RED);
+		getChildren().add(face);
+	}
+	public Sprite(Pane outerPane, double xSpd, double ySpd){
+		this.xSpd = xSpd;
+		this.ySpd = ySpd;
+		this.xStart = 0;
+		this.yStart = 0;
+
 	
 		this.outerPane = outerPane;
-		outerPane.getChildren().add(this);
+		//outerPane.getChildren().add(this);
 		
 	}
-	//Rotate method
 	public void move(){
-		this.setLayoutX(this.getLayoutX() + xSpd);
-		this.setLayoutY(this.getLayoutY() + ySpd);
+		if(this.getLayoutX() > 0 && this.getLayoutX() < this.outerPane.getWidth())
+			this.setLayoutX(this.getLayoutX() + xSpd);
+		if(this.getLayoutY() > 0 && this.getLayoutY() < this.outerPane.getHeight())
+			this.setLayoutY(this.getLayoutY() + ySpd);
 	}
+
 }

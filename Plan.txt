@@ -63,6 +63,8 @@ public class Game
 //run the game and run detection
 //contains map, player, enemies
 	checkCollision(Sprite s1, Sprite s2)
+	checkAreaCollision(Sprite s, Area a)
+	//checks collision between sprites and area, area has array of rectangles which represent hitbox of walls
 
 public class Menu extend Scene
 //Menu system with highscores and stat tracker
