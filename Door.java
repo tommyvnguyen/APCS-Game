@@ -32,7 +32,7 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Rotate;
 
 import java.util.*;
-public class Door extends Pane {
+public class Door extends Pane implements Collidable{
 	String position; //left, right, top or bottom
 	Rectangle door;
 	public Door(String pos,double paneHeight, double paneWidth){
@@ -58,6 +58,20 @@ public class Door extends Pane {
 		}
 	}
 	
+	public Rectangle getHitbox(){
+		return door;
+	}
 	
-	
+	//possible implement this so that the entire hitbox must go through for the door to work,
+	public boolean checkCollision(Rectangle hitbox){
+		if(door.intersects(hitbox.getX(),hitbox.getY(),hitbox.getWidth(),hitbox.getHeight())){
+			System.out.println("collision");
+			return true;
+		}else{
+			return false;
+		}
+	}
+	public String getPosition(){
+		return position;
+	}
 }

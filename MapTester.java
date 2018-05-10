@@ -43,7 +43,13 @@ public class MapTester extends Application{
 		wA.addTopDoor();
 		wA.addBottomDoor();
 		root.getChildren().addAll(wA,plyr);
-		
+		AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+               System.out.println(wA.checkDoorCollision(plyr.getHitbox()));
+            }
+        };
+        timer.start();
 		stage.setScene(new Scene(root, 800,800));
 		stage.getScene().onKeyPressedProperty().bind(plyr.onKeyPressedProperty());
 		stage.getScene().onKeyReleasedProperty().bind(plyr.onKeyReleasedProperty());

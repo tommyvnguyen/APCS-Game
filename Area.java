@@ -35,7 +35,7 @@ public abstract class Area extends Pane{
 	ArrayList<Rectangle> walls; //each wall is represented by a rectangle
 	ArrayList<Door> doors; //each door is represented by a rectangle
 	int[] coord; //room represented by a coordinate for the map 
-	
+	boolean completed = false;
 	public Area(double height, double width,int xcoord, int ycoord){
 		doors=new ArrayList<Door>();
 		walls = new ArrayList<Rectangle>();
@@ -43,6 +43,12 @@ public abstract class Area extends Pane{
 		setPrefHeight(height);
 		coord = new int[]{xcoord,ycoord};
 		
+	}
+	public void setCompleted(boolean b){
+		completed = b;
+	}
+	public boolean getCompleted(){
+		return completed;
 	}
 	public void addLeftDoor(){
 		Door d = new Door("left",getPrefWidth(),getPrefHeight());
@@ -64,7 +70,13 @@ public abstract class Area extends Pane{
 		doors.add(d);
 		getChildren().add(d);
 	}
-	public String checkDoorCollision(){
-		return "test";
+	public String checkDoorCollision(Rectangle hitbox){ //returns left,right,top,bottom, or null if no door
+		String ans = null;
+		for(Door d: doors){
+			if(d.checkCollision(hitbox)){
+				ans=d.getPosition();
+			}
+		}
+		return ans;
 	}
 }

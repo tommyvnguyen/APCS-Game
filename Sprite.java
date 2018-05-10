@@ -30,8 +30,6 @@ import javafx.animation.Animation;
 import javafx.util.Duration;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Rotate;
-
-
 import java.util.ArrayList;
 public abstract class Sprite extends Pane implements Collidable{
 

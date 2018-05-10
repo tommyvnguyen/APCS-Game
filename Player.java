@@ -50,7 +50,7 @@ public class Player extends Sprite{
 	
 	int delay =0;
 	int delayResetTimer=0;
-
+	
 	public Player(double x, double y, double w, double h, double xv, double yv){
 		super(xv,yv);
 		hitbox = new Rectangle(x,y,w,h);
