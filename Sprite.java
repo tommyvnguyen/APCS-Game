@@ -28,24 +28,55 @@ import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.animation.Animation;
 import javafx.util.Duration;
+import javafx.scene.transform.Transform;
+import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
-public abstract class Sprite extends Pane{
+public abstract class Sprite extends Pane implements Collidable{
+	double xStart;
+	double yStart;
 	double xSpd;
 	double ySpd;
-	Pane outerPane;
+	Pane outerPane; 
+	Rectangle hitbox;//Face is a drawn point on each sprite to show which way the sprite is facing.
 	
-	public Sprite(Pane outerPane,double xSpd, double ySpd){
+	public Sprite(double xStart, double yStart, double xSpd, double ySpd){
 		this.xSpd = xSpd;
 		this.ySpd = ySpd;
-	
-		this.outerPane = outerPane;
-		outerPane.getChildren().add(this);
+		this.xStart = xStart;
+		this.yStart = yStart;
+
+		//setLayoutX(xStart);
+		//setLayoutY(yStart);
 		
+		hitbox = new Rectangle(xStart,yStart,50,50);
+		hitbox.setFill(Color.BLACK);
+		//this.outerPane = outerPane;
+		//outerPane.getChildren().add(this);
+		//this.getChildren().add(hitbox);
+		
+
 	}
-	//Rotate method
+	
+	public Rectangle getHitbox(){
+		return this.hitbox;
+	}
+	
+	public Sprite(double xSpd, double ySpd){
+		this.xSpd = xSpd;
+		this.ySpd = ySpd;
+		this.xStart = 0;
+		this.yStart = 0;
+		
+		//setLayoutX(xStart);
+		//setLayoutY(yStart);
+		
+		hitbox = new Rectangle(xStart,yStart,50,50);
+		hitbox.setFill(Color.BLACK);
+		//getChildren().add(this.hitbox);
+	}
 	public void move(){
-		this.setLayoutX(this.getLayoutX() + xSpd);
-		this.setLayoutY(this.getLayoutY() + ySpd);
+		this.hitbox.setX(this.hitbox.getX() + xSpd);
+		this.hitbox.setY(this.hitbox.getY() + ySpd);
 	}
 }

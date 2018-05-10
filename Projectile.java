@@ -28,23 +28,30 @@ import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.animation.Animation;
 import javafx.util.Duration;
+import javafx.scene.transform.Transform;
+import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
 public abstract class Projectile extends Sprite{
 	int damage;
 	int fireRate;
 	
-	public Projectile(Pane outerPane, double dy, double dx){
-		super(outerPane,dy,dx);
-		this.setStyle("-fx-background-color: yellow");
-		this.setPrefSize(10,10);
-		this.setLayoutX(0);
-		this.setLayoutY(0);
+	public Projectile(double x, double y, double dy, double dx){
+		super(x,y,dy,dx);
 		damage = 1;
 		fireRate = 10;
 	}
 	
 	public int getFireRate(){
 		return this.fireRate;
+	}
+	public void setFireRate(int fr){
+		fireRate=fr;
+	}
+	public int getDamage(){
+		return damage;
+	}
+	public void setDamage(int d){
+		damage=d;
 	}
 }
