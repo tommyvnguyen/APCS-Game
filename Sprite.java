@@ -31,20 +31,25 @@ import javafx.util.Duration;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Rotate;
 
+
 import java.util.ArrayList;
 public abstract class Sprite extends Pane implements Collidable{
+
 	double xStart;
 	double yStart;
 	double xSpd;
 	double ySpd;
 	Pane outerPane; 
+
 	Rectangle hitbox;//Face is a drawn point on each sprite to show which way the sprite is facing.
 	
 	public Sprite(double xStart, double yStart, double xSpd, double ySpd){
+
 		this.xSpd = xSpd;
 		this.ySpd = ySpd;
 		this.xStart = xStart;
 		this.yStart = yStart;
+
 
 		//setLayoutX(xStart);
 		//setLayoutY(yStart);
@@ -63,10 +68,12 @@ public abstract class Sprite extends Pane implements Collidable{
 	}
 	
 	public Sprite(double xSpd, double ySpd){
+
 		this.xSpd = xSpd;
 		this.ySpd = ySpd;
 		this.xStart = 0;
 		this.yStart = 0;
+
 		
 		//setLayoutX(xStart);
 		//setLayoutY(yStart);
@@ -79,4 +86,5 @@ public abstract class Sprite extends Pane implements Collidable{
 		this.hitbox.setX(this.hitbox.getX() + xSpd);
 		this.hitbox.setY(this.hitbox.getY() + ySpd);
 	}
+
 }

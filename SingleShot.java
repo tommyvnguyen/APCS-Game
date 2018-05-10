@@ -28,9 +28,12 @@ import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.animation.Animation;
 import javafx.util.Duration;
+import javafx.scene.transform.Transform;
+import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
 public class SingleShot extends Projectile{
+
 	//NOTE : Removed Bullet and replaced it w/ hitbox (variable name change basically)
 	public SingleShot(double x, double y,double dy, double dx){
 		super(x,y, dy, dx);
@@ -39,6 +42,7 @@ public class SingleShot extends Projectile{
 		hitbox.setHeight(10);
 		hitbox.setFill(Color.BLUE);
 		getChildren().add(hitbox);
+
 	}
 	
 

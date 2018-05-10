@@ -50,6 +50,7 @@ public class Player extends Sprite{
 	
 	int delay =0;
 	int delayResetTimer=0;
+
 	public Player(double x, double y, double w, double h, double xv, double yv){
 		super(xv,yv);
 		hitbox = new Rectangle(x,y,w,h);
@@ -59,6 +60,7 @@ public class Player extends Sprite{
 		//this.hitbox = new Rectangle(10,10,10,10);
 		//this.hitbox.setFill(Color.RED);
 		//getChildren().add(this.hitbox);
+
 		
 		timer = new AnimationTimer() {
             @Override
@@ -74,7 +76,9 @@ public class Player extends Sprite{
         timer.start();
         getChildren().add(hitbox);
         
+
         bulletType = new SingleShot(0,0,1,1);
+
         bullets= new ArrayList<Projectile>();
         
 	}
@@ -111,25 +115,37 @@ public class Player extends Sprite{
     } 
 	
 	public void move(){
-		if(movingN && !movingE && !movingW){ hitbox.setY(hitbox.getY()-ySpd); }
+    if(movingN && !movingE && !movingW){ hitbox.setY(hitbox.getY()-ySpd); }
 		if(movingS && !movingE && !movingW){ hitbox.setY(hitbox.getY()+ySpd); }
 		if(movingE && !movingN && !movingS){ hitbox.setX(hitbox.getX()+xSpd); }
 		if(movingW && !movingN && !movingS){ hitbox.setX(hitbox.getX()-xSpd); }
-		if(movingN && movingE){ 
+		if(movingN && movingE &&!movingW){ 
 			hitbox.setY(hitbox.getY()-(ySpd/Math.sqrt(2)));
 			hitbox.setX(hitbox.getX()+(xSpd/Math.sqrt(2)));
-		}
-		if(movingN && movingW){ 
+		} 
+		if(movingN && movingW && !movingE){ 
 			hitbox.setY(hitbox.getY()-(ySpd/Math.sqrt(2)));
 			hitbox.setX(hitbox.getX()-(xSpd/Math.sqrt(2)));
 		}
-		if(movingS && movingE){ 
+		if(movingS && movingE && !movingW){ 
 			hitbox.setY(hitbox.getY()+(ySpd/Math.sqrt(2)));
 			hitbox.setX(hitbox.getX()+(xSpd/Math.sqrt(2)));
 		}
-		if(movingS && movingW){ 
+		if(movingS && movingW && !movingE){ 
 			hitbox.setY(hitbox.getY()+(ySpd/Math.sqrt(2)));
 			hitbox.setX(hitbox.getX()-(xSpd/Math.sqrt(2)));
+		}
+		if (movingN && movingE && movingW){
+			hitbox.setY(hitbox.getY()-ySpd);
+		}
+		if (movingS && movingE && movingW){
+			hitbox.setY(hitbox.getY()+ySpd);
+		}
+		if (movingE && movingN && movingS){
+			hitbox.setX(hitbox.getX()+xSpd);
+		}
+		if (movingW && movingN && movingS){
+			hitbox.setX(hitbox.getX()-xSpd);
 		}
 	}
 	
@@ -148,29 +164,37 @@ public class Player extends Sprite{
 				System.out.println("North shot");
 				//how to determine what shot to create? possible have hard checker for type
 				//maybe have a method which makes a copy for the projectile type, then feeds it to here and this only changes vx,vy,x,y, etc.
+
 				Projectile shot = new SingleShot(hitbox.getX()+0.5*hitbox.getWidth(),hitbox.getY(),0,-10);
 				//Projectile shot=makeBulletCopy(hitbox.getX()+0.5*hitbox.getWidth(),hitbox.getY(),0.0,-10.0);
+
 				getChildren().add(shot);
 				bullets.add(shot);
 				delay++;
 			}
 			else if(shootingS){
 				System.out.println("South shot");
+
 				Projectile shot = new SingleShot(hitbox.getX()+0.5*hitbox.getWidth(),hitbox.getY()+hitbox.getHeight(),0,10);
+
 				getChildren().add(shot);
 				bullets.add(shot);
 				delay++;
 			}
 			else if(shootingW){
 				System.out.println("West shot");
+
 				Projectile shot = new SingleShot(hitbox.getX(),hitbox.getY()+0.5*hitbox.getHeight(),-10,0);
+
 				getChildren().add(shot);
 				bullets.add(shot);
 				delay++;
 			}
 			else if(shootingE){
 				System.out.println("East shot");
+
 				Projectile shot = new SingleShot(hitbox.getX()+hitbox.getWidth(),hitbox.getY()+0.5*hitbox.getHeight(),10,0);
+
 				getChildren().add(shot);
 				bullets.add(shot);
 				delay++;
@@ -180,6 +204,7 @@ public class Player extends Sprite{
 		}else{
 			delay++;
 		}
+
 	}
 	//private Projectile makeBulletCopy(double x,double y, double vx, double vy){
 	//	Projectile copy = new Projectile(this,x,y,vx,vy);
@@ -193,5 +218,6 @@ public class Player extends Sprite{
 	//	return copy;
 	//}
 	//
+	
 	
 }

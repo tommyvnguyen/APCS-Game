@@ -27,7 +27,9 @@ import javafx.scene.paint.Color;
 import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.animation.Animation;
+
 import javafx.animation.AnimationTimer;
+
 import javafx.util.Duration;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Rotate;
@@ -36,6 +38,7 @@ import java.util.ArrayList;
 public abstract class Shooter extends Enemy{
 	//Projectile projectile;
 	//jpeg
+
 	AnimationTimer timer;
 	ArrayList<Projectile> bullets;
 	
@@ -51,11 +54,13 @@ public abstract class Shooter extends Enemy{
         };
         timer.start();
 		bullets = new ArrayList<Projectile>();
+
 		//May need to receive ArrayList<Sprite>, so that fire() can add a projectile object to it.
 		//The timer will loop through the arraylist and call each move() in it.
 	}
 	
 	public void fire(){
+
 		double angle = Math.toDegrees(Math.atan2(this.hitbox.getY() - target.getY(),this.hitbox.getX()-target.getX())) + 180;
 		double x = (target.getX() + target.getWidth()/2) - (this.hitbox.getWidth() + this.hitbox.getX()) + (this.hitbox.getHeight()/2 * Math.cos(Math.toRadians(angle)));
 		double y = (target.getY() + target.getHeight()/2) - (this.hitbox.getHeight()/2 + this.hitbox.getY()) + (this.hitbox.getWidth()/2 * Math.sin(Math.toRadians(angle)));
@@ -68,6 +73,7 @@ public abstract class Shooter extends Enemy{
 		//shot.getTransforms().add(new Rotate(Math.toDegrees(Math.atan2(this.hitbox.getY() - target.getY(),this.hitbox.getX()-target.getX()))+180, (this.hitbox.getWidth()/2 + this.hitbox.getX()), (this.hitbox.getHeight()/2 + this.hitbox.getY())));
 		this.getChildren().add(shot);
 		this.bullets.add(shot);
+
 	}
 	public void move(){
 		super.move();

@@ -32,18 +32,31 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
-public abstract class Projectile extends Sprite{
+public class Projectile extends Sprite{
 	int damage;
 	int fireRate;
 	
+
 	public Projectile(double x, double y, double dy, double dx){
 		super(x,y,dy,dx);
+
 		damage = 1;
 		fireRate = 10;
 	}
 	
 	public int getFireRate(){
 		return this.fireRate;
+
+	}
+	public void setFireRate(int fr){
+		fireRate=fr;
+	}
+	public int getDamage(){
+		return damage;
+	}
+	public void setDamage(int d){
+		damage=d;
+
 	}
 	public void setFireRate(int fr){
 		fireRate=fr;
