@@ -43,6 +43,7 @@ public class CollisionTester extends Application{
 		Scene scene = new Scene(root, 1600, 900);
 		Player plyr = new Player(200,200,100,100,3,3);
 		FlyingShooter testEnemy = new FlyingShooter(1, 1, plyr.getHitbox());
+		ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 		
 		
 		root.getChildren().add(plyr);
@@ -54,7 +55,21 @@ public class CollisionTester extends Application{
 				//System.out.println(timeCounter);
 				if(timeCounter % 50 == 0)
 					testEnemy.fire();
+				if(timeCounter%1000 == 0 && enemies.size() < 15)
+					enemies.add(new FlyingShooter(1,1,plyr.getHitbox());
 				testEnemy.move(timeCounter);
+				for(int i = 0; i < enemies.size(); i++){
+					enemies.get(i).move(timeCounter);
+					for(int j = 0; j < enemies.get(i).getBullets().size(); j++){
+						Rectangle bulletHitbox = enemies.get(i).getBullets().get(j).getHitbox();
+						if(bulletHitbox.getX() < plyr.getX() + plyr.getWidth() && bulletHitbox().getY() < plyr.getY() + plyr.getHeight() && bulletHitbox.getX() + bulletHitbox.getWidth() > plyr.getX() && bulletHitbox.getY() + bulletHitbox.getHeight() > plyr.getY()){
+							enemies.get(i).getChildren().remove(j);
+							enemies.get(i).getBullets().remove(j);
+						}
+					}
+				}
+				
+				
 				timeCounter++;
 			}
 		};
