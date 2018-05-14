@@ -115,37 +115,37 @@ public class Player extends Sprite{
     } 
 	
 	public void move(){
-    if(movingN && !movingE && !movingW){ hitbox.setY(hitbox.getY()-ySpd); }
-		if(movingS && !movingE && !movingW){ hitbox.setY(hitbox.getY()+ySpd); }
-		if(movingE && !movingN && !movingS){ hitbox.setX(hitbox.getX()+xSpd); }
-		if(movingW && !movingN && !movingS){ hitbox.setX(hitbox.getX()-xSpd); }
+    if(movingN && !movingE && !movingW){ hitbox.setY(hitbox.getY()-(2*ySpd)); }
+		if(movingS && !movingE && !movingW){ hitbox.setY(hitbox.getY()+(2*ySpd)); }
+		if(movingE && !movingN && !movingS){ hitbox.setX(hitbox.getX()+(2*xSpd)); }
+		if(movingW && !movingN && !movingS){ hitbox.setX(hitbox.getX()-(2*xSpd)); }
 		if(movingN && movingE &&!movingW){ 
-			hitbox.setY(hitbox.getY()-(ySpd/Math.sqrt(2)));
-			hitbox.setX(hitbox.getX()+(xSpd/Math.sqrt(2)));
+			hitbox.setY(hitbox.getY()-(2*ySpd/Math.sqrt(2)));
+			hitbox.setX(hitbox.getX()+(2*xSpd/Math.sqrt(2)));
 		} 
 		if(movingN && movingW && !movingE){ 
-			hitbox.setY(hitbox.getY()-(ySpd/Math.sqrt(2)));
-			hitbox.setX(hitbox.getX()-(xSpd/Math.sqrt(2)));
+			hitbox.setY(hitbox.getY()-(2*ySpd/Math.sqrt(2)));
+			hitbox.setX(hitbox.getX()-(2*xSpd/Math.sqrt(2)));
 		}
 		if(movingS && movingE && !movingW){ 
-			hitbox.setY(hitbox.getY()+(ySpd/Math.sqrt(2)));
-			hitbox.setX(hitbox.getX()+(xSpd/Math.sqrt(2)));
+			hitbox.setY(hitbox.getY()+(2*ySpd/Math.sqrt(2)));
+			hitbox.setX(hitbox.getX()+(2*xSpd/Math.sqrt(2)));
 		}
 		if(movingS && movingW && !movingE){ 
-			hitbox.setY(hitbox.getY()+(ySpd/Math.sqrt(2)));
-			hitbox.setX(hitbox.getX()-(xSpd/Math.sqrt(2)));
+			hitbox.setY(hitbox.getY()+(2*ySpd/Math.sqrt(2)));
+			hitbox.setX(hitbox.getX()-(2*xSpd/Math.sqrt(2)));
 		}
 		if (movingN && movingE && movingW){
-			hitbox.setY(hitbox.getY()-ySpd);
+			hitbox.setY(hitbox.getY()-(2*ySpd));
 		}
 		if (movingS && movingE && movingW){
-			hitbox.setY(hitbox.getY()+ySpd);
+			hitbox.setY(hitbox.getY()+(2*ySpd));
 		}
 		if (movingE && movingN && movingS){
-			hitbox.setX(hitbox.getX()+xSpd);
+			hitbox.setX(hitbox.getX()+(2*xSpd));
 		}
 		if (movingW && movingN && movingS){
-			hitbox.setX(hitbox.getX()-xSpd);
+			hitbox.setX(hitbox.getX()-(2*xSpd));
 		}
 	}
 	

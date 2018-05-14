@@ -42,28 +42,36 @@ public class CollisionTester extends Application{
 		Pane root = new Pane();
 		Scene scene = new Scene(root, 1600, 900);
 		Player plyr = new Player(200,200,100,100,3,3);
-		FlyingShooter testEnemy = new FlyingShooter(1, 1, plyr.getHitbox());
-		ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+		//FlyingShooter testEnemy = new FlyingShooter(1, 1, plyr.getHitbox());
+		ArrayList<FlyingShooter> enemies = new ArrayList<FlyingShooter>();
 		
 		
 		root.getChildren().add(plyr);
-		root.getChildren().add(testEnemy);
+		//root.getChildren().add(testEnemy);
 		
 		AnimationTimer timer = new AnimationTimer(){
 			@Override
 			public void handle(long now){
 				//System.out.println(timeCounter);
-				if(timeCounter % 50 == 0)
-					testEnemy.fire();
-				if(timeCounter%1000 == 0 && enemies.size() < 15)
-					enemies.add(new FlyingShooter(1,1,plyr.getHitbox());
-				testEnemy.move(timeCounter);
+				if(timeCounter % 50 == 0){
+					//testEnemy.fire();
+					for(int i = 0; i < enemies.size(); i++){
+						enemies.get(i).fire();
+					}
+				}
+				if(timeCounter%1000 == 0 && enemies.size() < 5){
+					FlyingShooter newShooter = new FlyingShooter(1,1,plyr.getHitbox());
+					enemies.add(newShooter);
+					root.getChildren().add(newShooter);
+				}
+				//testEnemy.move(timeCounter);
 				for(int i = 0; i < enemies.size(); i++){
 					enemies.get(i).move(timeCounter);
 					for(int j = 0; j < enemies.get(i).getBullets().size(); j++){
 						Rectangle bulletHitbox = enemies.get(i).getBullets().get(j).getHitbox();
-						if(bulletHitbox.getX() < plyr.getX() + plyr.getWidth() && bulletHitbox().getY() < plyr.getY() + plyr.getHeight() && bulletHitbox.getX() + bulletHitbox.getWidth() > plyr.getX() && bulletHitbox.getY() + bulletHitbox.getHeight() > plyr.getY()){
-							enemies.get(i).getChildren().remove(j);
+						if(bulletHitbox.getX() < plyr.getHitbox().getX() + plyr.getHitbox().getWidth() && bulletHitbox.getY() < plyr.getHitbox().getY() + plyr.getHitbox().getHeight() && bulletHitbox.getX() + bulletHitbox.getWidth() > plyr.getHitbox().getX() && bulletHitbox.getY() + bulletHitbox.getHeight() > plyr.getHitbox().getY()
+						|| bulletHitbox.getX() < 0 || bulletHitbox.getY() < 0 || bulletHitbox.getX() > 1600 || bulletHitbox.getY() > 900){
+							enemies.get(i).getChildren().remove(j+1);
 							enemies.get(i).getBullets().remove(j);
 						}
 					}
