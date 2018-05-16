@@ -59,6 +59,10 @@ public abstract class Shooter extends Enemy{
 		//The timer will loop through the arraylist and call each move() in it.
 	}
 	
+	public ArrayList<Projectile> getBullets(){
+		return bullets;
+	}
+	
 	public void fire(){
 
 		double angle = Math.toDegrees(Math.atan2(this.hitbox.getY() - target.getY(),this.hitbox.getX()-target.getX())) + 180;
