@@ -28,7 +28,13 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 public class MapTester extends Application{
+	
+			private final long[] frameTimes = new long[100];
+  		private int frameTimeIndex = 0 ;
+    	private boolean arrayFilled = false ;
+	
 	public static void main(String [] args){
 		launch(args);
 	}
@@ -43,6 +49,32 @@ public class MapTester extends Application{
 		wA.addTopDoor();
 		wA.addBottomDoor();
 		root.getChildren().addAll(wA,plyr);
+		
+
+    	Label label = new Label();
+        AnimationTimer frameRateMeter = new AnimationTimer() {
+
+            @Override
+            public void handle(long now) {
+                long oldFrameTime = frameTimes[frameTimeIndex] ;
+                frameTimes[frameTimeIndex] = now ;
+                frameTimeIndex = (frameTimeIndex + 1) % frameTimes.length ;
+                if (frameTimeIndex == 0) {
+                    arrayFilled = true ;
+                }
+                if (arrayFilled) {
+                    long elapsedNanos = now - oldFrameTime ;
+                    long elapsedNanosPerFrame = elapsedNanos / frameTimes.length ;
+                    double frameRate = 1_000_000_000.0 / elapsedNanosPerFrame ;
+                    label.setText(String.format("Current frame rate: %.3f", frameRate));
+                }
+            }
+        };
+        frameRateMeter.start();
+		root.getChildren().add(new StackPane(label));
+    	
+    	
+    	
 		AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -50,6 +82,7 @@ public class MapTester extends Application{
             }
         };
         timer.start();
+        
 		stage.setScene(new Scene(root, 800,800));
 		stage.getScene().onKeyPressedProperty().bind(plyr.onKeyPressedProperty());
 		stage.getScene().onKeyReleasedProperty().bind(plyr.onKeyReleasedProperty());
