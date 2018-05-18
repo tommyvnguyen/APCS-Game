@@ -42,7 +42,7 @@ public abstract class Sprite extends Pane implements Collidable{
 	Pane outerPane; 
 
 	Rectangle hitbox;//Face is a drawn point on each sprite to show which way the sprite is facing.
-	
+	// the actual player sprite will constantly update with the hitbox
 	public Sprite(double xStart, double yStart, double xSpd, double ySpd){
 
 		this.xSpd = xSpd;
@@ -66,7 +66,18 @@ public abstract class Sprite extends Pane implements Collidable{
 	public Rectangle getHitbox(){
 		return this.hitbox;
 	}
-	
+	public double getX(){
+		return this.hitbox.getX();
+	}
+	public void setX(double d){
+		this.hitbox.setX(d);	
+	}
+	public double getY(){
+		return hitbox.getY();
+	}
+	public void setY(double d){
+		this.hitbox.setY(d);
+	}
 	public Sprite(double xSpd, double ySpd){
 
 		this.xSpd = xSpd;
