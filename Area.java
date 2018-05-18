@@ -32,6 +32,8 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Rotate;
 import java.util.*;
 public abstract class Area extends Pane{
+	final int PANE_HEIGHT=800;
+	final int PANE_WIDTH=800;
 	ArrayList<Rectangle> walls; //each wall is represented by a rectangle
 	ArrayList<Door> doors; //each door is represented by a rectangle
 	int[] coord; //room represented by a coordinate for the map 
@@ -44,12 +46,23 @@ public abstract class Area extends Pane{
 		coord = new int[]{xcoord,ycoord};
 		
 	}
+	public Area(int xcoord, int ycoord){
+		doors=new ArrayList<Door>();
+		walls = new ArrayList<Rectangle>();
+		setPrefWidth(PANE_WIDTH);
+		setPrefHeight(PANE_HEIGHT);
+		coord = new int[]{xcoord,ycoord};
+		
+	}
 	public void setCompleted(boolean b){
 		completed = b;
 	}
 	public boolean getCompleted(){
 		return completed;
 	}
+	
+	public int getXCoord(){return coord[0];}
+	public int getYCoord(){return coord[1];}
 	public void addLeftDoor(){
 		Door d = new Door("left",getPrefWidth(),getPrefHeight());
 		doors.add(d);

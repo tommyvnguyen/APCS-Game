@@ -84,5 +84,5 @@ public abstract class Sprite extends Pane implements Collidable{
 		this.hitbox.setX(this.hitbox.getX() + xSpd);
 		this.hitbox.setY(this.hitbox.getY() + ySpd);
 	}
-
+	
 }

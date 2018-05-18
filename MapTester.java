@@ -43,12 +43,8 @@ public class MapTester extends Application{
 		Pane root = new Pane();
 		Player plyr = new Player(200,200,50,50,4,4);
 
-		WallyArea wA = new WallyArea(800,800,0,0);
-		wA.addLeftDoor();
-		wA.addRightDoor();
-		wA.addTopDoor();
-		wA.addBottomDoor();
-		root.getChildren().addAll(wA,plyr);
+		Map m = new Map(20);
+		root.getChildren().addAll(m,plyr);
 		
 
     	Label label = new Label();
@@ -78,7 +74,12 @@ public class MapTester extends Application{
 		AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-               System.out.println(wA.checkDoorCollision(plyr.getHitbox()));
+             	boolean b= m.moveRooms(wA.checkDoorCollision(plyr.getHitbox()));
+				//fix this to accurately move player
+				if(b){
+					plyr.setX(400);
+					plyr.setY(400);
+				}
             }
         };
         timer.start();
