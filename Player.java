@@ -39,6 +39,8 @@ import javafx.animation.KeyValue;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Node;
 public class Player extends Sprite{
+
+	int health;
 	
 	AnimationTimer timer;
 	boolean movingN,movingE,movingW,movingS;
@@ -51,11 +53,13 @@ public class Player extends Sprite{
 	int delay =0;
 	int delayResetTimer=0;
 
-	public Player(double x, double y, double w, double h, double xv, double yv){
+	public Player(double x, double y, double w, double h, double xv, double yv, double multiplier){
 		super(xv,yv);
+		health = 5;
 		hitbox = new Rectangle(x,y,w,h);
 		movingN=false; movingE=false; movingW= false; movingS=false;
 		shootingN=false; shootingE=false; shootingW= false; shootingS=false;
+		spdMultiplier = multiplier;
 		
 		//this.hitbox = new Rectangle(10,10,10,10);
 		//this.hitbox.setFill(Color.RED);
@@ -82,6 +86,12 @@ public class Player extends Sprite{
         bullets= new ArrayList<Projectile>();
         
 	}
+	
+		
+	public ArrayList<Projectile> getBullets(){
+		return this.bullets;
+	}
+	
 	
 	private void getInput(){
 	 	setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -115,37 +125,37 @@ public class Player extends Sprite{
     } 
 	
 	public void move(){
-    if(movingN && !movingE && !movingW){ hitbox.setY(hitbox.getY()-(2*ySpd)); }
-		if(movingS && !movingE && !movingW){ hitbox.setY(hitbox.getY()+(2*ySpd)); }
-		if(movingE && !movingN && !movingS){ hitbox.setX(hitbox.getX()+(2*xSpd)); }
-		if(movingW && !movingN && !movingS){ hitbox.setX(hitbox.getX()-(2*xSpd)); }
+		if(movingN && !movingE && !movingW){ hitbox.setY(hitbox.getY()-ySpd*spdMultiplier); }
+		if(movingS && !movingE && !movingW){ hitbox.setY(hitbox.getY()+ySpd*spdMultiplier); }
+		if(movingE && !movingN && !movingS){ hitbox.setX(hitbox.getX()+xSpd*spdMultiplier); }
+		if(movingW && !movingN && !movingS){ hitbox.setX(hitbox.getX()-xSpd*spdMultiplier); }
 		if(movingN && movingE &&!movingW){ 
-			hitbox.setY(hitbox.getY()-(2*ySpd/Math.sqrt(2)));
-			hitbox.setX(hitbox.getX()+(2*xSpd/Math.sqrt(2)));
+			hitbox.setY(hitbox.getY()-(ySpd/Math.sqrt(2))*spdMultiplier);
+			hitbox.setX(hitbox.getX()+(xSpd/Math.sqrt(2))*spdMultiplier);
 		} 
 		if(movingN && movingW && !movingE){ 
-			hitbox.setY(hitbox.getY()-(2*ySpd/Math.sqrt(2)));
-			hitbox.setX(hitbox.getX()-(2*xSpd/Math.sqrt(2)));
+			hitbox.setY(hitbox.getY()-(ySpd/Math.sqrt(2))*spdMultiplier);
+			hitbox.setX(hitbox.getX()-(xSpd/Math.sqrt(2))*spdMultiplier);
 		}
 		if(movingS && movingE && !movingW){ 
-			hitbox.setY(hitbox.getY()+(2*ySpd/Math.sqrt(2)));
-			hitbox.setX(hitbox.getX()+(2*xSpd/Math.sqrt(2)));
+			hitbox.setY(hitbox.getY()+(ySpd/Math.sqrt(2))*spdMultiplier);
+			hitbox.setX(hitbox.getX()+(xSpd/Math.sqrt(2))*spdMultiplier);
 		}
 		if(movingS && movingW && !movingE){ 
-			hitbox.setY(hitbox.getY()+(2*ySpd/Math.sqrt(2)));
-			hitbox.setX(hitbox.getX()-(2*xSpd/Math.sqrt(2)));
+			hitbox.setY(hitbox.getY()+(ySpd/Math.sqrt(2))*spdMultiplier);
+			hitbox.setX(hitbox.getX()-(xSpd/Math.sqrt(2))*spdMultiplier);
 		}
 		if (movingN && movingE && movingW){
-			hitbox.setY(hitbox.getY()-(2*ySpd));
+			hitbox.setY(hitbox.getY()-ySpd*spdMultiplier);
 		}
 		if (movingS && movingE && movingW){
-			hitbox.setY(hitbox.getY()+(2*ySpd));
+			hitbox.setY(hitbox.getY()+ySpd*spdMultiplier);
 		}
 		if (movingE && movingN && movingS){
-			hitbox.setX(hitbox.getX()+(2*xSpd));
+			hitbox.setX(hitbox.getX()+xSpd*spdMultiplier);
 		}
 		if (movingW && movingN && movingS){
-			hitbox.setX(hitbox.getX()-(2*xSpd));
+			hitbox.setX(hitbox.getX()-xSpd*spdMultiplier);
 		}
 	}
 	
@@ -161,7 +171,7 @@ public class Player extends Sprite{
 			}
 		}else if(delay==0){
 			if(shootingN){
-				System.out.println("North shot");
+				//System.out.println("North shot");
 				//how to determine what shot to create? possible have hard checker for type
 				//maybe have a method which makes a copy for the projectile type, then feeds it to here and this only changes vx,vy,x,y, etc.
 
@@ -173,7 +183,7 @@ public class Player extends Sprite{
 				delay++;
 			}
 			else if(shootingS){
-				System.out.println("South shot");
+				//System.out.println("South shot");
 
 				Projectile shot = new SingleShot(hitbox.getX()+0.5*hitbox.getWidth(),hitbox.getY()+hitbox.getHeight(),0,10);
 
@@ -182,7 +192,7 @@ public class Player extends Sprite{
 				delay++;
 			}
 			else if(shootingW){
-				System.out.println("West shot");
+				//System.out.println("West shot");
 
 				Projectile shot = new SingleShot(hitbox.getX(),hitbox.getY()+0.5*hitbox.getHeight(),-10,0);
 
@@ -191,7 +201,7 @@ public class Player extends Sprite{
 				delay++;
 			}
 			else if(shootingE){
-				System.out.println("East shot");
+				//System.out.println("East shot");
 
 				Projectile shot = new SingleShot(hitbox.getX()+hitbox.getWidth(),hitbox.getY()+0.5*hitbox.getHeight(),10,0);
 

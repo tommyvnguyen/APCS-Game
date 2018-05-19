@@ -40,6 +40,8 @@ public class FlyingShooter extends Shooter{
 
 	public FlyingShooter(double dy, double dx, Rectangle target){
 		super(dy, dx, target);
+		
+		health = 10;
 		this.getChildren().add(hitbox);
 
 	}
@@ -69,7 +71,7 @@ public class FlyingShooter extends Shooter{
 		
 		if(timeCounter%360 == 0){
 			int PosOrNeg = (int)(Math.random() * 2);
-			xSpd = Math.random();
+			xSpd = Math.random() ;
 		 	ySpd = Math.sqrt(1 - Math.pow(xSpd,2));
 			if(PosOrNeg == 0){
 				xSpd *= -1;
@@ -78,7 +80,9 @@ public class FlyingShooter extends Shooter{
 			if(PosOrNeg == 0){
 				ySpd *= -1;
 			}
-
+			
+			//xSpd *= spdMultiplier;
+			//ySpd *= spdMultiplier;
 			//System.out.println("     " + PosOrNeg);
 
 		}else if(timeCounter%360 == 270){
