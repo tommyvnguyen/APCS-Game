@@ -30,11 +30,11 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 public class MapTester extends Application{
-	
+
 			private final long[] frameTimes = new long[100];
   		private int frameTimeIndex = 0 ;
     	private boolean arrayFilled = false ;
-	
+
 	public static void main(String [] args){
 		launch(args);
 	}
@@ -45,7 +45,7 @@ public class MapTester extends Application{
 
 		Map m = new Map(20);
 		root.getChildren().addAll(m,plyr);
-		
+
 
     	Label label = new Label();
         AnimationTimer frameRateMeter = new AnimationTimer() {
@@ -68,26 +68,30 @@ public class MapTester extends Application{
         };
         frameRateMeter.start();
 		root.getChildren().add(new StackPane(label));
-    	
-    	
-    	
+
+
+
 		AnimationTimer timer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-             	boolean b= m.moveRooms(wA.checkDoorCollision(plyr.getHitbox()));
-				//fix this to accurately move player
-				if(b){
-					plyr.setX(400);
-					plyr.setY(400);
-				}
-            }
-        };
-        timer.start();
-        
+	      @Override
+	      public void handle(long now) {
+					String dir=m.checkDoorCollision(plyr.getHitbox());
+						if(dir!=null) System.out.println(dir);
+					if(dir!=null){
+	       		m.moveRooms(dir);
+						//change this if statement to determine where to move the player to
+						if(true){
+							plyr.setX(400);
+							plyr.setY(400);
+						}
+					}
+        }
+    };
+    timer.start();
+
 		stage.setScene(new Scene(root, 800,800));
 		stage.getScene().onKeyPressedProperty().bind(plyr.onKeyPressedProperty());
 		stage.getScene().onKeyReleasedProperty().bind(plyr.onKeyReleasedProperty());
 		stage.show();
 	}
-	
+
 }
