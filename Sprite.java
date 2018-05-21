@@ -30,8 +30,6 @@ import javafx.animation.Animation;
 import javafx.util.Duration;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Rotate;
-
-
 import java.util.ArrayList;
 public abstract class Sprite extends Pane implements Collidable{
 
@@ -87,7 +85,18 @@ public abstract class Sprite extends Pane implements Collidable{
 		
 
 	}
-	
+	public double getX(){
+		return this.hitbox.getX();
+	}
+	public void setX(double d){
+		this.hitbox.setX(d);	
+	}
+	public double getY(){
+		return hitbox.getY();
+	}
+	public void setY(double d){
+		this.hitbox.setY(d);
+	}
 	public Sprite(double xSpd, double ySpd){
 
 		this.xSpd = xSpd;
@@ -121,8 +130,10 @@ public abstract class Sprite extends Pane implements Collidable{
 		this.hitbox.setY(this.hitbox.getY() + ySpd);
 	}
 	
+
 	public boolean collides(Collidable collidable){
 		return hitbox.getX() <= collidable.getHitbox().getX() + collidable.getHitbox().getWidth() && hitbox.getY() <= collidable.getHitbox().getY() + collidable.getHitbox().getHeight() && (hitbox.getX() + hitbox.getWidth() >= collidable.getHitbox().getX() && hitbox.getY() + hitbox.getHeight() >= collidable.getHitbox().getY()); 
 	}
 
 }
+

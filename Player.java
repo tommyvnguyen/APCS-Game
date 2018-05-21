@@ -54,9 +54,11 @@ public class Player extends Sprite{
 	
 	int delay =0;
 	int delayResetTimer=0;
+
 	int immuneCounter;
 
 	public Player(double x, double y, double w, double h, double xv, double yv, double multiplier){
+
 		super(xv,yv);
 		maxHealth = 5;
 		health = maxHealth;

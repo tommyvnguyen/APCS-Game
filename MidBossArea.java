@@ -31,10 +31,10 @@ import javafx.util.Duration;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Rotate;
 import java.util.*;
-public class WallyArea extends Area{
+public class MidBossArea extends Area{
 
 
-	public WallyArea(int xcoord, int ycoord){
+	public MidBossArea(int xcoord, int ycoord){
 		super(xcoord, ycoord);
 		Rectangle leftWall = new Rectangle(0,0,10,getPrefHeight());
 		leftWall.setFill(Color.BROWN);
@@ -45,7 +45,8 @@ public class WallyArea extends Area{
 		Rectangle bottomWall = new Rectangle(0,getPrefHeight()-10,getPrefWidth(),10);
 		bottomWall.setFill(Color.BROWN);
 		Rectangle midBlock = new Rectangle (400,400,30,30);
-		getChildren().addAll(leftWall,rightWall,topWall,bottomWall,midBlock);
+		Rectangle bottomBar = new Rectangle (200,600,400,30);
+		getChildren().addAll(leftWall,rightWall,topWall,bottomWall,midBlock,bottomBar);
 		
 		
 	}
