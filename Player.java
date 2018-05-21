@@ -47,7 +47,7 @@ public class Player extends Sprite{
 	AnimationTimer timer;
 	boolean movingN,movingE,movingW,movingS;
 	boolean shootingN,shootingE,shootingW,shootingS;
-	
+	String hittingWall;
 	Projectile bulletType;
 	ArrayList<Projectile> bullets;
 	
@@ -66,7 +66,7 @@ public class Player extends Sprite{
 		movingN=false; movingE=false; movingW= false; movingS=false;
 		shootingN=false; shootingE=false; shootingW= false; shootingS=false;
 		spdMultiplier = multiplier;
-		
+		hittingWall=null;
 		
 		//this.hitbox = new Rectangle(10,10,10,10);
 		//this.hitbox.setFill(Color.RED);
@@ -134,7 +134,12 @@ public class Player extends Sprite{
 	public void setImmune(){
 		immuneCounter = 60;
 	}
-	
+	public void setHittingWall(String b){
+		hittingWall=b;
+	}
+	public String getHittingWall(){
+		return hittingWall;
+	}
 	private void countdownImmunity(){
 		if(immuneCounter > 0){
 			if(immuneCounter % 20 == 0){
@@ -190,38 +195,53 @@ public class Player extends Sprite{
     } 
 	
 	public void move(){
-		if(movingN && !movingE && !movingW){ hitbox.setY(hitbox.getY()-ySpd*spdMultiplier); }
-		if(movingS && !movingE && !movingW){ hitbox.setY(hitbox.getY()+ySpd*spdMultiplier); }
-		if(movingE && !movingN && !movingS){ hitbox.setX(hitbox.getX()+xSpd*spdMultiplier); }
-		if(movingW && !movingN && !movingS){ hitbox.setX(hitbox.getX()-xSpd*spdMultiplier); }
-		if(movingN && movingE &&!movingW){ 
-			hitbox.setY(hitbox.getY()-(ySpd/Math.sqrt(2))*spdMultiplier);
-			hitbox.setX(hitbox.getX()+(xSpd/Math.sqrt(2))*spdMultiplier);
-		} 
-		if(movingN && movingW && !movingE){ 
-			hitbox.setY(hitbox.getY()-(ySpd/Math.sqrt(2))*spdMultiplier);
-			hitbox.setX(hitbox.getX()-(xSpd/Math.sqrt(2))*spdMultiplier);
+		if(hittingWall!=null){
+			if(hittingWall.equals("right")){
+				movingE=false;
+			}
+			if(hittingWall.equals("left")){
+				movingW=false;
+			}
+			if(hittingWall.equals("top")){
+				movingN=false;
+			}
+			if(hittingWall.equals("bottom")){
+				movingS=false;
+			}
 		}
-		if(movingS && movingE && !movingW){ 
-			hitbox.setY(hitbox.getY()+(ySpd/Math.sqrt(2))*spdMultiplier);
-			hitbox.setX(hitbox.getX()+(xSpd/Math.sqrt(2))*spdMultiplier);
-		}
-		if(movingS && movingW && !movingE){ 
-			hitbox.setY(hitbox.getY()+(ySpd/Math.sqrt(2))*spdMultiplier);
-			hitbox.setX(hitbox.getX()-(xSpd/Math.sqrt(2))*spdMultiplier);
-		}
-		if (movingN && movingE && movingW){
-			hitbox.setY(hitbox.getY()-ySpd*spdMultiplier);
-		}
-		if (movingS && movingE && movingW){
-			hitbox.setY(hitbox.getY()+ySpd*spdMultiplier);
-		}
-		if (movingE && movingN && movingS){
-			hitbox.setX(hitbox.getX()+xSpd*spdMultiplier);
-		}
-		if (movingW && movingN && movingS){
-			hitbox.setX(hitbox.getX()-xSpd*spdMultiplier);
-		}
+			if(movingN && !movingE && !movingW){ hitbox.setY(hitbox.getY()-ySpd*spdMultiplier); }
+			if(movingS && !movingE && !movingW){ hitbox.setY(hitbox.getY()+ySpd*spdMultiplier); }
+			if(movingE && !movingN && !movingS){ hitbox.setX(hitbox.getX()+xSpd*spdMultiplier); }
+			if(movingW && !movingN && !movingS){ hitbox.setX(hitbox.getX()-xSpd*spdMultiplier); }
+			if(movingN && movingE &&!movingW){ 
+				hitbox.setY(hitbox.getY()-(ySpd/Math.sqrt(2))*spdMultiplier);
+				hitbox.setX(hitbox.getX()+(xSpd/Math.sqrt(2))*spdMultiplier);
+			} 
+			if(movingN && movingW && !movingE){ 
+				hitbox.setY(hitbox.getY()-(ySpd/Math.sqrt(2))*spdMultiplier);
+				hitbox.setX(hitbox.getX()-(xSpd/Math.sqrt(2))*spdMultiplier);
+			}
+			if(movingS && movingE && !movingW){ 
+				hitbox.setY(hitbox.getY()+(ySpd/Math.sqrt(2))*spdMultiplier);
+				hitbox.setX(hitbox.getX()+(xSpd/Math.sqrt(2))*spdMultiplier);
+			}
+			if(movingS && movingW && !movingE){ 
+				hitbox.setY(hitbox.getY()+(ySpd/Math.sqrt(2))*spdMultiplier);
+				hitbox.setX(hitbox.getX()-(xSpd/Math.sqrt(2))*spdMultiplier);
+			}
+			if (movingN && movingE && movingW){
+				hitbox.setY(hitbox.getY()-ySpd*spdMultiplier);
+			}
+			if (movingS && movingE && movingW){
+				hitbox.setY(hitbox.getY()+ySpd*spdMultiplier);
+			}
+			if (movingE && movingN && movingS){
+				hitbox.setX(hitbox.getX()+xSpd*spdMultiplier);
+			}
+			if (movingW && movingN && movingS){
+				hitbox.setX(hitbox.getX()-xSpd*spdMultiplier);
+			}
+			
 	}
 	
 	private void shoot(){

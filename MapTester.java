@@ -41,7 +41,7 @@ public class MapTester extends Application{
 	public void start(Stage stage){
 
 		Pane root = new Pane();
-		Player plyr = new Player(200,200,50,50,4,4);
+		Player plyr = new Player(200,200,50,50,4,4,2);
 
 		Map m = new Map(20);
 		root.getChildren().addAll(m,plyr);

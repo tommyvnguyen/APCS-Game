@@ -47,7 +47,7 @@ public class SpawnArea extends Area{
 		Rectangle midBlock = new Rectangle (400,400,30,30);
 		midBlock.setFill(Color.PINK);
 		getChildren().addAll(leftWall,rightWall,topWall,bottomWall,midBlock);
-
+		walls.addAll(leftWall,rightWall,topWall,bottomWall,midBlock);
 
 	}
 }

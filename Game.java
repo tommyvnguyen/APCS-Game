@@ -37,11 +37,11 @@ public class Game extends Scene{
 	ArrayList<Shooter> enemies;
 	ArrayList<Powerup> powerups;
 	Pane pane;
-	
+	Map map;
 	Game(){
-		super(new Pane(), 1600, 900);
+		super(new Pane(), 800, 800);
 		pane = (Pane)getRoot();
-		plyr = new Player(200,200,100,100,1,1,3);
+		plyr = new Player(200,200,50,50,1,1,4);
 		enemies = new ArrayList<Shooter>();
 		powerups = new ArrayList<Powerup>();
 		pane.getChildren().add(plyr);
@@ -50,10 +50,15 @@ public class Game extends Scene{
 		powerups.add(new DamagePowerup(500,500));
 		pane.getChildren().add(powerups.get(0));
 		
+		map = new Map(20); 
+		pane.getChildren().add(map);
+		
 		AnimationTimer timer = new AnimationTimer(){
 			@Override
 			public void handle(long now){
 				run();
+				checkWalls();
+				checkDoors();
 			}
 		};
 		timer.start();
@@ -144,5 +149,38 @@ public class Game extends Scene{
 		}
 		
 		timeCounter++;
+	}
+	private void checkDoors(){
+		String dir=map.checkDoorCollision(plyr.getHitbox());
+		if(dir!=null) System.out.println(dir);
+		if(dir!=null){
+			map.moveRooms(dir);
+			//might be a good idea to change the numbers to actual variable getters
+			if(dir.equals("right")){
+				plyr.setX(30);
+				plyr.setY(400);
+			}
+			if(dir.equals("left")){
+				plyr.setX(720);
+				plyr.setY(400);
+			}
+			if(dir.equals("top")){
+				plyr.setX(400);
+				plyr.setY(720);
+			}
+			if(dir.equals("bottom")){
+				plyr.setX(400);
+				plyr.setY(30);
+			}
+		}
+	}	
+	private void checkWalls(){
+		plyr.setHittingWall(null);
+		if(plyr.getHitbox().getX()<0){
+			plyr.setHittingWall("left");
+		}
+		if(plyr.getHitbox().getX()>800-plyr.getHitbox().getWidth()){
+			plyr.setHittingWall("right");
+		}
 	}
 }

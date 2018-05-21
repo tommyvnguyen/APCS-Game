@@ -45,6 +45,6 @@ public class OpenArea extends Area{
 		Rectangle bottomWall = new Rectangle(0,getPrefHeight()-10,getPrefWidth(),10);
 		bottomWall.setFill(Color.BLACK);
 		getChildren().addAll(leftWall,rightWall,topWall,bottomWall);
-
+		walls.addAll(leftWall,rightWall,topWall,bottomWall);
 	}
 }
