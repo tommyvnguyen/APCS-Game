@@ -37,7 +37,8 @@ public abstract class Sprite extends Pane implements Collidable{
 	double yStart;
 	double xSpd;
 	double ySpd;
-	Pane outerPane; 
+	double spdMultiplier;
+	//double trueSpd; // In the case that the sprite slows down or stops, trueSpd will be used to make sure that the sprite will go back to its normal speed
 
 	Rectangle hitbox;//Face is a drawn point on each sprite to show which way the sprite is facing.
 	
@@ -47,6 +48,8 @@ public abstract class Sprite extends Pane implements Collidable{
 		this.ySpd = ySpd;
 		this.xStart = xStart;
 		this.yStart = yStart;
+		spdMultiplier = 1;
+		//trueSpd = spdMultiplier;
 
 
 		//setLayoutX(xStart);
@@ -61,8 +64,26 @@ public abstract class Sprite extends Pane implements Collidable{
 
 	}
 	
-	public Rectangle getHitbox(){
-		return this.hitbox;
+	public Sprite(double xStart, double yStart, double xSpd, double ySpd, double multiplier){
+
+		this.xSpd = xSpd;
+		this.ySpd = ySpd;
+		this.xStart = xStart;
+		this.yStart = yStart;
+		spdMultiplier = multiplier;
+		//trueSpd = spdMultiplier;
+
+
+		//setLayoutX(xStart);
+		//setLayoutY(yStart);
+		
+		hitbox = new Rectangle(xStart,yStart,50,50);
+		hitbox.setFill(Color.BLACK);
+		//this.outerPane = outerPane;
+		//outerPane.getChildren().add(this);
+		//this.getChildren().add(hitbox);
+		
+
 	}
 	public double getX(){
 		return this.hitbox.getX();
@@ -82,7 +103,8 @@ public abstract class Sprite extends Pane implements Collidable{
 		this.ySpd = ySpd;
 		this.xStart = 0;
 		this.yStart = 0;
-
+		spdMultiplier = 1;
+		//trueSpd = spdMultiplier;
 		
 		//setLayoutX(xStart);
 		//setLayoutY(yStart);
@@ -91,9 +113,27 @@ public abstract class Sprite extends Pane implements Collidable{
 		hitbox.setFill(Color.BLACK);
 		//getChildren().add(this.hitbox);
 	}
+	
+	public double getSpdMultiplier(){
+		return spdMultiplier;
+	}
+	
+	public void setSpdMultiplier(double multiplier){
+		spdMultiplier = multiplier;
+	}
+	
+	public Rectangle getHitbox(){
+		return this.hitbox;
+	}
 	public void move(){
 		this.hitbox.setX(this.hitbox.getX() + xSpd);
 		this.hitbox.setY(this.hitbox.getY() + ySpd);
 	}
 	
+
+	public boolean collides(Collidable collidable){
+		return hitbox.getX() <= collidable.getHitbox().getX() + collidable.getHitbox().getWidth() && hitbox.getY() <= collidable.getHitbox().getY() + collidable.getHitbox().getHeight() && (hitbox.getX() + hitbox.getWidth() >= collidable.getHitbox().getX() && hitbox.getY() + hitbox.getHeight() >= collidable.getHitbox().getY()); 
+	}
+
 }
+
