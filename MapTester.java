@@ -70,18 +70,30 @@ public class MapTester extends Application{
 		root.getChildren().add(new StackPane(label));
 
 
-
+//this is the basic code for moving players to the correct position when transfering rooms
 		AnimationTimer timer = new AnimationTimer() {
 	      @Override
 	      public void handle(long now) {
 					String dir=m.checkDoorCollision(plyr.getHitbox());
-						if(dir!=null) System.out.println(dir);
+					if(dir!=null) System.out.println(dir);
 					if(dir!=null){
 	       		m.moveRooms(dir);
-						//change this if statement to determine where to move the player to
-						if(true){
-							plyr.setX(400);
+						//might be a good idea to change the numbers to actual variable getters
+						if(dir.equals("right")){
+							plyr.setX(30);
 							plyr.setY(400);
+						}
+						if(dir.equals("left")){
+							plyr.setX(720);
+							plyr.setY(400);
+						}
+						if(dir.equals("top")){
+							plyr.setX(400);
+							plyr.setY(720);
+						}
+						if(dir.equals("bottom")){
+							plyr.setX(400);
+							plyr.setY(30);
 						}
 					}
         }

@@ -36,9 +36,10 @@ public class Map extends Pane{
 	public Area currentArea;
 	ArrayList<Area> areas = new ArrayList<Area>(); //coordinate system IS TRADITIONAL EUCLIDIAN SPACE
 	final int NUM_OF_AREA_TYPES = 2;
+
 	public Map(int size){
 		generateNewMap();
-
+		addDoors();
 	}
 
 	public String checkDoorCollision(Rectangle hitbox){
@@ -46,11 +47,11 @@ public class Map extends Pane{
 	}
 	private void generateNewMap(){
 		SpawnArea spawn = new SpawnArea(0,0);
-		spawn.addLeftDoor();spawn.addRightDoor();spawn.addTopDoor();spawn.addBottomDoor();
 		areas.add(spawn);
 		currentArea=spawn;
 		getChildren().add(currentArea);
 		generateMainBranch("right");
+		generateMainBranch("up");
 	}
 
 	//takes "right", "left", "up", "down"
@@ -69,19 +70,11 @@ public class Map extends Pane{
 			}
 		}
 		if(direction.equals("up") || direction.equals("down")){
-			Area a = new MidBossArea(0,5*modifier);
-			a.addRightDoor();
-			areas.add(a);
-			a=new FinalBossArea(0,10*modifier);
-			a.addRightDoor();
-			areas.add(a);
+			areas.add(new MidBossArea(0,5*modifier));
+			areas.add(new FinalBossArea(0,10*modifier));
 		}else{
-			Area a = new MidBossArea(5*modifier,0);
-			a.addRightDoor();
-			areas.add(a);
-			a= new FinalBossArea(10*modifier,0);
-			a.addRightDoor();
-			areas.add(a);
+			areas.add(new MidBossArea(5*modifier,0));
+			areas.add(new FinalBossArea(10*modifier,0));
 		}
 		for(Area as : areas){
 				System.out.println(as.getXCoord()+" " + as.getYCoord());
@@ -98,8 +91,6 @@ public class Map extends Pane{
 			case 2: result= new OpenArea(x,y);
 					break;
 		}
-		//CHANGE THIS LINE TO ADD CORECT DOORS
-		result.addRightDoor();
 		return result;
 	}
 
@@ -139,5 +130,23 @@ public class Map extends Pane{
 	private void refreshArea(){
 		getChildren().removeAll(getChildren());
 		getChildren().add(currentArea);
+	}
+	private void addDoors(){
+		for(int i=0;i<areas.size();i++){
+			for(Area a: areas){
+				if(a.getXCoord()==areas.get(i).getXCoord()+1 && a.getYCoord()==areas.get(i).getYCoord()){
+					areas.get(i).addRightDoor();
+				}
+				if(a.getXCoord()==areas.get(i).getXCoord()-1 && a.getYCoord()==areas.get(i).getYCoord()){
+					areas.get(i).addLeftDoor();
+				}
+				if(a.getXCoord()==areas.get(i).getXCoord() && a.getYCoord()==areas.get(i).getYCoord()+1){
+					areas.get(i).addTopDoor();
+				}
+				if(a.getXCoord()==areas.get(i).getXCoord() && a.getYCoord()==areas.get(i).getYCoord()-1){
+					areas.get(i).addBottomDoor();
+				}
+			}
+		}
 	}
 }
