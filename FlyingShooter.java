@@ -47,31 +47,12 @@ public class FlyingShooter extends Shooter{
 	}
 	//TimeCounter counts how many times the animationTimer has called its methods. 
 	//TimeCounter acts as a unit of time.
-	public void move(int timeCounter){
-
-		if(this.hitbox.getX() >= 0 && this.hitbox.getX() + this.hitbox.getWidth() < 1600){ //Be sure to make it based around the root's size, later
-			this.hitbox.setX(this.hitbox.getX() + xSpd);
-		}
-		else{
-			xSpd *= -1;
-			this.hitbox.setX(this.hitbox.getX() + xSpd);
-		}
-		if(this.hitbox.getY() >= 0 && this.hitbox.getY() + this.hitbox.getHeight() < 900){ 
-			this.hitbox.setY(this.hitbox.getY() + ySpd);
-		}else{
-			ySpd *= -1;
-			this.hitbox.setY(this.hitbox.getY() + ySpd);
-		}
-		
-		
-		//this.getTransforms().add(new Rotate(Math.atan(((this.getLayoutY() + this.getHeight()/2) - (target.getLayoutY() + target.getHeight()/2))/((this.getLayoutX() + this.getWidth()/2) - (target.getLayoutX() + target.getWidth()/2)) ),this.getWidth()/2, this.getHeight()/2));
-		//this.getTransforms().add(new Rotate(1,this.getWidth()/2, this.getHeight()/2));
+	public void move(){
+		super.move();
 		track();
-
-		
 		if(timeCounter%360 == 0){
 			int PosOrNeg = (int)(Math.random() * 2);
-			xSpd = Math.random() ;
+			xSpd = Math.random();
 		 	ySpd = Math.sqrt(1 - Math.pow(xSpd,2));
 			if(PosOrNeg == 0){
 				xSpd *= -1;
@@ -87,9 +68,8 @@ public class FlyingShooter extends Shooter{
 
 		}else if(timeCounter%360 == 270){
 			xSpd = 0;
-		 	ySpd = 0;
+			ySpd = 0;
 		}
-		
 		//Turn towards player
 
 		//System.out.println(ySpd + " -- " + xSpd);

@@ -41,11 +41,9 @@ public abstract class Shooter extends Enemy{
 
 	AnimationTimer timer;
 	ArrayList<Projectile> bullets;
-	int shootingCounter; 
 	
 	public Shooter(double dy, double dx, Rectangle target){
 		super(dy, dx, target);
-		shootingCounter = 0;
 		timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -68,7 +66,7 @@ public abstract class Shooter extends Enemy{
 	
 	
 	public void fire(){
-		if(shootingCounter % 50 == 0){
+		if(timeCounter % 60 == 0){
 			double angle = Math.toDegrees(Math.atan2(this.hitbox.getY() - target.getY(),this.hitbox.getX()-target.getX())) + 180;
 			double x = (target.getX() + target.getWidth()/2) - (this.hitbox.getWidth() + this.hitbox.getX()) + (this.hitbox.getHeight()/2 * Math.cos(Math.toRadians(angle)));
 			double y = (target.getY() + target.getHeight()/2) - (this.hitbox.getHeight()/2 + this.hitbox.getY()) + (this.hitbox.getWidth()/2 * Math.sin(Math.toRadians(angle)));
@@ -82,7 +80,6 @@ public abstract class Shooter extends Enemy{
 			this.getChildren().add(shot);
 			this.bullets.add(shot);
 		}
-		shootingCounter++;
 	}
 	public void move(){
 		super.move();

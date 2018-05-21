@@ -33,5 +33,5 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 public interface Collidable{
 	public Rectangle getHitbox();
-	public boolean collides(Rectangle collideRect);
+	public boolean collides(Collidable collidable);
 }

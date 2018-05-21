@@ -34,16 +34,21 @@ import java.util.ArrayList;
 public class Game extends Scene{
 	int timeCounter;
 	Player plyr;
-	ArrayList<FlyingShooter> enemies;
+	ArrayList<Shooter> enemies;
+	ArrayList<Powerup> powerups;
 	Pane pane;
 	
 	Game(){
 		super(new Pane(), 1600, 900);
 		pane = (Pane)getRoot();
 		plyr = new Player(200,200,100,100,1,1,3);
-		enemies = new ArrayList<FlyingShooter>();
+		enemies = new ArrayList<Shooter>();
+		powerups = new ArrayList<Powerup>();
 		pane.getChildren().add(plyr);
 		timeCounter = 0;
+		
+		powerups.add(new DamagePowerup(500,500));
+		pane.getChildren().add(powerups.get(0));
 		
 		AnimationTimer timer = new AnimationTimer(){
 			@Override
@@ -61,6 +66,11 @@ public class Game extends Scene{
 		//root.getChildren().add(testEnemy);
 		
 		//System.out.println(timeCounter);
+		
+		//Testing powerups
+		
+		
+		//Enemy actions
 		for(int i = 0; i < enemies.size(); i++){
 			enemies.get(i).fire();
 		}
@@ -69,16 +79,28 @@ public class Game extends Scene{
 			enemies.add(newShooter);
 			pane.getChildren().add(newShooter);
 		}
-		//testEnemy.move(timeCounter);
+		
 		for(int i = 0; i < enemies.size(); i++){
-			enemies.get(i).move(timeCounter);
+			enemies.get(i).move();
+			if(enemies.get(i).collides(plyr)){
+				plyr.takeDamage();
+			}
+			
+			//Enemy bullets collide w/ objects
 			for(int j = 0; j < enemies.get(i).getBullets().size(); j++){
 				Rectangle bulletHitbox = enemies.get(i).getBullets().get(j).getHitbox();
-				if(enemies.get(i).getBullets().get(j).collides(plyr.getHitbox())|| bulletHitbox.getX() < 0 || bulletHitbox.getY() < 0 || bulletHitbox.getX() > 1600 || bulletHitbox.getY() > 900){
+				if(enemies.get(i).getBullets().get(j).collides(plyr)){
+					enemies.get(i).getChildren().remove(j+1);
+					enemies.get(i).getBullets().remove(j);
+					plyr.takeDamage();
+				}
+				
+				if(bulletHitbox.getX() < 0 || bulletHitbox.getY() < 0 || bulletHitbox.getX() > 1600 || bulletHitbox.getY() > 900){
 					enemies.get(i).getChildren().remove(j+1);
 					enemies.get(i).getBullets().remove(j);
 				}
 			}
+			enemies.get(i).increaseTimeCounter();
 		}
 		
 		//playerBullets collide w/ objects
@@ -86,20 +108,21 @@ public class Game extends Scene{
 		for(int i = 0; i < plyr.getBullets().size(); i++){
 			for(int j = 0; j < enemies.size(); j++){
 				//System.out.println("Check");
-				if(plyr.getBullets().get(i).collides(enemies.get(j).getHitbox())){
+				if(plyr.getBullets().get(i).collides(enemies.get(j))){
 					//System.out.println(j + "--" + enemies.size() + "--" + root.getChildren().size());
 						
-					if(enemies.get(j).decreaseHealth(plyr.getBullets().get(i).getDamage()) <= 0){
+					if(enemies.get(j).decreaseHealth(plyr.getBulletType().getDamage()) <= 0){
 						hitList.add(enemies.get(j));
 					}
+					plyr.getChildren().remove(plyr.getBullets().get(i));
 					plyr.getBullets().remove(i);
-					plyr.getChildren().remove(i+1);
+					
 					break;
 					//System.out.println(enemies.size() + " " + root.getChildren().size());
 				}
 				if(plyr.getBullets().get(i).getHitbox().getX() <= 0 || plyr.getBullets().get(i).getHitbox().getY() <= 0 || plyr.getBullets().get(i).getHitbox().getX() + plyr.getBullets().get(i).getHitbox().getWidth() >= 1600 || plyr.getBullets().get(i).getHitbox().getY() + plyr.getBullets().get(i).getHitbox().getHeight() >= 900){
+					plyr.getChildren().remove(plyr.getBullets().get(i));
 					plyr.getBullets().remove(i);
-					plyr.getChildren().remove(i+1);
 					break;
 				}
 			}
@@ -109,6 +132,17 @@ public class Game extends Scene{
 			enemies.remove(e);
 		}
 		hitList.clear();
+		
+		//Player collide w/ objects
+		for(int i = 0; i < powerups.size(); i++){
+			if(plyr.collides(powerups.get(i))){
+				if(powerups.get(i).upgrade(plyr)){
+					pane.getChildren().remove(powerups.get(i));
+					powerups.remove(i);
+				}
+			}
+		}
+		
 		timeCounter++;
 	}
 }

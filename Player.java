@@ -41,6 +41,8 @@ import javafx.scene.Node;
 public class Player extends Sprite{
 
 	int health;
+	int maxHealth;
+	int meleeDmg;
 	
 	AnimationTimer timer;
 	boolean movingN,movingE,movingW,movingS;
@@ -52,14 +54,17 @@ public class Player extends Sprite{
 	
 	int delay =0;
 	int delayResetTimer=0;
+	int immuneCounter;
 
 	public Player(double x, double y, double w, double h, double xv, double yv, double multiplier){
 		super(xv,yv);
-		health = 5;
+		maxHealth = 5;
+		health = maxHealth;
 		hitbox = new Rectangle(x,y,w,h);
 		movingN=false; movingE=false; movingW= false; movingS=false;
 		shootingN=false; shootingE=false; shootingW= false; shootingS=false;
 		spdMultiplier = multiplier;
+		
 		
 		//this.hitbox = new Rectangle(10,10,10,10);
 		//this.hitbox.setFill(Color.RED);
@@ -75,6 +80,7 @@ public class Player extends Sprite{
 				   p.move();
 			   }
                shoot();
+			   countdownImmunity();
             }
         };
         timer.start();
@@ -87,11 +93,68 @@ public class Player extends Sprite{
         
 	}
 	
-		
+	public int getMaxHealth(){
+		return this.maxHealth;
+	}
+	
+	public int getHealth(){
+		return this.health;
+	}
+	
+	public int getMeleeDmg(){
+		return this.meleeDmg;
+	}
+	
 	public ArrayList<Projectile> getBullets(){
 		return this.bullets;
 	}
 	
+	public Projectile getBulletType(){
+		return this.bulletType;
+	}
+	
+	public void setMaxHealth(int maxHealth){
+		this.maxHealth = maxHealth;
+	}
+	
+	public void setHealth(int health){
+		this.health = health;
+	}
+	
+	public void setMeleeDmg(int meleeDmg){
+		this.meleeDmg = meleeDmg;
+	}
+	
+	public boolean isImmune(){
+		return immuneCounter > 0;
+	}
+	
+	public void setImmune(){
+		immuneCounter = 60;
+	}
+	
+	private void countdownImmunity(){
+		if(immuneCounter > 0){
+			if(immuneCounter % 20 == 0){
+				hitbox.setFill(Color.WHITE);
+			}else if(immuneCounter % 10 == 0 || immuneCounter == 1){
+				hitbox.setFill(Color.BLACK);
+			}
+			immuneCounter--;
+		}
+	}
+	
+	public void takeDamage(){
+		if(getHealth() >= 1 && !(isImmune())){
+			setHealth(getHealth()-1);
+			if(getHealth() <= 0){
+				
+			}else{
+				setImmune();
+				System.out.println(this);
+			}
+		}
+	}
 	
 	private void getInput(){
 	 	setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -229,5 +292,8 @@ public class Player extends Sprite{
 	//}
 	//
 	
+	public String toString(){
+		return "Max HP : " + getMaxHealth() + "\nHP : " + getHealth() + "\nDamage : " + bulletType.getDamage() + "\nMeleeDmg : " + getMeleeDmg() + "\nSpeed : " + getSpdMultiplier() + "\n\n";
+	}
 	
 }

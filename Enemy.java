@@ -35,6 +35,7 @@ import java.util.ArrayList;
 public abstract class Enemy extends Sprite{
 	int damage;
 	int health;
+	int timeCounter;
 
 	Rectangle target; //The thing that the enemy is looking at
 	//Projectile projectile;
@@ -45,6 +46,7 @@ public abstract class Enemy extends Sprite{
 
 		damage = 1;
 		health = 10;
+		timeCounter = 0;
 		this.target = target;
 	}
 	
@@ -52,6 +54,27 @@ public abstract class Enemy extends Sprite{
 	public void track(){
 		this.hitbox.getTransforms().clear();
 		this.hitbox.getTransforms().add(new Rotate(Math.toDegrees(Math.atan2(this.hitbox.getY() - target.getY(),this.hitbox.getX()-target.getX()))+180, (this.hitbox.getWidth()/2 + this.hitbox.getX()), (this.hitbox.getHeight()/2 + this.hitbox.getY())));
+	}
+	
+	public void move(){
+		if(this.hitbox.getX() >= 0 && this.hitbox.getX() + this.hitbox.getWidth() < 1600){ //Be sure to make it based around the root's size, later
+			this.hitbox.setX(this.hitbox.getX() + xSpd * spdMultiplier);
+		}
+		else{
+			xSpd *= -1;
+			this.hitbox.setX(this.hitbox.getX() + xSpd * spdMultiplier);
+		}
+		if(this.hitbox.getY() >= 0 && this.hitbox.getY() + this.hitbox.getHeight() < 900){ 
+			this.hitbox.setY(this.hitbox.getY() + ySpd * spdMultiplier);
+		}else{
+			ySpd *= -1;
+			this.hitbox.setY(this.hitbox.getY() + ySpd * spdMultiplier);
+		}
+		//if(spdMultiplier > trueSpd){
+		//	spdMultiplier -= 0.1;
+		//}else if(spdMultiplier < trueSpd){
+		//	spdMultiplier += 0.1;
+		//}
 	}
 	
 	public int getHealth(){
@@ -64,6 +87,10 @@ public abstract class Enemy extends Sprite{
 	public int decreaseHealth(int decreaseAmt){
 		health -= decreaseAmt;
 		return health;
+	}
+	
+	public void increaseTimeCounter(){
+		timeCounter++;
 	}
    // It takes a y value and an x value and finds their proportion
 }
