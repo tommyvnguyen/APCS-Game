@@ -31,22 +31,23 @@ import javafx.util.Duration;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Rotate;
 import java.util.*;
-public class WallyArea extends Area{
+public class SpawnArea extends Area{
 
 
-	public WallyArea(int xcoord, int ycoord){
+	public SpawnArea(int xcoord, int ycoord){
 		super(xcoord, ycoord);
 		Rectangle leftWall = new Rectangle(0,0,10,getPrefHeight());
 		leftWall.setFill(Color.BROWN);
 		Rectangle topWall = new Rectangle(0,0,getPrefWidth(),10);
 		topWall.setFill(Color.BROWN);
 		Rectangle rightWall= new Rectangle(getPrefWidth()-10,0,10,getPrefHeight());
-		rightWall.setFill(Color.BROWN);
+		rightWall.setFill(Color.GREEN);
 		Rectangle bottomWall = new Rectangle(0,getPrefHeight()-10,getPrefWidth(),10);
 		bottomWall.setFill(Color.BROWN);
 		Rectangle midBlock = new Rectangle (400,400,30,30);
+		midBlock.setFill(Color.PINK);
 		getChildren().addAll(leftWall,rightWall,topWall,bottomWall,midBlock);
-		
-		
+
+
 	}
 }

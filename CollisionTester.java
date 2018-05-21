@@ -32,7 +32,7 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 public class CollisionTester extends Application{
-	int timeCounter = 1;
+	int timeCounter = 0;
 	
 	public static void main(String[] args){
 		launch(args);
@@ -41,7 +41,7 @@ public class CollisionTester extends Application{
 	public void start(Stage stage){
 		Pane root = new Pane();
 		Scene scene = new Scene(root, 1600, 900);
-		Player plyr = new Player(200,200,100,100,3,3);
+		Player plyr = new Player(200,200,100,100,1,1,3);
 		//FlyingShooter testEnemy = new FlyingShooter(1, 1, plyr.getHitbox());
 		ArrayList<FlyingShooter> enemies = new ArrayList<FlyingShooter>();
 		
@@ -53,13 +53,10 @@ public class CollisionTester extends Application{
 			@Override
 			public void handle(long now){
 				//System.out.println(timeCounter);
-				if(timeCounter % 50 == 0){
-					//testEnemy.fire();
-					for(int i = 0; i < enemies.size(); i++){
-						enemies.get(i).fire();
-					}
+				for(int i = 0; i < enemies.size(); i++){
+					enemies.get(i).fire();
 				}
-				if(timeCounter%1000 == 0 && enemies.size() < 5){
+				if(timeCounter%100 == 0 && enemies.size() < 5){
 					FlyingShooter newShooter = new FlyingShooter(1,1,plyr.getHitbox());
 					enemies.add(newShooter);
 					root.getChildren().add(newShooter);
@@ -69,15 +66,41 @@ public class CollisionTester extends Application{
 					enemies.get(i).move(timeCounter);
 					for(int j = 0; j < enemies.get(i).getBullets().size(); j++){
 						Rectangle bulletHitbox = enemies.get(i).getBullets().get(j).getHitbox();
-						if(bulletHitbox.getX() < plyr.getHitbox().getX() + plyr.getHitbox().getWidth() && bulletHitbox.getY() < plyr.getHitbox().getY() + plyr.getHitbox().getHeight() && bulletHitbox.getX() + bulletHitbox.getWidth() > plyr.getHitbox().getX() && bulletHitbox.getY() + bulletHitbox.getHeight() > plyr.getHitbox().getY()
-						|| bulletHitbox.getX() < 0 || bulletHitbox.getY() < 0 || bulletHitbox.getX() > 1600 || bulletHitbox.getY() > 900){
+						if(enemies.get(i).getBullets().get(j).collides(plyr.getHitbox())|| bulletHitbox.getX() < 0 || bulletHitbox.getY() < 0 || bulletHitbox.getX() > 1600 || bulletHitbox.getY() > 900){
 							enemies.get(i).getChildren().remove(j+1);
 							enemies.get(i).getBullets().remove(j);
 						}
 					}
 				}
 				
-				
+				//playerBullets collide w/ objects
+				ArrayList<Enemy> hitList = new ArrayList<Enemy>();
+				for(int i = 0; i < plyr.getBullets().size(); i++){
+					for(int j = 0; j < enemies.size(); j++){
+						//System.out.println("Check");
+						if(plyr.getBullets().get(i).collides(enemies.get(j).getHitbox())){
+							//System.out.println(j + "--" + enemies.size() + "--" + root.getChildren().size());
+								
+							if(enemies.get(j).decreaseHealth(plyr.getBullets().get(i).getDamage()) <= 0){
+								hitList.add(enemies.get(j));
+							}
+							plyr.getBullets().remove(i);
+							plyr.getChildren().remove(i+1);
+							break;
+							//System.out.println(enemies.size() + " " + root.getChildren().size());
+						}
+						if(plyr.getBullets().get(i).getHitbox().getX() <= 0 || plyr.getBullets().get(i).getHitbox().getY() <= 0 || plyr.getBullets().get(i).getHitbox().getX() + plyr.getBullets().get(i).getHitbox().getWidth() >= 1600 || plyr.getBullets().get(i).getHitbox().getY() + plyr.getBullets().get(i).getHitbox().getHeight() >= 900){
+							plyr.getBullets().remove(i);
+							plyr.getChildren().remove(i+1);
+							break;
+						}
+					}
+				}
+				for(Enemy e : hitList){
+					root.getChildren().remove(e);
+					enemies.remove(e);
+				}
+				hitList.clear();
 				timeCounter++;
 			}
 		};
