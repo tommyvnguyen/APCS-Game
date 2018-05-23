@@ -48,7 +48,7 @@ public class FinalBossArea extends Area{
 		Rectangle bottomBar = new Rectangle (200,600,400,30);
 		bottomBar.setFill(Color.BLUE);
 		getChildren().addAll(leftWall,rightWall,topWall,bottomWall,midBlock,bottomBar);
-		walls.addAll(leftWall,rightWall,topWall,bottomWall,midBlock,bottomBar);
-		
+		Collections.addAll(walls,leftWall,rightWall,topWall,bottomWall,midBlock,bottomBar);
+
 	}
 }

@@ -42,6 +42,10 @@ public class Map extends Pane{
 		addDoors();
 	}
 
+	public Area getCurrentArea(){
+		return currentArea;
+	}
+
 	public String checkDoorCollision(Rectangle hitbox){
 			return currentArea.checkDoorCollision(hitbox);
 	}
