@@ -54,10 +54,43 @@ public class Map extends Pane{
 		areas.add(spawn);
 		currentArea=spawn;
 		getChildren().add(currentArea);
-		generateMainBranch("right");
-		generateMainBranch("up");
+		randomMap(6,3,1);
 	}
-
+	//assigns a main branch, a long side branch, a short side branch then adds side rooms and short side branches
+	// any maps is given to have a main branch with 2 bosses, a side branch with 1 boss and 1 side branch with no boss
+	private void randomMap(int numSideRooms, int numSideBranches, int numBossBranch){
+		String dir= randomDirection();
+		generateMainBranch(dir);
+		String currentDir= dir;
+		while(dir.equals(currentDir)){
+			dir = randomDirection();
+		}
+		generateSideBranch(0,0,dir,randomInt(4,6),false);
+		String currentDir2=dir;
+		while(dir.equals(currentDir)||currentDir2.equals(dir)){
+			dir = randomDirection();
+		}
+		generateSideRooms(0,0,dir,randomInt(3,4),false);
+		for(int i=0;i<numBossBranch;i++){
+			int index = randomInt(0,areas.size()-1);
+			int xc=areas.get(index).getXCoord();
+			int yc=areas.get(index).getYCoord();
+			generateSideBranch(xc,yc,openRandomDirection(xc,yc),randomInt(5,7),false);
+		}
+		for(int i=0; i<numSideBranches; i++){
+			int index = randomInt(0,areas.size()-1);
+			int xc=areas.get(index).getXCoord();
+			int yc=areas.get(index).getYCoord();
+			generateSideRooms(xc,yc,openRandomDirection(xc,yc),randomInt(3,5),false);
+		}
+		for(int i=0; i<numSideRooms; i++){
+			int index = randomInt(0,areas.size()-1);
+			int xc=areas.get(index).getXCoord();
+			int yc=areas.get(index).getYCoord();
+			generateSideRooms(xc,yc,openRandomDirection(xc,yc),randomInt(1,2),false);
+		}		
+	}
+	
 	//takes "right", "left", "up", "down"
 	private void generateMainBranch(String direction){
 		int modifier = 1;
@@ -84,7 +117,57 @@ public class Map extends Pane{
 				System.out.println(as.getXCoord()+" " + as.getYCoord());
 		}
 	}
-
+	//generates branch with size number rooms, starting a x,y and going in direction given. boolean whether intial coordiante is incldued 
+	// (e.g exclusive vs inclusive)
+	private void generateSideBranch(int x, int y,String direction,int size,boolean inclusive){
+		int modifier = 1;
+		if(direction.equals("left")||direction.equals("down")){
+			modifier=-1;
+		}
+		if(!inclusive){
+			if(direction.equals("up")||direction.equals("down")){
+				y+=1*modifier;
+			}
+			if(direction.equals("left")||direction.equals("right")){
+				x+=1*modifier;
+			}
+		}	
+		for(int i=0; i<size-1; i++){
+				if(direction.equals("up") || direction.equals("down")){
+					areas.add(randomArea(x,y+(i*modifier)));
+				}else{
+					areas.add(randomArea(x+(i*modifier),y));
+				}
+		}
+		if(direction.equals("up") || direction.equals("down")){
+			areas.add(new MidBossArea(x,y+(size-1)*modifier));
+		}else{
+			areas.add(new MidBossArea(x+(size-1)*modifier,y));
+		}
+	}
+	//nos boss usually for small side rooms (1 or 2)
+	private void generateSideRooms(int x, int y, String direction, int size,boolean inclusive){
+		int modifier = 1;
+		if(direction.equals("left")||direction.equals("down")){
+			modifier=-1;
+		}
+		if(!inclusive){
+			if(direction.equals("up")||direction.equals("down")){
+				y+=1*modifier;
+			}
+			if(direction.equals("left")||direction.equals("right")){
+				x+=1*modifier;
+			}
+		}	
+		for(int i=0; i<size-1; i++){
+				if(direction.equals("up") || direction.equals("down")){
+					areas.add(randomArea(x,y+(i*modifier)));
+				}else{
+					areas.add(randomArea(x+(i*modifier),y));
+				}
+		}
+	}
+	
 	//takes in a coordinate and creates a random area from possible selection
 	private Area randomArea(int x, int y){
 		int index = (int)(Math.random()*NUM_OF_AREA_TYPES +1);
@@ -152,5 +235,48 @@ public class Map extends Pane{
 				}
 			}
 		}
+	}
+	private String randomDirection(){
+		int random = (int)(Math.random()*4+1);
+		if(random ==1){ return "top";}
+		else if(random==2){ return "bottom";}
+		else if (random==3){return "right";}
+		else { return "left";}
+	}
+	//given coordinate, find random direction that has no rooms
+	private String openRandomDirection(int x, int y){
+		boolean rightEmpty=true;
+		boolean leftEmpty=true;
+		boolean topEmpty=true;
+		boolean bottomEmpty=true;
+		for(Area a : areas){
+			if(a.getXCoord()==x+1 && a.getYCoord()==y){
+				rightEmpty=false;
+			}
+			if(a.getXCoord()==x-1 && a.getYCoord()==y){
+				leftEmpty=false;
+			}
+			if(a.getXCoord()==x && a.getYCoord()==y+1){
+				topEmpty=false;
+			}
+			if(a.getXCoord()==x && a.getYCoord()==y-1){
+				bottomEmpty=false;
+			}
+		}
+		if(!rightEmpty && !leftEmpty && !topEmpty && !bottomEmpty){ 
+			return randomDirection();
+		}else{
+			while(true){
+				String dir = randomDirection();
+				if(dir.equals("right") && rightEmpty){ return "right";}
+				if(dir.equals("left") && leftEmpty){ return "left";}
+				if(dir.equals("top") && topEmpty){ return "top";}
+				if(dir.equals("bottom") && bottomEmpty){ return "bottom";}
+			}
+		}
+	}
+	private int randomInt(int low, int high){
+		int x = (int)(Math.random()*(high-low+1)+low);
+		return x;
 	}
 }
