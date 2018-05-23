@@ -52,8 +52,10 @@ public abstract class Enemy extends Sprite{
 	
 
 	public void track(){
-		this.hitbox.getTransforms().clear();
-		this.hitbox.getTransforms().add(new Rotate(Math.toDegrees(Math.atan2(this.hitbox.getY() - target.getY(),this.hitbox.getX()-target.getX()))+180, (this.hitbox.getWidth()/2 + this.hitbox.getX()), (this.hitbox.getHeight()/2 + this.hitbox.getY())));
+		if(timeCounter > 60){
+			this.hitbox.getTransforms().clear();
+			this.hitbox.getTransforms().add(new Rotate(Math.toDegrees(Math.atan2(this.hitbox.getY() - target.getY(),this.hitbox.getX()-target.getX()))+180, (this.hitbox.getWidth()/2 + this.hitbox.getX()), (this.hitbox.getHeight()/2 + this.hitbox.getY())));
+		}
 	}
 	
 	public void move(){
@@ -91,6 +93,10 @@ public abstract class Enemy extends Sprite{
 	
 	public void increaseTimeCounter(){
 		timeCounter++;
+	}
+	
+	public int getTimeCounter(){
+		return timeCounter;
 	}
    // It takes a y value and an x value and finds their proportion
 }

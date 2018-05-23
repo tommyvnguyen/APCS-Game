@@ -71,8 +71,8 @@ public abstract class Shooter extends Enemy{
 			double x = (target.getX() + target.getWidth()/2) - (this.hitbox.getWidth() + this.hitbox.getX()) + (this.hitbox.getHeight()/2 * Math.cos(Math.toRadians(angle)));
 			double y = (target.getY() + target.getHeight()/2) - (this.hitbox.getHeight()/2 + this.hitbox.getY()) + (this.hitbox.getWidth()/2 * Math.sin(Math.toRadians(angle)));
 			double d = Math.sqrt(Math.pow(x,2) + Math.pow(y,2));
-			double shotDx = x*10/d;  //Yeah I know how redundant this is.
-			double shotDy = y*10/d;
+			double shotDx = x*7/d; 
+			double shotDy = y*7/d;
 		
 			//System.out.println(shotDx + " " + shotDy);
 			SingleShot shot = new SingleShot(this.hitbox.getWidth() + this.hitbox.getX(), this.hitbox.getHeight()/2 + this.hitbox.getY(), shotDx, shotDy);

@@ -138,9 +138,9 @@ public class Player extends Sprite{
 	private void countdownImmunity(){
 		if(immuneCounter > 0){
 			if(immuneCounter % 20 == 0){
-				hitbox.setFill(Color.WHITE);
+				hitbox.setVisible(false);
 			}else if(immuneCounter % 10 == 0 || immuneCounter == 1){
-				hitbox.setFill(Color.BLACK);
+				hitbox.setVisible(true);
 			}
 			immuneCounter--;
 		}
@@ -151,9 +151,6 @@ public class Player extends Sprite{
 			setHealth(getHealth()-1);
 			if(getHealth() <= 0){
 				
-			}else{
-				setImmune();
-				System.out.println(this);
 			}
 		}
 	}

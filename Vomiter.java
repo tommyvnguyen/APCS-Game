@@ -21,25 +21,26 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
 
 import javafx.scene.paint.Color;
 
 import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.animation.Animation;
+import javafx.animation.AnimationTimer;
 import javafx.util.Duration;
-import javafx.scene.transform.Transform;
-import javafx.scene.transform.Rotate;
-
 
 import java.util.ArrayList;
-public class PoisonPowerup extends Powerup{
-	public PoisonPowerup(double xStart, double yStart){
-		super(xStart,yStart);
+public class Vomiter extends Shooter{
+	
+	Vomiter(double dy, double dx, Rectangle target){
+		super(dy, dx, target);
+		
+		health = 30;
+		this.getChildren().add(hitbox);
 	}
-	public boolean upgrade(Player plyr){
-		plyr.setMeleeDmg(plyr.getMeleeDmg() + 1);
-		Notify.displayMessage(plyr, "Poison Touch!", "I'm so ILL");
-		return true;
-	}
+	
+	
 }
