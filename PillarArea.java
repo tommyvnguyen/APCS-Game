@@ -31,25 +31,30 @@ import javafx.util.Duration;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Rotate;
 import java.util.*;
-public class WallyArea extends Area{
+public class PillarArea extends Area{
 
 
-	public WallyArea(int xcoord, int ycoord){
+	public PillarArea(int xcoord, int ycoord){
 		super(xcoord, ycoord);
 		Rectangle leftWall = new Rectangle(0,0,10,getPrefHeight());
-		leftWall.setFill(Color.BROWN);
+		leftWall.setFill(Color.GREEN);
 		Rectangle topWall = new Rectangle(0,0,getPrefWidth(),10);
-		topWall.setFill(Color.BROWN);
+		topWall.setFill(Color.GREEN);
 		Rectangle rightWall= new Rectangle(getPrefWidth()-10,0,10,getPrefHeight());
-		rightWall.setFill(Color.BROWN);
+		rightWall.setFill(Color.GREEN);
 		Rectangle bottomWall = new Rectangle(0,getPrefHeight()-10,getPrefWidth(),10);
-		bottomWall.setFill(Color.BROWN);
-		Rectangle midBlock = new Rectangle (200,350,30,100);
-		Rectangle midBlock2 = new Rectangle (550,350,30,100);
-		Rectangle midBlock3 = new Rectangle (350,570,100,30);
-		Rectangle midBlock4 = new Rectangle (350,200,100,30);
-		getChildren().addAll(leftWall,rightWall,topWall,bottomWall,midBlock,midBlock2,midBlock3,midBlock4);
-		Collections.addAll(walls,leftWall,rightWall,topWall,bottomWall,midBlock,midBlock2,midBlock3,midBlock4);
+		bottomWall.setFill(Color.GREEN);
+    for(int i=175; i<700;i+=200){
+      for(int j=175;j<700; j+=200){
+        Rectangle pillar= new Rectangle (i,j,50,50);
+        pillar.setFill(Color.BROWN);
+        getChildren().add(pillar);
+        walls.add(pillar);
+      }
+    }
+
+		getChildren().addAll(leftWall,rightWall,topWall,bottomWall);
+		Collections.addAll(walls,leftWall,rightWall,topWall,bottomWall);
 
 	}
 }

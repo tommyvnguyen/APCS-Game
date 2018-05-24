@@ -35,7 +35,7 @@ public class Map extends Pane{
 	Pane minimap;
 	public Area currentArea;
 	ArrayList<Area> areas = new ArrayList<Area>(); //coordinate system IS TRADITIONAL EUCLIDIAN SPACE
-	final int NUM_OF_AREA_TYPES = 2;
+	final int NUM_OF_AREA_TYPES = 3;
 
 	public Map(int size){
 		generateNewMap();
@@ -193,6 +193,8 @@ public class Map extends Pane{
 			case 1: result= new WallyArea(x,y);
 					break;
 			case 2: result= new OpenArea(x,y);
+					break;
+			case 3: result= new PillarArea(x,y);
 					break;
 		}
 		return result;

@@ -106,6 +106,7 @@ public class Game extends Scene{
 
 		//Enemy actions
 		for(int i = 0; i < enemies.size(); i++){
+			enemies.get(i).track();
 			enemies.get(i).fire();
 		}
 		if(timeCounter%100 == 0 && enemies.size() < 1){
@@ -118,7 +119,7 @@ public class Game extends Scene{
 		}
 
 		for(int i = 0; i < enemies.size(); i++){
-			enemies.get(i).rangedTrackMove(map.getCurrentArea(),plyr.getHitbox(),20);
+			enemies.get(i).rangedTrackMove(map.getCurrentArea(),plyr.getHitbox(),300);
 			if(enemies.get(i).collides(plyr)){
 				plyr.takeDamage();
 			}
@@ -267,10 +268,24 @@ public class Game extends Scene{
 							wallsHit+="bottom";
 							e.getHitbox().setY(r.getY()-e.getHitbox().getHeight());
 						}
-
+				}
+				int exactCorners=0;
+				if(e.getHitbox().getY()-Math.abs(e.getYSpd())*e.getSpdMultiplier()== r.getY()+r.getHeight() && (e.getHitbox().getY()==r.getY()+r.getHeight())){
+					exactCorners++;
+				}
+				if(e.getHitbox().getY()+e.getHitbox().getHeight()+Math.abs(e.getYSpd())*e.getSpdMultiplier()>= r.getY() && e.getHitbox().getY()+e.getHitbox().getHeight()<=r.getY()){
+					exactCorners++;
+				}
+				if(e.getHitbox().getX()-Math.abs(e.getXSpd())*e.getSpdMultiplier()<= r.getX()+r.getWidth() && e.getHitbox().getX()>=r.getX()+r.getWidth()){
+					exactCorners++;
+				}
+				if(e.getHitbox().getX()+e.getHitbox().getWidth()+e.getXSpd()*e.getSpdMultiplier()>= r.getX() && e.getHitbox().getX()+e.getHitbox().getWidth()<=r.getX()){
+					exactCorners++;
+				}
+				if(exactCorners>=2){
+					wallsHit="";
 				}
 			}
-			if(!wallsHit.equals("")) System.out.println(wallsHit);
 			e.setHittingWall(wallsHit);
 		}
 	}
