@@ -41,7 +41,7 @@ public class Game extends Scene{
 	Game(){
 		super(new Pane(), 800, 800);
 		pane = (Pane)getRoot();
-		plyr = new Player(200,200,50,50,1,1,4);
+		plyr = new Player(200,200,50,50,1,1,8);
 		enemies = new ArrayList<Shooter>();
 		powerups = new ArrayList<Powerup>();
 		pane.getChildren().add(plyr);
@@ -179,17 +179,29 @@ public class Game extends Scene{
 			if(plyr.getHitbox().getY()+plyr.getHitbox().getHeight()>r.getY() && plyr.getHitbox().getY()<r.getY()+r.getHeight()){
 					if(plyr.getHitbox().getX()-plyr.getXSpd()*plyr.getSpdMultiplier()< r.getX()+r.getWidth() && plyr.getHitbox().getX()>=r.getX()+r.getWidth()){
 						wallsHit+="left";
+						if(plyr.getMovingW()){
+							plyr.setX(r.getX()+r.getWidth());
+						}
 					}
 					if(plyr.getHitbox().getX()+plyr.getHitbox().getWidth()+plyr.getXSpd()*plyr.getSpdMultiplier()> r.getX() && plyr.getHitbox().getX()+plyr.getHitbox().getWidth()<=r.getX()){
 						wallsHit+="right";
+						if(plyr.getMovingE()){
+							plyr.setX(r.getX()-plyr.getHitbox().getWidth());
+						}
 					}
 			}
 			if(plyr.getHitbox().getX()+plyr.getHitbox().getWidth()>r.getX() && plyr.getHitbox().getX()<r.getX()+r.getWidth()){
 					if(plyr.getHitbox().getY()-plyr.getYSpd()*plyr.getSpdMultiplier()< r.getY()+r.getHeight() && plyr.getHitbox().getY()>=r.getY()+r.getHeight()){
 						wallsHit+="top";
+						if(plyr.getMovingN()){
+							plyr.setY(r.getY()+r.getHeight());
+						}
 					}
 					if(plyr.getHitbox().getY()+plyr.getHitbox().getHeight()+plyr.getYSpd()*plyr.getSpdMultiplier()> r.getY() && plyr.getHitbox().getY()+plyr.getHitbox().getHeight()<=r.getY()){
 						wallsHit+="bottom";
+						if(plyr.getMovingS()){
+							plyr.setY(r.getY()-plyr.getHitbox().getHeight());
+						}
 					}
 			}
 		}

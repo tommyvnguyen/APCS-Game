@@ -95,6 +95,19 @@ public class Player extends Sprite{
 
 	}
 
+	public boolean getMovingN(){
+		return movingN;
+	}
+	public boolean getMovingE(){
+		return movingE;
+	}
+	public boolean getMovingW(){
+		return movingW;
+	}
+	public boolean getMovingS(){
+		return movingS;
+	}
+
 	public int getMaxHealth(){
 		return this.maxHealth;
 	}
@@ -254,7 +267,6 @@ public class Player extends Sprite{
 	}
 
 	private void shoot(){
-	//replace "5" with projectile.getFireRate();
 		if(delay==bulletType.getFireRate()){delay=0;}
 		if(!(shootingN||shootingS||shootingW||shootingE)){
 			//delayResetTimer prevents repeated tapping vs holding down
