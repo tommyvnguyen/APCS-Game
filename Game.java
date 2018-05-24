@@ -29,7 +29,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.util.Duration;
-
+import javafx.scene.control.Label;
 import java.util.ArrayList;
 public class Game extends Scene{
 	int timeCounter;
@@ -38,6 +38,10 @@ public class Game extends Scene{
 	ArrayList<Powerup> powerups;
 	Pane pane;
 	Map map;
+
+																				private final long[] frameTimes = new long[100];
+																			private int frameTimeIndex = 0 ;
+																			private boolean arrayFilled = false ;
 	Game(){
 		super(new Pane(), 800, 800);
 		pane = (Pane)getRoot();
@@ -59,11 +63,36 @@ public class Game extends Scene{
 				run();
 				checkWalls();
 				checkDoors();
+				enemyCheckWalls();
 			}
 		};
 		timer.start();
 		onKeyPressedProperty().bind(plyr.onKeyPressedProperty());
 		onKeyReleasedProperty().bind(plyr.onKeyReleasedProperty());
+
+
+																Label label = new Label();
+														    AnimationTimer frameRateMeter = new AnimationTimer() {
+
+														        @Override
+														        public void handle(long now) {
+														            long oldFrameTime = frameTimes[frameTimeIndex] ;
+														            frameTimes[frameTimeIndex] = now ;
+														            frameTimeIndex = (frameTimeIndex + 1) % frameTimes.length ;
+														            if (frameTimeIndex == 0) {
+														                arrayFilled = true ;
+														            }
+														            if (arrayFilled) {
+														                long elapsedNanos = now - oldFrameTime ;
+														                long elapsedNanosPerFrame = elapsedNanos / frameTimes.length ;
+														                double frameRate = 1_000_000_000.0 / elapsedNanosPerFrame ;
+														                label.setText(String.format("Current frame rate: %.3f", frameRate));
+														            }
+														        }
+														    };
+														    frameRateMeter.start();
+																pane.getChildren().add(new StackPane(label));
+
 	}
 
 	public void run(){
@@ -79,14 +108,17 @@ public class Game extends Scene{
 		for(int i = 0; i < enemies.size(); i++){
 			enemies.get(i).fire();
 		}
-		if(timeCounter%100 == 0 && enemies.size() < 5){
+		if(timeCounter%100 == 0 && enemies.size() < 1){
 			FlyingShooter newShooter = new FlyingShooter(1,1,plyr.getHitbox());
+			newShooter.setX(50);
+			newShooter.setY(50);
 			enemies.add(newShooter);
 			pane.getChildren().add(newShooter);
+
 		}
 
 		for(int i = 0; i < enemies.size(); i++){
-			enemies.get(i).move();
+			enemies.get(i).rangedTrackMove(map.getCurrentArea(),plyr.getHitbox(),20);
 			if(enemies.get(i).collides(plyr)){
 				plyr.takeDamage();
 			}
@@ -211,5 +243,35 @@ public class Game extends Scene{
 			plyr.setHittingWall(wallsHit);
 		}
 
+	}
+	private void enemyCheckWalls(){
+		for(Enemy e: enemies){
+			String wallsHit="";
+			for(Rectangle r : map.getCurrentArea().getWalls()){
+				if(e.getHitbox().getY()+e.getHitbox().getHeight()>=r.getY() && e.getHitbox().getY()<=r.getY()+r.getHeight()){
+						if(e.getHitbox().getX()-Math.abs(e.getXSpd())*e.getSpdMultiplier()<= r.getX()+r.getWidth() && e.getHitbox().getX()>=r.getX()+r.getWidth()){
+							wallsHit+="left";
+							e.getHitbox().setX(r.getWidth()+r.getX());
+						}
+						if(e.getHitbox().getX()+e.getHitbox().getWidth()+e.getXSpd()*e.getSpdMultiplier()>= r.getX() && e.getHitbox().getX()+e.getHitbox().getWidth()<=r.getX()){
+							wallsHit+="right";
+							e.getHitbox().setX(r.getX()-e.getHitbox().getWidth());
+						}
+				}
+				if(e.getHitbox().getX()+e.getHitbox().getWidth()>=r.getX() && e.getHitbox().getX()<=r.getX()+r.getWidth()){
+						if(e.getHitbox().getY()-Math.abs(e.getYSpd())*e.getSpdMultiplier()<= r.getY()+r.getHeight() && (e.getHitbox().getY()>=r.getY()+r.getHeight())){
+							wallsHit+="top";
+							e.getHitbox().setY(r.getHeight()+r.getY());
+						}
+						if(e.getHitbox().getY()+e.getHitbox().getHeight()+Math.abs(e.getYSpd())*e.getSpdMultiplier()>= r.getY() && e.getHitbox().getY()+e.getHitbox().getHeight()<=r.getY()){
+							wallsHit+="bottom";
+							e.getHitbox().setY(r.getY()-e.getHitbox().getHeight());
+						}
+
+				}
+			}
+			if(!wallsHit.equals("")) System.out.println(wallsHit);
+			e.setHittingWall(wallsHit);
+		}
 	}
 }

@@ -44,9 +44,10 @@ public class WallyArea extends Area{
 		rightWall.setFill(Color.BROWN);
 		Rectangle bottomWall = new Rectangle(0,getPrefHeight()-10,getPrefWidth(),10);
 		bottomWall.setFill(Color.BROWN);
-		Rectangle midBlock = new Rectangle (400,400,30,30);
-		getChildren().addAll(leftWall,rightWall,topWall,bottomWall,midBlock);
-		Collections.addAll(walls,leftWall,rightWall,topWall,bottomWall,midBlock);
+		Rectangle midBlock = new Rectangle (400,0,30,100);
+		Rectangle midBlock2 = new Rectangle (400,400,30,100);
+		getChildren().addAll(leftWall,rightWall,topWall,bottomWall,midBlock,midBlock2);
+		Collections.addAll(walls,leftWall,rightWall,topWall,bottomWall,midBlock,midBlock2);
 
 	}
 }

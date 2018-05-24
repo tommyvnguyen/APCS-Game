@@ -214,7 +214,6 @@ public class Player extends Sprite{
 		boolean wasMovingE=movingE;
 		boolean wasMovingS=movingS;
 		if(hittingWall!=null){
-			System.out.println(hittingWall);
 			if(hittingWall.indexOf("right")!=-1){
 				movingE=false;
 			}
