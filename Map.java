@@ -54,7 +54,7 @@ public class Map extends Pane{
 		areas.add(spawn);
 		currentArea=spawn;
 		getChildren().add(currentArea);
-		randomMap(6,3,1);
+		randomMap(12,6,3);
 	}
 	//assigns a main branch, a long side branch, a short side branch then adds side rooms and short side branches
 	// any maps is given to have a main branch with 2 bosses, a side branch with 1 boss and 1 side branch with no boss
