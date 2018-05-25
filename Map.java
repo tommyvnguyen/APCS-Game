@@ -161,7 +161,6 @@ public class Map extends Pane{
 	//nos boss usually for small side rooms (1 or 2)
 	private void generateSideRooms(int x, int y, String direction, int size,boolean inclusive){
 		int modifier = 1;
-		System.out.println(x +" "+ y +" "+ direction+" " + size +" "+ inclusive);
 		if(direction.equals("left")||direction.equals("bottom")){
 			modifier=-1;
 		}
@@ -211,7 +210,6 @@ public class Map extends Pane{
 			}
 			for(Area a : areas){
 				if(a.getXCoord()==currentArea.getXCoord()+1*modifier && a.getYCoord()==currentArea.getYCoord()){
-					System.out.println("move success");
 					currentArea = a;
 					refreshArea();
 					System.out.println(currentArea.getXCoord()+" " + currentArea.getYCoord());

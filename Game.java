@@ -32,7 +32,7 @@ import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.util.Duration;
 import javafx.scene.control.Label;
-import java.util.ArrayList;
+import java.util.*;
 public class Game extends Scene{
 	int timeCounter;
 	Player plyr;
@@ -78,46 +78,6 @@ public class Game extends Scene{
 		powerups.add(new PoisonPowerup(200,500));
 		gamePane.getChildren().add(powerups.get(1));
 
-		/*if(timeCounter%100 == 0 && enemies.size() < 1){
-			FlyingShooter newShooter = new FlyingShooter(1,1,plyr.getHitbox());
-			newShooter.setX(50);
-			newShooter.setY(50);
-			enemies.add(newShooter);
-			gamePane.getChildren().add(newShooter);
-		}*/
-
-		Machine s1 = new Machine(1,1,plyr.getHitbox());
-		enemies.add(s1);
-		gamePane.getChildren().add(s1);
-		s1.getHitbox().setX(600);
-		s1.getHitbox().setY(400);
-
-
-
-
-		//Vomiter v1 = new Vomiter(1,1,plyr.getHitbox());
-		//enemies.add(v1);
-		//gamePane.getChildren().add(v1);
-		//v1.getHitbox().setX(600);
-		//v1.getHitbox().setY(400);
-
-		Chaser e1 = new Chaser(1,1,plyr.getHitbox());
-		enemies.add(e1);
-		gamePane.getChildren().add(e1);
-		e1.getHitbox().setX(600);
-		e1.getHitbox().setY(400);
-		Chaser e2 = new Chaser(1,1,plyr.getHitbox());
-		enemies.add(e2);
-		gamePane.getChildren().add(e2);
-		e2.getHitbox().setX(200);
-		e2.getHitbox().setY(400);
-		//FlyingShooter s1 = new FlyingShooter(1,1,plyr.getHitbox());
-		//s1.getHitbox().setX(400);
-		//s1.getHitbox().setY(400);
-		//enemies.add(s1);
-		//gamePane.getChildren().add(s1);
-
-		// --------------------------------------
 
 		AnimationTimer timer = new AnimationTimer(){
 			@Override
@@ -126,6 +86,7 @@ public class Game extends Scene{
 				checkWalls();
 				checkDoors();
 				enemyCheckWalls();
+				spawnMobs();
 			}
 		};
 		timer.start();
@@ -161,15 +122,20 @@ public class Game extends Scene{
 
     //Enemy actions
 		for(int i = 0; i < enemies.size(); i++){
-			enemies.get(i).track();
-		/*	if(enemies.get(i) instanceof Shooter){
+		//	enemies.get(i).track();
+			if(enemies.get(i) instanceof Shooter){
 				enemies.get(i).rangedTrackMove(map.getCurrentArea(),plyr.getHitbox(),300);
-			}*/
+			}else{
+				enemies.get(i).move();
+			}
 		}
 		ArrayList<Enemy> hitList = new ArrayList<Enemy>();
 		for(int i = 0; i < enemies.size(); i++){
 			if(enemies.get(i).getTimeCounter() > 50){
-				enemies.get(i).move();
+				/* CHANGE
+					THIS
+					LINE TO CHECK FOR EACH ENEMY */
+				//enemies.get(i).move();
 				if(enemies.get(i).collides(plyr)){
 
 					plyr.takeDamage();
@@ -189,6 +155,10 @@ public class Game extends Scene{
 					Shooter shooter = (Shooter)enemies.get(i);
 					shooter.fire();
 					for(int j= shooter.getBullets().size()-1; j>=0; j--){
+						if(shooter.getBullets().get(j) instanceof Laser){
+							Laser temp = (Laser)shooter.getBullets().get(j);
+							temp.increaseTimeCounter();
+						}
 						Projectile bullet = shooter.getBullets().get(j);
 						if(shooter.getBullets().get(j).collides(plyr)){
 							plyr.takeDamage();
@@ -220,7 +190,7 @@ public class Game extends Scene{
 										shooter.getChildren().remove(j+1);
 										shooter.getBullets().remove(j);
 									}
-									laser.increaseTimeCounter();
+
 								}
 							}
 						}
@@ -229,6 +199,7 @@ public class Game extends Scene{
 
 				}
 			}
+
 			enemies.get(i).increaseTimeCounter();
 
 		}
@@ -248,9 +219,10 @@ public class Game extends Scene{
 					}
 				}
 			}
+			//index error occurs when there are bullets out already and a newer bullet is removed
 			if(!removed){
 				for(Rectangle wall : map.getCurrentArea().getWalls()){
-						if(plyr.getBullets().size()>0){
+						if(plyr.getBullets().size()>0 && !removed){
 							if(plyr.getBullets().get(i).getHitbox().intersects(wall.getX(),wall.getY(),wall.getWidth(),wall.getHeight()) &&!removed){
 								plyr.getChildren().remove(plyr.getBullets().get(i));
 								plyr.getBullets().remove(i);
@@ -258,7 +230,7 @@ public class Game extends Scene{
 							}
 						}
 				}
-			}	
+			}
 		}
 		for(Enemy e : hitList){
 			double healthDropChance = Math.random();
@@ -290,7 +262,7 @@ public class Game extends Scene{
 
 	private void checkDoors(){
 		String dir=map.checkDoorCollision(plyr.getHitbox());
-		if(dir!=null){
+		if(dir!=null && map.getCurrentArea().getCompleted()){
 			map.moveRooms(dir);
 			//might be a good idea to change the numbers to actual variable getters
 			if(dir.equals("right")){
@@ -393,5 +365,82 @@ public class Game extends Scene{
 			}
 			e.setHittingWall(wallsHit);
 		}
+	}
+	private void spawnMobs(){
+		if(!map.getCurrentArea().getCompleted() && !map.getCurrentArea().getSpawned()){
+			map.getCurrentArea().setSpawned(true);
+
+			if(map.getCurrentArea() instanceof PillarArea){
+				for(int i = 0; i<5;i++){
+					FlyingShooter fs = new FlyingShooter(1,1,plyr.getHitbox());
+					fs.getHitbox().setX(430); //175-225
+					fs.getHitbox().setY(225+ i*100);
+					enemies.add(fs);
+					gamePane.getChildren().add(fs);
+				}
+			}
+
+			if(map.getCurrentArea() instanceof OpenArea){
+					LaserShooter ls = new LaserShooter(0,0,plyr.getHitbox());
+					ls.getHitbox().setX(400); ls.getHitbox().setY(400);
+					enemies.add(ls);
+					gamePane.getChildren().add(ls);
+					Chaser e1 = new Chaser(1,1,plyr.getHitbox());
+					e1.getHitbox().setX(450); e1.getHitbox().setY(400);
+					Chaser e2 = new Chaser(1,1,plyr.getHitbox());
+					e2.getHitbox().setX(350); e2.getHitbox().setY(400);
+					Chaser e3 = new Chaser(1,1,plyr.getHitbox());
+					e3.getHitbox().setX(400); e3.getHitbox().setY(450);
+					Chaser e4 = new Chaser(1,1,plyr.getHitbox());
+					e4.getHitbox().setX(400); e4.getHitbox().setY(350);
+					Collections.addAll(enemies,e1,e2,e3,e4);
+					gamePane.getChildren().addAll(e1,e2,e3,e4);
+			}
+			if(map.getCurrentArea() instanceof WallyArea){
+				LaserShooter ls = new LaserShooter(0,0,plyr.getHitbox());
+				ls.getHitbox().setX(325); ls.getHitbox().setY(325);
+				enemies.add(ls);
+				gamePane.getChildren().add(ls);
+				ls = new LaserShooter(0,0,plyr.getHitbox());
+				ls.getHitbox().setX(425); ls.getHitbox().setY(325);
+				enemies.add(ls);
+				gamePane.getChildren().add(ls);
+				 ls = new LaserShooter(0,0,plyr.getHitbox());
+				ls.getHitbox().setX(325); ls.getHitbox().setY(425);
+				enemies.add(ls);
+				gamePane.getChildren().add(ls);
+				 ls = new LaserShooter(0,0,plyr.getHitbox());
+				ls.getHitbox().setX(425); ls.getHitbox().setY(425);
+				enemies.add(ls);
+				gamePane.getChildren().add(ls);
+				FlyingShooter fs = new FlyingShooter(1,1,plyr.getHitbox());
+				fs.getHitbox().setX(30);fs.getHitbox().setY(30);
+				enemies.add(fs);
+				gamePane.getChildren().add(fs);
+				fs = new FlyingShooter(1,1,plyr.getHitbox());
+				fs.getHitbox().setX(730);fs.getHitbox().setY(730);
+				enemies.add(fs);
+				gamePane.getChildren().add(fs);
+			}
+			if(map.getCurrentArea() instanceof FinalBossArea){
+				Machine s1 = new Machine(1,1,plyr.getHitbox());
+					enemies.add(s1);
+					gamePane.getChildren().add(s1);
+					s1.getHitbox().setX(400);
+					s1.getHitbox().setY(400);
+			}
+			if(map.getCurrentArea() instanceof MidBossArea){
+				Vomiter s1 = new Vomiter(0,0,plyr.getHitbox());
+					enemies.add(s1);
+					gamePane.getChildren().add(s1);
+					s1.getHitbox().setX(362.5);
+					s1.getHitbox().setY(362.5);
+			}
+		}
+		if(!map.getCurrentArea().getCompleted()&&enemies.size()==0){
+			map.getCurrentArea().setCompleted(true);
+		}
+
+
 	}
 }

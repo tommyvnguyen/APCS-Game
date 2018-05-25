@@ -36,10 +36,10 @@ import java.util.ArrayList;
 public class Vomiter extends Shooter{
 	private int pauseCounter;
 	private String directionFacing;
-	
+
 	Vomiter(double dy, double dx, Rectangle target){
 		super(dy, dx, target);
-		
+
 		directionFacing = "FORWARD";
 		health = 100;
 		this.hitbox.setWidth(75);
@@ -47,7 +47,7 @@ public class Vomiter extends Shooter{
 		this.getChildren().add(hitbox);
 		this.spdMultiplier = 2.1;
 	}
-	
+
 	public void move(){
 		super.move();
 		track();
@@ -72,18 +72,18 @@ public class Vomiter extends Shooter{
 			}
 		}
 	}
-	
+
 	public void fire(){
-		if(pauseCounter > 25){
+		if(pauseCounter > -1){
 			double randDx = Math.random() * 3 + 0.5;
 			double randDy = Math.random() * 3 + 0.5;
 			double angle = Math.toDegrees(Math.atan2(this.hitbox.getY() - target.getY(),this.hitbox.getX()-target.getX())) + 180;
 			double x = (target.getX() + target.getWidth()/2) - (this.hitbox.getWidth() + this.hitbox.getX()) + (this.hitbox.getHeight()/2 * Math.cos(Math.toRadians(angle)));
 			double y = (target.getY() + target.getHeight()/2) - (this.hitbox.getHeight()/2 + this.hitbox.getY()) + (this.hitbox.getWidth()/2 * Math.sin(Math.toRadians(angle)));
 			double d = Math.sqrt(Math.pow(x,2) + Math.pow(y,2));
-			double shotDx = x*randDx/d; 
+			double shotDx = x*randDx/d;
 			double shotDy = y*randDy/d;
-			
+
 				//System.out.println(shotDx + " " + shotDy);
 			SingleShot shot = new SingleShot(this.hitbox.getWidth()/2 + this.hitbox.getX(), this.hitbox.getHeight()/2 + this.hitbox.getY(), shotDx, shotDy);
 			//shot.getTransforms().add(new Rotate(Math.toDegrees(Math.atan2(this.hitbox.getY() - target.getY(),this.hitbox.getX()-target.getX()))+180, (this.hitbox.getWidth()/2 + this.hitbox.getX()), (this.hitbox.getHeight()/2 + this.hitbox.getY())));

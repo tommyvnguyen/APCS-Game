@@ -46,8 +46,8 @@ public class MidBossArea extends Area{
 		bottomWall.setFill(Color.BROWN);
 		Rectangle midBlock = new Rectangle (400,400,30,30);
 		Rectangle bottomBar = new Rectangle (200,600,400,30);
-		getChildren().addAll(leftWall,rightWall,topWall,bottomWall,midBlock,bottomBar);
-		Collections.addAll(walls,leftWall,rightWall,topWall,bottomWall,midBlock,bottomBar);
+		getChildren().addAll(leftWall,rightWall,topWall,bottomWall);
+		Collections.addAll(walls,leftWall,rightWall,topWall,bottomWall);
 
 	}
 }

@@ -38,6 +38,7 @@ public abstract class Area extends Pane{
 	ArrayList<Door> doors; //each door is represented by a rectangle
 	int[] coord; //room represented by a coordinate for the map
 	boolean completed = false;
+	boolean spawned = false;
 	public Area(double height, double width,int xcoord, int ycoord){
 		doors=new ArrayList<Door>();
 		walls = new ArrayList<Rectangle>();
@@ -61,6 +62,12 @@ public abstract class Area extends Pane{
 	public boolean getCompleted(){
 		return completed;
 	}
+public boolean getSpawned(){
+	return spawned;
+}
+public void setSpawned(boolean b){
+	spawned=b;
+}
 
 	public int getXCoord(){return coord[0];}
 	public int getYCoord(){return coord[1];}

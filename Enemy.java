@@ -101,7 +101,7 @@ public abstract class Enemy extends Sprite{
 	public void increaseTimeCounter(){
 		timeCounter++;
 	}
-	
+
 	public int getTimeCounter(){
 		return timeCounter;
 	}
@@ -253,20 +253,20 @@ public abstract class Enemy extends Sprite{
 		if(!hittingWall.equals(""))System.out.println(hittingWall);
 		if(hittingWall.indexOf("right")!=-1 && xSpd>=0){
 			ySpd = Math.sqrt(xSpd*xSpd+ySpd*ySpd)*ySpd/Math.abs(ySpd);
-			xSpd=0;
+			xSpd=0.001;
 
 		}
 		if(hittingWall.indexOf("left")!=-1 && xSpd<=0){
 			ySpd = Math.sqrt(xSpd*xSpd+ySpd*ySpd) *ySpd/Math.abs(ySpd);
-			xSpd=0;
+			xSpd=0.001;
 		}
 		if(hittingWall.indexOf("top")!=-1 && ySpd<=0){
 			xSpd = Math.sqrt(xSpd*xSpd+ySpd*ySpd) *xSpd/Math.abs(xSpd);
-			ySpd=0;
+			ySpd=0.001;
 		}
 		if(hittingWall.indexOf("bottom")!=-1 && ySpd>=0){
 			xSpd = Math.sqrt(xSpd*xSpd+ySpd*ySpd) *xSpd/Math.abs(xSpd);
-			ySpd=0;
+			ySpd=0.001;
 		}
 		this.hitbox.setX(this.hitbox.getX() + xSpd * spdMultiplier);
 		this.hitbox.setY(this.hitbox.getY() + ySpd * spdMultiplier);

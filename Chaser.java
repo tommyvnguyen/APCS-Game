@@ -34,15 +34,15 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 public class Chaser extends Enemy{
-	
+
 	Chaser(double dy, double dx, Rectangle target){
 		super(dy, dx, target);
-		
+
 		health = 5;
 		this.getChildren().add(hitbox);
 		this.spdMultiplier = 2;
 	}
-	
+
 	public void move(){
 		super.move();
 		track();
@@ -50,9 +50,9 @@ public class Chaser extends Enemy{
 		double x = (target.getX() + target.getWidth()/2) - (this.hitbox.getWidth() + this.hitbox.getX()) + (this.hitbox.getHeight()/2 * Math.cos(Math.toRadians(angle)));
 		double y = (target.getY() + target.getHeight()/2) - (this.hitbox.getHeight()/2 + this.hitbox.getY()) + (this.hitbox.getWidth()/2 * Math.sin(Math.toRadians(angle)));
 		double d = Math.sqrt(Math.pow(x,2) + Math.pow(y,2));
-		
+
 		xSpd = x*spdMultiplier/d;
 		ySpd = y*spdMultiplier/d;
 	}
-	
+
 }
