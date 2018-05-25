@@ -55,7 +55,6 @@ public class Chaser extends Enemy{
 			getChildren().add(imgview);
 
 		}catch(Exception e){
-			System.out.println("error while creating image");
 			e.printStackTrace();
 		}
 	}

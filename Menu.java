@@ -114,7 +114,7 @@ public class Menu extends Pane{
 			}
 		});
 		scoreBox.getChildren().addAll(gameOverText,nameField);
-		scoreBox.setLayoutX(0);scoreBox.setLayoutY(300);
+		scoreBox.setLayoutX(0);scoreBox.setLayoutY(500);
 		getChildren().addAll(scoreBox);
 	}
   private void resetToMenu(String name, int score){
@@ -123,7 +123,6 @@ public class Menu extends Pane{
 		}
 		getChildren().removeAll(getChildren());
 		getChildren().add(menuLayers);
-    hs.refreshScores();
   }
   private void showScores(){
 		getChildren().removeAll(getChildren());

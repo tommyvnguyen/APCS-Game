@@ -73,8 +73,11 @@ public class HighScores extends VBox{
 					break;
 			}
 		}
+    if(scores.size()==0){
+      scores.add(name+" -"+score);
+    }
 		writeWordFile();
-		//refreshScores();
+		refreshScores();
 	}
 
 	private void readWordFile(){

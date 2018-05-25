@@ -55,28 +55,22 @@ public class Map extends Pane{
 		currentArea=spawn;
 		getChildren().add(currentArea);
 		randomMap(6,3,1);
-		for(Area as : areas){
-				System.out.println(as.getXCoord()+" " + as.getYCoord());
-		}
 	}
 	//assigns a main branch, a long side branch, a short side branch then adds side rooms and short side branches
 	// any maps is given to have a main branch with 2 bosses, a side branch with 1 boss and 1 side branch with no boss
 	private void randomMap(int numSideRooms, int numSideBranches, int numBossBranch){
 		String dir= randomDirection();
-			System.out.println("main branch direction:" +dir);
 		generateMainBranch(dir);
 		String currentDir= dir;
 		while(dir.equals(currentDir)){
 			dir = randomDirection();
 		}
-		System.out.println("side branch direction:" +dir);
 		generateSideBranch(0,0,dir,randomInt(4,6),false);
 		String currentDir2=dir;
 		while(dir.equals(currentDir)||currentDir2.equals(dir)){
 			dir = randomDirection();
 
 		}
-		System.out.println("side rooms direction:" +dir);
 		generateSideRooms(0,0,dir,randomInt(3,4),false);
 		for(int i=0;i<numBossBranch;i++){
 			int index = randomInt(0,areas.size()-1);
@@ -212,7 +206,6 @@ public class Map extends Pane{
 				if(a.getXCoord()==currentArea.getXCoord()+1*modifier && a.getYCoord()==currentArea.getYCoord()){
 					currentArea = a;
 					refreshArea();
-					System.out.println(currentArea.getXCoord()+" " + currentArea.getYCoord());
 					break;
 				}
 			}

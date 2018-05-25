@@ -146,7 +146,6 @@ public class Game extends Scene{
 						}
 						statsPane.update();
 						plyr.setImmune();
-						System.out.println(plyr);
 					}
 				}
 
@@ -169,7 +168,6 @@ public class Game extends Scene{
 									shooter.getBullets().remove(j);
 								}
 								plyr.setImmune();
-								System.out.println(plyr);
 								statsPane.update();
 							}
 

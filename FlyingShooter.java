@@ -79,17 +79,12 @@ public class FlyingShooter extends Shooter{
 				ySpd *= -1;
 			}
 
-			//xSpd *= spdMultiplier;
-			//ySpd *= spdMultiplier;
-			//System.out.println("     " + PosOrNeg);
 
 		}else if(timeCounter%360 == 270){
 			xSpd = 0;
 			ySpd = 0;
 		}
-		//Turn towards player
 
-		//System.out.println(ySpd + " -- " + xSpd);
 	}
 
 

@@ -49,7 +49,6 @@ public class DamagePowerup extends Powerup{
           getChildren().add(imgview);
 
       }catch(Exception e){
-          System.out.println("error while creating image");
           e.printStackTrace();
       }
 	}

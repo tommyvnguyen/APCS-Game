@@ -250,7 +250,6 @@ public abstract class Enemy extends Sprite{
 				xSpd = magnitudeSpd * (targetPos[0]-hitbox.getX())/(distance);
 				ySpd = magnitudeSpd * (targetPos[1]-hitbox.getY())/(distance);
 		}
-		if(!hittingWall.equals(""))System.out.println(hittingWall);
 		if(hittingWall.indexOf("right")!=-1 && xSpd>=0){
 			ySpd = Math.sqrt(xSpd*xSpd+ySpd*ySpd)*ySpd/Math.abs(ySpd);
 			xSpd=0;

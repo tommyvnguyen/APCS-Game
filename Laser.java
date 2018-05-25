@@ -79,7 +79,6 @@ public class Laser extends Projectile{
 	}
 
 	public void move(Rectangle target){
-		System.out.println(timeCounter);
 		if(timeCounter == 25){
 			this.hitbox = new Rectangle(xStart,yStart,5,1000);
 			this.hitbox.setFill(Color.RED);
