@@ -76,6 +76,7 @@ public class Machine extends Shooter{
 	}
 	
 	public void fire(){
+		System.out.println(timeCounter);
 		if(timeCounter%450 < 300){
 			double attackChance = Math.random();
 			if(attackChance < 0.50){	

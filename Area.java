@@ -36,7 +36,7 @@ public abstract class Area extends Pane{
 	final int PANE_WIDTH=800;
 	ArrayList<Rectangle> walls; //each wall is represented by a rectangle
 	ArrayList<Door> doors; //each door is represented by a rectangle
-	int[] coord; //room represented by a coordinate for the map
+	int[] coord; //room represented by a coordinate for the map 
 	boolean completed = false;
 	public Area(double height, double width,int xcoord, int ycoord){
 		doors=new ArrayList<Door>();
@@ -44,7 +44,7 @@ public abstract class Area extends Pane{
 		setPrefWidth(width);
 		setPrefHeight(height);
 		coord = new int[]{xcoord,ycoord};
-
+		
 	}
 	public Area(int xcoord, int ycoord){
 		doors=new ArrayList<Door>();
@@ -52,16 +52,15 @@ public abstract class Area extends Pane{
 		setPrefWidth(PANE_WIDTH);
 		setPrefHeight(PANE_HEIGHT);
 		coord = new int[]{xcoord,ycoord};
-
+		
 	}
-	public ArrayList<Rectangle> getWalls(){ return walls;}
 	public void setCompleted(boolean b){
 		completed = b;
 	}
 	public boolean getCompleted(){
 		return completed;
 	}
-
+	
 	public int getXCoord(){return coord[0];}
 	public int getYCoord(){return coord[1];}
 	public void addLeftDoor(){

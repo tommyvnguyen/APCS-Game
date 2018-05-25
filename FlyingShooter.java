@@ -33,19 +33,19 @@ import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
 public class FlyingShooter extends Shooter{
-
+	
 	//Projectile projectile;
 	//jpeg
-
+	
 
 	public FlyingShooter(double dy, double dx, Rectangle target){
 		super(dy, dx, target);
-
+		
 		health = 10;
 		this.getChildren().add(hitbox);
 
 	}
-	//TimeCounter counts how many times the animationTimer has called its methods.
+	//TimeCounter counts how many times the animationTimer has called its methods. 
 	//TimeCounter acts as a unit of time.
 	public void move(){
 		super.move();
@@ -61,7 +61,7 @@ public class FlyingShooter extends Shooter{
 			if(PosOrNeg == 0){
 				ySpd *= -1;
 			}
-
+			
 			//xSpd *= spdMultiplier;
 			//ySpd *= spdMultiplier;
 			//System.out.println("     " + PosOrNeg);
@@ -74,7 +74,7 @@ public class FlyingShooter extends Shooter{
 
 		//System.out.println(ySpd + " -- " + xSpd);
 	}
-
-
+	
+	
 
 }
