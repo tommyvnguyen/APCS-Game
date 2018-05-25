@@ -40,7 +40,7 @@ public class StatsPane extends Pane{
 	ArrayList<ImageView> hearts;
 	ArrayList<ImageView> emptyHearts;
 	ArrayList<Rectangle> tickMarks;
-	
+
 	StatsPane(Player plyr){
 		this.plyr = plyr;
 		this.hearts = new ArrayList<ImageView>();
@@ -59,7 +59,7 @@ public class StatsPane extends Pane{
 			iv1.setCache(true);
 			this.getChildren().add(iv1);
 			hearts.add(iv1);
-			
+
 			ImageView iv2 = new ImageView();
 			iv2.setX(((i%6)*45) + 525);
 			iv2.setY((i/6 * 45) + 10);
@@ -77,7 +77,7 @@ public class StatsPane extends Pane{
 				iv2.setVisible(false);
 			}
 		}
-		
+
 		ImageView bullet = new ImageView();
 		bullet.setImage(new Image("bullet.png"));
 		bullet.setFitWidth(40);
@@ -87,7 +87,7 @@ public class StatsPane extends Pane{
 		bullet.setSmooth(true);
 		bullet.setCache(true);
 		this.getChildren().add(bullet);
-		
+
 		ImageView shoe = new ImageView();
 		shoe.setImage(new Image("shoe.png"));
 		shoe.setFitWidth(30);
@@ -97,7 +97,7 @@ public class StatsPane extends Pane{
 		shoe.setSmooth(true);
 		shoe.setCache(true);
 		this.getChildren().add(shoe);
-		
+
 		ImageView fist = new ImageView();
 		fist.setImage(new Image("fist.png"));
 		fist.setFitWidth(30);
@@ -107,7 +107,7 @@ public class StatsPane extends Pane{
 		fist.setSmooth(true);
 		fist.setCache(true);
 		this.getChildren().add(fist);
-		
+
 		for(int i = 0; i < 10; i++){
 			Rectangle tickMark = new Rectangle(400 + (i*7),12,5, 35);
 			tickMark.setFill(Color.WHITE);
@@ -117,7 +117,7 @@ public class StatsPane extends Pane{
 				tickMark.setVisible(false);
 			}
 		}
-		
+
 		for(int i = 0; i < 10; i++){
 			Rectangle tickMark = new Rectangle(400 + (i*7),52,5, 35);
 			tickMark.setFill(Color.WHITE);
@@ -127,7 +127,7 @@ public class StatsPane extends Pane{
 				tickMark.setVisible(false);
 			}
 		}
-		
+
 		for(int i = 0; i < 10; i++){
 			Rectangle tickMark = new Rectangle(400 + (i*7),92,5, 35);
 			tickMark.setFill(Color.WHITE);
@@ -138,7 +138,7 @@ public class StatsPane extends Pane{
 			}
 		}
 	}
-	
+
 	public void update(){
 		for(int i = 0; i < 18; i++){
 			if(i < plyr.getMaxHealth()){
@@ -146,7 +146,7 @@ public class StatsPane extends Pane{
 			}else{
 				hearts.get(i).setVisible(false);
 			}
-			
+
 			if(i < plyr.getHealth()){
 				emptyHearts.get(i).setVisible(true);
 			}else{
@@ -160,7 +160,7 @@ public class StatsPane extends Pane{
 				tickMarks.get(i).setVisible(true);
 			}
 		}
-		
+
 		for(int i = 10; i < 20; i++){
 			if(i-10 >= plyr.getSpdMultiplier()){
 				tickMarks.get(i).setVisible(false);
@@ -168,7 +168,7 @@ public class StatsPane extends Pane{
 				tickMarks.get(i).setVisible(true);
 			}
 		}
-		
+
 		for(int i = 20; i < 30; i++){
 			if(i-20 >= plyr.getMeleeDmg()){
 				tickMarks.get(i).setVisible(false);

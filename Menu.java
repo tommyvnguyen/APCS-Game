@@ -41,6 +41,7 @@ public class Menu extends Pane{
   VBox menuLayers;
   private boolean startGame;
   HighScores hs;
+  Music music = new Music();
   public Menu(){
     hs= new HighScores();
 		BackgroundImage menuBackground= new BackgroundImage(new Image("menuBackground.jpg",0,0,false,false), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
@@ -89,9 +90,20 @@ public class Menu extends Pane{
 		helpBtn.setPrefHeight(100);
 		StackPane helpPane = new StackPane();
 		helpPane.getChildren().add(helpBtn);
+    Button musicBtn = new Button("Music");
+		musicBtn.setOnAction(new EventHandler <ActionEvent> (){
+			@Override
+			public void handle(ActionEvent event){
+				showMusic();
+			}
+		});
+		musicBtn .setPrefWidth(300);
+		musicBtn.setPrefHeight(100);
+		StackPane musicPane = new StackPane();
+		musicPane.getChildren().add(musicBtn);
 		menuLayers = new VBox();
 		menuLayers.setPrefWidth(800);
-		menuLayers.getChildren().addAll(titlePane,startPane,scorePane,helpPane);
+		menuLayers.getChildren().addAll(titlePane,startPane,scorePane,helpPane,musicPane);
 
 		getChildren().add(menuLayers);
 	}
@@ -155,5 +167,74 @@ public class Menu extends Pane{
 			}
 		});
 		getChildren().addAll(backBtn,help);
+  }
+  private void showMusic(){
+    getChildren().removeAll(getChildren());
+    Button backBtn = new Button("Return to menu");
+    backBtn.setOnAction(new EventHandler <ActionEvent> (){
+			@Override
+			public void handle(ActionEvent event){
+				resetToMenu(null,0);
+			}
+		});
+    Button m1 = new Button("Play Wolfgang's 5th Symphony (give it a second)");
+		m1.setOnAction(new EventHandler <ActionEvent> (){
+			@Override
+			public void handle(ActionEvent event){
+        music.play5th();
+			}
+		});
+		m1.setPrefWidth(300);
+		m1.setPrefHeight(100);
+		StackPane m1Pane = new StackPane();
+		m1Pane.getChildren().add(m1);
+    Button m2 = new Button("Play Powerglide(instrumental)");
+		m2.setOnAction(new EventHandler <ActionEvent> (){
+			@Override
+			public void handle(ActionEvent event){
+        music.playPowerglide();
+			}
+		});
+		m2.setPrefWidth(300);
+		m2.setPrefHeight(100);
+		StackPane m2Pane = new StackPane();
+		m2Pane.getChildren().add(m2);
+    Button m3 = new Button("Play Anpanman");
+		m3.setOnAction(new EventHandler <ActionEvent> (){
+			@Override
+			public void handle(ActionEvent event){
+        music.playAnpanman();
+			}
+		});
+		m3.setPrefWidth(300);
+		m3.setPrefHeight(100);
+		StackPane m3Pane = new StackPane();
+		m3Pane.getChildren().add(m3);
+    Button m4 = new Button("Stop Music");
+		m4.setOnAction(new EventHandler <ActionEvent> (){
+			@Override
+			public void handle(ActionEvent event){
+        music.stopMusic();
+			}
+		});
+		m4.setPrefWidth(300);
+		m4.setPrefHeight(100);
+		StackPane m4Pane = new StackPane();
+		m4Pane.getChildren().add(m4);
+    Button m5 = new Button("Play RPG Music");
+		m5.setOnAction(new EventHandler <ActionEvent> (){
+			@Override
+			public void handle(ActionEvent event){
+        music.playRPG();
+			}
+		});
+		m5.setPrefWidth(300);
+		m5.setPrefHeight(100);
+		StackPane m5Pane = new StackPane();
+		m5Pane.getChildren().add(m5);
+    VBox v = new VBox();
+		v.getChildren().addAll(m1Pane,m2Pane,m3Pane,m5Pane,m4Pane);
+    v.setLayoutX(250);
+    getChildren().addAll(backBtn,v);
   }
 }
