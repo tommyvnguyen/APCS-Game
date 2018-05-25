@@ -71,21 +71,33 @@ public class Game extends Scene{
 		powerups.add(new PoisonPowerup(200,500));
 		gamePane.getChildren().add(powerups.get(1));
 		
-		Chaser e1 = new Chaser(1,1,plyr.getHitbox());
-		enemies.add(e1);
-		gamePane.getChildren().add(e1);
-		e1.getHitbox().setX(600);
-		e1.getHitbox().setY(400);
-		Chaser e2 = new Chaser(1,1,plyr.getHitbox());
-		enemies.add(e2);
-		gamePane.getChildren().add(e2);
-		e2.getHitbox().setX(200);
-		e2.getHitbox().setY(400);
-		FlyingShooter s1 = new FlyingShooter(1,1,plyr.getHitbox());
-		s1.getHitbox().setX(400);
-		s1.getHitbox().setY(400);
-		enemies.add(s1);
-		gamePane.getChildren().add(s1);
+		Machine m1 = new Machine(1,1,plyr.getHitbox());
+		enemies.add(m1);
+		gamePane.getChildren().add(m1);
+		m1.getHitbox().setX(600);
+		m1.getHitbox().setY(400);
+		
+		//Vomiter v1 = new Vomiter(1,1,plyr.getHitbox());
+		//enemies.add(v1);
+		//gamePane.getChildren().add(v1);
+		//v1.getHitbox().setX(600);
+		//v1.getHitbox().setY(400);
+	
+		//Chaser e1 = new Chaser(1,1,plyr.getHitbox());
+		//enemies.add(e1);
+		//gamePane.getChildren().add(e1);
+		//e1.getHitbox().setX(600);
+		//e1.getHitbox().setY(400);
+		//Chaser e2 = new Chaser(1,1,plyr.getHitbox());
+		//enemies.add(e2);
+		//gamePane.getChildren().add(e2);
+		//e2.getHitbox().setX(200);
+		//e2.getHitbox().setY(400);
+		//FlyingShooter s1 = new FlyingShooter(1,1,plyr.getHitbox());
+		//s1.getHitbox().setX(400);
+		//s1.getHitbox().setY(400);
+		//enemies.add(s1);
+		//gamePane.getChildren().add(s1);
 		
 		// --------------------------------------
 		AnimationTimer timer = new AnimationTimer(){
@@ -129,22 +141,37 @@ public class Game extends Scene{
 					for(int j = 0; j < shooter.getBullets().size(); j++){
 						Rectangle bulletHitbox = shooter.getBullets().get(j).getHitbox();
 						if(shooter.getBullets().get(j).collides(plyr)){
-							shooter.getChildren().remove(j+1);
-							shooter.getBullets().remove(j);
 							plyr.takeDamage();
-							plyr.setImmune();
-							System.out.println(plyr);
-							statsPane.update();
+							if(!(plyr.isImmune())){
+								if(!(shooter.getBullets().get(j) instanceof Laser)){
+									shooter.getChildren().remove(j+1);
+									shooter.getBullets().remove(j);
+								}
+								plyr.setImmune();
+								System.out.println(plyr);
+								statsPane.update();
+							}
+							
+							
 						}
 						
-						if(bulletHitbox.getX() < 0 || bulletHitbox.getY() < 0 || bulletHitbox.getX() > 1600 || bulletHitbox.getY() > 900){
+						if(bulletHitbox.getX() < 0 || bulletHitbox.getY() < 0 || bulletHitbox.getX() > 1600 || bulletHitbox.getY() > 900 && !(shooter.getBullets().get(j) instanceof Laser)){
 							shooter.getChildren().remove(j+1);
 							shooter.getBullets().remove(j);
+						}
+						if(shooter.getBullets().get(j) instanceof Laser){
+							Laser laser = (Laser)shooter.getBullets().get(j);
+							if(laser.getTimeCounter() >= 125){
+								shooter.getChildren().remove(j+1);
+								shooter.getBullets().remove(j);
+							}
+							laser.increaseTimeCounter();
 						}
 					}
 				}
 			}
 			enemies.get(i).increaseTimeCounter();
+		
 		}
 		
 		//playerBullets collide w/ objects

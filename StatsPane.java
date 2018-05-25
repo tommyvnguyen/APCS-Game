@@ -36,31 +36,46 @@ import java.util.ArrayList;
 
 import java.util.ArrayList;
 public class StatsPane extends Pane{
-	ArrayList<ImageView> hearts;
-	ArrayList<Rectangle> tickMarks;
 	Player plyr;
+	ArrayList<ImageView> hearts;
+	ArrayList<ImageView> emptyHearts;
+	ArrayList<Rectangle> tickMarks;
 	
 	StatsPane(Player plyr){
 		this.plyr = plyr;
-		hearts = new ArrayList<ImageView>();
-		tickMarks = new ArrayList<Rectangle>();
-		for(int i = 0; i < plyr.getMaxHealth(); i++){
-			Image image = null;
-			if(i > plyr.getHealth()-1){
-				image = new Image("emptyHeart.png");
-			}else{
-				image = new Image("heart.png");
+		this.hearts = new ArrayList<ImageView>();
+		this.emptyHearts = new ArrayList<ImageView>();
+		this.tickMarks = new ArrayList<Rectangle>();
+		for(int i = 0; i < 18; i++){
+			Image emptyHeartImage = new Image("emptyHeart.png");
+			Image heartImage = new Image("heart.png");
+			ImageView iv1 = new ImageView();
+			iv1.setX(((i%6)*45) + 525);
+			iv1.setY((i/6 * 45) + 10);
+			iv1.setImage(emptyHeartImage);
+			iv1.setFitWidth(40);
+			iv1.setPreserveRatio(true);
+			iv1.setSmooth(true);
+			iv1.setCache(true);
+			this.getChildren().add(iv1);
+			hearts.add(iv1);
+			
+			ImageView iv2 = new ImageView();
+			iv2.setX(((i%6)*45) + 525);
+			iv2.setY((i/6 * 45) + 10);
+			iv2.setImage(heartImage);
+			iv2.setFitWidth(40);
+			iv2.setPreserveRatio(true);
+			iv2.setSmooth(true);
+			iv2.setCache(true);
+			this.getChildren().add(iv2);
+			emptyHearts.add(iv2);
+			if(i >= plyr.getMaxHealth()){
+				iv1.setVisible(false);
 			}
-			ImageView iv = new ImageView();
-			iv.setX(((i%6)*45) + 525);
-			iv.setY((i/6 * 45) + 10);
-			iv.setImage(image);
-			iv.setFitWidth(40);
-			iv.setPreserveRatio(true);
-			iv.setSmooth(true);
-			iv.setCache(true);
-			hearts.add(iv);
-			this.getChildren().add(iv);
+			if(i >= plyr.getHealth()){
+				iv2.setVisible(false);
+			}
 		}
 		
 		ImageView bullet = new ImageView();
@@ -93,92 +108,73 @@ public class StatsPane extends Pane{
 		fist.setCache(true);
 		this.getChildren().add(fist);
 		
-		for(int i = 0; i < plyr.getBulletType().getDamage(); i++){
+		for(int i = 0; i < 10; i++){
 			Rectangle tickMark = new Rectangle(400 + (i*7),12,5, 35);
 			tickMark.setFill(Color.WHITE);
-			tickMarks.add(tickMark);
 			this.getChildren().add(tickMark);
+			tickMarks.add(tickMark);
+			if(i >= plyr.getBulletType().getDamage()){
+				tickMark.setVisible(false);
+			}
 		}
 		
-		for(int i = 0; i < plyr.spdMultiplier; i++){
+		for(int i = 0; i < 10; i++){
 			Rectangle tickMark = new Rectangle(400 + (i*7),52,5, 35);
 			tickMark.setFill(Color.WHITE);
-			tickMarks.add(tickMark);
 			this.getChildren().add(tickMark);
+			tickMarks.add(tickMark);
+			if(i >= plyr.getSpdMultiplier()){
+				tickMark.setVisible(false);
+			}
 		}
 		
-		for(int i = 0; i < plyr.getMeleeDmg(); i++){
+		for(int i = 0; i < 10; i++){
 			Rectangle tickMark = new Rectangle(400 + (i*7),92,5, 35);
 			tickMark.setFill(Color.WHITE);
-			tickMarks.add(tickMark);
 			this.getChildren().add(tickMark);
+			tickMarks.add(tickMark);
+			if(i >= plyr.getMeleeDmg()){
+				tickMark.setVisible(false);
+			}
 		}
 	}
 	
 	public void update(){
-		this.getChildren().clear();
-		hearts.clear();
-		tickMarks.clear();
-		for(int i = 0; i < plyr.getMaxHealth(); i++){
-			Image image = null;
-			if(i > plyr.getHealth()-1){
-				image = new Image("emptyHeart.png");
+		for(int i = 0; i < 18; i++){
+			if(i < plyr.getMaxHealth()){
+				hearts.get(i).setVisible(true);
 			}else{
-				image = new Image("heart.png");
+				hearts.get(i).setVisible(false);
 			}
-			ImageView iv = new ImageView();
-			iv.setX(((i%6)*45) + 525 );
-			iv.setY((i/6 * 45) + 10);
-			iv.setImage(image);
-			iv.setFitWidth(40);
-			iv.setPreserveRatio(true);
-			hearts.add(iv);
-			this.getChildren().add(iv);
+			
+			if(i < plyr.getHealth()){
+				emptyHearts.get(i).setVisible(true);
+			}else{
+				emptyHearts.get(i).setVisible(false);
+			}
+		}
+		for(int i = 0; i < 10; i++){
+			if(i >= plyr.getBulletType().getDamage()){
+				tickMarks.get(i).setVisible(false);
+			}else{
+				tickMarks.get(i).setVisible(true);
+			}
 		}
 		
-		ImageView bullet = new ImageView();
-		bullet.setImage(new Image("bullet.png"));
-		bullet.setFitWidth(40);
-		bullet.setX(350);
-		bullet.setY(10);
-		bullet.setPreserveRatio(true);
-		this.getChildren().add(bullet);
-		
-		ImageView shoe = new ImageView();
-		shoe.setImage(new Image("shoe.png"));
-		shoe.setFitWidth(30);
-		shoe.setX(357);
-		shoe.setY(60);
-		shoe.setPreserveRatio(true);
-		this.getChildren().add(shoe);
-		
-		ImageView fist = new ImageView();
-		fist.setImage(new Image("fist.png"));
-		fist.setFitWidth(30);
-		fist.setX(355);
-		fist.setY(97);
-		fist.setPreserveRatio(true);
-		this.getChildren().add(fist);
-		
-		for(int i = 0; i < plyr.getBulletType().getDamage(); i++){
-			Rectangle tickMark = new Rectangle(400 + (i*7),12,5, 35);
-			tickMark.setFill(Color.WHITE);
-			tickMarks.add(tickMark);
-			this.getChildren().add(tickMark);
+		for(int i = 10; i < 20; i++){
+			if(i-10 >= plyr.getSpdMultiplier()){
+				tickMarks.get(i).setVisible(false);
+			}else{
+				tickMarks.get(i).setVisible(true);
+			}
 		}
 		
-		for(int i = 0; i < plyr.spdMultiplier; i++){
-			Rectangle tickMark = new Rectangle(400 + (i*7),52,5, 35);
-			tickMark.setFill(Color.WHITE);
-			tickMarks.add(tickMark);
-			this.getChildren().add(tickMark);
-		}
-		
-		for(int i = 0; i < plyr.getMeleeDmg(); i++){
-			Rectangle tickMark = new Rectangle(400 + (i*7),92,5, 35);
-			tickMark.setFill(Color.WHITE);
-			tickMarks.add(tickMark);
-			this.getChildren().add(tickMark);
+		for(int i = 20; i < 30; i++){
+			if(i-20 >= plyr.getMeleeDmg()){
+				tickMarks.get(i).setVisible(false);
+			}else{
+				tickMarks.get(i).setVisible(true);
+			}
 		}
 	}
 }

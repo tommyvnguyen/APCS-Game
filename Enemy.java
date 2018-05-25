@@ -59,14 +59,14 @@ public abstract class Enemy extends Sprite{
 	}
 	
 	public void move(){
-		if(this.hitbox.getX() >= 0 && this.hitbox.getX() + this.hitbox.getWidth() < 1600){ //Be sure to make it based around the root's size, later
+		if(this.hitbox.getX() >= 0 && this.hitbox.getX() + this.hitbox.getWidth() < 800){ //Be sure to make it based around the root's size, later
 			this.hitbox.setX(this.hitbox.getX() + xSpd * spdMultiplier);
 		}
 		else{
 			xSpd *= -1;
 			this.hitbox.setX(this.hitbox.getX() + xSpd * spdMultiplier);
 		}
-		if(this.hitbox.getY() >= 0 && this.hitbox.getY() + this.hitbox.getHeight() < 900){ 
+		if(this.hitbox.getY() >= 0 && this.hitbox.getY() + this.hitbox.getHeight() < 800){ 
 			this.hitbox.setY(this.hitbox.getY() + ySpd * spdMultiplier);
 		}else{
 			ySpd *= -1;
