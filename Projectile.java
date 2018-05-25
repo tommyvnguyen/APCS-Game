@@ -35,7 +35,7 @@ import java.util.ArrayList;
 public class Projectile extends Sprite{
 	int damage;
 	int fireRate;
-	
+
 
 	public Projectile(double x, double y, double dy, double dx){
 		super(x,y,dy,dx);
@@ -43,7 +43,7 @@ public class Projectile extends Sprite{
 		damage = 1;
 		fireRate = 10;
 	}
-	
+
 	public int getFireRate(){
 		return this.fireRate;
 
@@ -58,5 +58,5 @@ public class Projectile extends Sprite{
 		damage=d;
 
 	}
-	
+
 }
