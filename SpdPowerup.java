@@ -39,6 +39,7 @@ public class SpdPowerup extends Powerup{
 	}
 	public boolean upgrade(Player plyr){
 		plyr.setSpdMultiplier(plyr.getSpdMultiplier() * 1.2);
+		Notify.displayMessage(plyr, "Speed up!", "FASTER");
 		return true;
 	}
 }

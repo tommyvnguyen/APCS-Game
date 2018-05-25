@@ -71,6 +71,11 @@ public class Door extends Pane implements Collidable{
 			return false;
 		}
 	}
+	
+	public boolean collides(Collidable c){
+		return checkCollision(c.getHitbox());
+	}
+	
 	public String getPosition(){
 		return position;
 	}

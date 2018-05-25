@@ -54,22 +54,28 @@ public abstract class Enemy extends Sprite{
 
 
 	public void track(){
-		this.hitbox.getTransforms().clear();
-		this.hitbox.getTransforms().add(new Rotate(Math.toDegrees(Math.atan2(this.hitbox.getY() - target.getY(),this.hitbox.getX()-target.getX()))+180, (this.hitbox.getWidth()/2 + this.hitbox.getX()), (this.hitbox.getHeight()/2 + this.hitbox.getY())));
+		if(timeCounter > 60){
+			this.hitbox.getTransforms().clear();
+			this.hitbox.getTransforms().add(new Rotate(Math.toDegrees(Math.atan2(this.hitbox.getY() - target.getY(),this.hitbox.getX()-target.getX()))+180, (this.hitbox.getWidth()/2 + this.hitbox.getX()), (this.hitbox.getHeight()/2 + this.hitbox.getY())));
+		}
 	}
 
 	public void move(){
+
 		if(hittingWall.indexOf("right")!=-1 && xSpd>0){
 			xSpd=-1*xSpd;
 		}
 		if(hittingWall.indexOf("left")!=-1 && xSpd<0){
 			xSpd=-1*xSpd;
+
 		}
 		if(hittingWall.indexOf("top")!=-1 && ySpd<0){
 			ySpd=-1*ySpd;
 		}
+
 		if(hittingWall.indexOf("bottom")!=-1 && ySpd>0){
 			ySpd=-1*ySpd;
+
 		}
 		this.hitbox.setX(this.hitbox.getX() + xSpd * spdMultiplier);
 		this.hitbox.setY(this.hitbox.getY() + ySpd * spdMultiplier);
@@ -94,6 +100,10 @@ public abstract class Enemy extends Sprite{
 
 	public void increaseTimeCounter(){
 		timeCounter++;
+	}
+	
+	public int getTimeCounter(){
+		return timeCounter;
 	}
    // It takes a y value and an x value and finds their proportion
 
