@@ -168,7 +168,7 @@ public class Player extends Sprite{
 		if(getHealth() >= 1 && !(isImmune())){
 			setHealth(getHealth()-1);
 			if(getHealth() <= 0){
-
+				
 			}
 		}
 	}

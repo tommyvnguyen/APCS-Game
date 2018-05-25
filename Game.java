@@ -38,18 +38,35 @@ public class Game extends Scene{
 	Player plyr;
 	ArrayList<Enemy> enemies;
 	ArrayList<Powerup> powerups;
+	AnimationTimer timer;
+	
+	boolean isActive;
 
 	Pane gamePane;
 	StatsPane statsPane;
 	BorderPane rootPane;
+	Pane menuPane;
 	Map map;
 															private final long[] frameTimes = new long[100];
 														private int frameTimeIndex = 0 ;
 														private boolean arrayFilled = false ;
 
 	Game(){
-		super(new BorderPane(), 800, 950);
-		rootPane = (BorderPane)getRoot();
+		super(new Pane(), 800, 950);
+		menuPane = (Pane)getRoot();
+		Button button = new Button("Start");
+		button.setPrefSize(100,50);
+		button.setLayoutX(350);
+		button.setLayoutY(375);
+		button.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent e) {
+				startGame();
+			}
+		});
+		menuPane.getChildren().add(button);
+		isActive = false;
+		
+		rootPane = new BorderPane();
 		gamePane = new Pane();
 		gamePane.setPrefSize(800,800);
 		gamePane.setStyle("-fx-border: single; -fx-border-color: black; -fx-border-width: 5px;");
@@ -78,19 +95,19 @@ public class Game extends Scene{
 		powerups.add(new PoisonPowerup(200,500));
 		gamePane.getChildren().add(powerups.get(1));
 
-		/*if(timeCounter%100 == 0 && enemies.size() < 1){
+		if(timeCounter%100 == 0 && enemies.size() < 1){
 			FlyingShooter newShooter = new FlyingShooter(1,1,plyr.getHitbox());
 			newShooter.setX(50);
 			newShooter.setY(50);
 			enemies.add(newShooter);
 			gamePane.getChildren().add(newShooter);
-		}*/
+		}
 
-		Machine s1 = new Machine(1,1,plyr.getHitbox());
-		enemies.add(s1);
-		gamePane.getChildren().add(s1);
-		s1.getHitbox().setX(600);
-		s1.getHitbox().setY(400);
+		//Machine s1 = new Machine(1,1,plyr.getHitbox());
+		//enemies.add(s1);
+		//gamePane.getChildren().add(s1);
+		//s1.getHitbox().setX(600);
+		//s1.getHitbox().setY(400);
 
 
 
@@ -119,7 +136,7 @@ public class Game extends Scene{
 
 		// --------------------------------------
 
-		AnimationTimer timer = new AnimationTimer(){
+		timer = new AnimationTimer(){
 			@Override
 			public void handle(long now){
 				run();
@@ -128,7 +145,6 @@ public class Game extends Scene{
 				enemyCheckWalls();
 			}
 		};
-		timer.start();
 		onKeyPressedProperty().bind(plyr.onKeyPressedProperty());
 		onKeyReleasedProperty().bind(plyr.onKeyReleasedProperty());
 
@@ -158,13 +174,12 @@ public class Game extends Scene{
 	}
 
 	public void run(){
-
     //Enemy actions
 		for(int i = 0; i < enemies.size(); i++){
 			enemies.get(i).track();
-		/*	if(enemies.get(i) instanceof Shooter){
+			if(enemies.get(i) instanceof Shooter){
 				enemies.get(i).rangedTrackMove(map.getCurrentArea(),plyr.getHitbox(),300);
-			}*/
+			}
 		}
 		ArrayList<Enemy> hitList = new ArrayList<Enemy>();
 		for(int i = 0; i < enemies.size(); i++){
@@ -173,6 +188,9 @@ public class Game extends Scene{
 				if(enemies.get(i).collides(plyr)){
 
 					plyr.takeDamage();
+					if(plyr.getHealth() <= 0){
+							endGame();
+						}
 					if(!plyr.isImmune()){
 						if(enemies.get(i).decreaseHealth(plyr.getMeleeDmg()) <= 0){
 								hitList.add(enemies.get(i));
@@ -192,6 +210,9 @@ public class Game extends Scene{
 						Projectile bullet = shooter.getBullets().get(j);
 						if(shooter.getBullets().get(j).collides(plyr)){
 							plyr.takeDamage();
+							if(plyr.getHealth() <= 0){
+								endGame();
+							}
 							if(!(plyr.isImmune())){
 								if(!(shooter.getBullets().get(j) instanceof Laser)){
 									shooter.getChildren().remove(shooter.getBullets().get(j));
@@ -213,7 +234,7 @@ public class Game extends Scene{
 								}
 
 							}
-							if(!removed){
+							//if(!removed){
 								if(shooter.getBullets().get(j) instanceof Laser){
 									Laser laser = (Laser)shooter.getBullets().get(j);
 									if(laser.getTimeCounter() >= 125){
@@ -222,7 +243,7 @@ public class Game extends Scene{
 									}
 									laser.increaseTimeCounter();
 								}
-							}
+							//}
 						}
 
 					}
@@ -235,8 +256,9 @@ public class Game extends Scene{
 
 		//playerBullets collide w/ objects
 		for(int i = plyr.getBullets().size()-1; i >=0 ; i--){
-			boolean removed=false;
-			for(int j = enemies.size()-1; j >=0 && !removed;  j--){
+
+			for(int j = enemies.size()-1; j >=0;  j--){
+				//System.out.println("Check");
 				if(plyr.getBullets().size()>0){
 					if(plyr.getBullets().get(i).collides(enemies.get(j))){
 						if(enemies.get(j).decreaseHealth(plyr.getBulletType().getDamage()) <= 0){
@@ -244,21 +266,23 @@ public class Game extends Scene{
 						}
 						plyr.getChildren().remove(plyr.getBullets().get(i));
 						plyr.getBullets().remove(i);
-						removed =true;
+
+						break;
+					}else{
+						boolean removed = false;
+						for(Rectangle wall : map.getCurrentArea().getWalls()){
+								System.out.println("size:" +plyr.getBullets().size());
+								if(plyr.getBullets().size()>0){
+									if(plyr.getBullets().get(i).getHitbox().intersects(wall.getX(),wall.getY(),wall.getWidth(),wall.getHeight()) &&!removed){
+										plyr.getChildren().remove(plyr.getBullets().get(i));
+										plyr.getBullets().remove(i);
+										removed = true;
+									}
+								}
+						}
 					}
 				}
 			}
-			if(!removed){
-				for(Rectangle wall : map.getCurrentArea().getWalls()){
-						if(plyr.getBullets().size()>0){
-							if(plyr.getBullets().get(i).getHitbox().intersects(wall.getX(),wall.getY(),wall.getWidth(),wall.getHeight()) &&!removed){
-								plyr.getChildren().remove(plyr.getBullets().get(i));
-								plyr.getBullets().remove(i);
-								removed = true;
-							}
-						}
-				}
-			}	
 		}
 		for(Enemy e : hitList){
 			double healthDropChance = Math.random();
@@ -393,5 +417,39 @@ public class Game extends Scene{
 			}
 			e.setHittingWall(wallsHit);
 		}
+	}
+	
+	public void startGame(){
+		//map = new Map(20);
+		//plyr = new Player(200,200,50,50,1,1,4);
+		//enemies = new ArrayList<Enemy>();
+		//powerups = new ArrayList<Powerup>();
+		//statsPane = new StatsPane(plyr);
+		plyr.setHealth(5);
+		plyr.setMaxHealth(5);
+		plyr.setSpdMultiplier(4);
+		plyr.setMeleeDmg(0);
+		plyr.getBulletType().setDamage(1);
+		plyr.setX(200);
+		plyr.setY(200);
+		setRoot(rootPane);
+		timer.start();
+		//isActive = true;
+	}
+	
+	public void endGame(){
+		gamePane.getChildren().remove(map);
+		map = new Map(20);
+		gamePane.getChildren().add(map);
+		plyr.setHealth(5);
+		plyr.setMaxHealth(5);
+		plyr.setSpdMultiplier(4);
+		plyr.setMeleeDmg(0);
+		plyr.getBulletType().setDamage(1);
+		plyr.setX(200);
+		plyr.setY(200);
+		timer.stop();
+		setRoot(menuPane);
+		//isActive = false;
 	}
 }
