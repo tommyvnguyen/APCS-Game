@@ -35,15 +35,11 @@ public class Map extends Pane{
 	Pane minimap;
 	public Area currentArea;
 	ArrayList<Area> areas = new ArrayList<Area>(); //coordinate system IS TRADITIONAL EUCLIDIAN SPACE
-	final int NUM_OF_AREA_TYPES = 3;
+	final int NUM_OF_AREA_TYPES = 2;
 
 	public Map(int size){
 		generateNewMap();
 		addDoors();
-	}
-
-	public Area getCurrentArea(){
-		return currentArea;
 	}
 
 	public String checkDoorCollision(Rectangle hitbox){
@@ -54,134 +50,34 @@ public class Map extends Pane{
 		areas.add(spawn);
 		currentArea=spawn;
 		getChildren().add(currentArea);
-		randomMap(6,3,1);
-		for(Area as : areas){
-				System.out.println(as.getXCoord()+" " + as.getYCoord());
-		}
-	}
-	//assigns a main branch, a long side branch, a short side branch then adds side rooms and short side branches
-	// any maps is given to have a main branch with 2 bosses, a side branch with 1 boss and 1 side branch with no boss
-	private void randomMap(int numSideRooms, int numSideBranches, int numBossBranch){
-		String dir= randomDirection();
-			System.out.println("main branch direction:" +dir);
-		generateMainBranch(dir);
-		String currentDir= dir;
-		while(dir.equals(currentDir)){
-			dir = randomDirection();
-		}
-		System.out.println("side branch direction:" +dir);
-		generateSideBranch(0,0,dir,randomInt(4,6),false);
-		String currentDir2=dir;
-		while(dir.equals(currentDir)||currentDir2.equals(dir)){
-			dir = randomDirection();
-
-		}
-		System.out.println("side rooms direction:" +dir);
-		generateSideRooms(0,0,dir,randomInt(3,4),false);
-		for(int i=0;i<numBossBranch;i++){
-			int index = randomInt(0,areas.size()-1);
-			int xc=areas.get(index).getXCoord();
-			int yc=areas.get(index).getYCoord();
-			generateSideBranch(xc,yc,openRandomDirection(xc,yc),randomInt(5,7),false);
-		}
-		for(int i=0; i<numSideBranches; i++){
-			int index = randomInt(0,areas.size()-1);
-			int xc=areas.get(index).getXCoord();
-			int yc=areas.get(index).getYCoord();
-			generateSideRooms(xc,yc,openRandomDirection(xc,yc),randomInt(3,5),false);
-		}
-		for(int i=0; i<numSideRooms; i++){
-			int index = randomInt(0,areas.size()-1);
-			int xc=areas.get(index).getXCoord();
-			int yc=areas.get(index).getYCoord();
-			generateSideRooms(xc,yc,openRandomDirection(xc,yc),randomInt(1,2),false);
-		}
+		generateMainBranch("right");
+		generateMainBranch("up");
 	}
 
-	//takes "right", "left", "top", "bottom"
+	//takes "right", "left", "up", "down"
 	private void generateMainBranch(String direction){
 		int modifier = 1;
-		if(direction.equals("left")||direction.equals("bottom")){
+		if(direction.equals("left")||direction.equals("down")){
 			modifier=-1;
 		}
 		for(int i=1; i<10; i++){
 			if(i!=5){
-				if(direction.equals("top") || direction.equals("bottom")){
+				if(direction.equals("up") || direction.equals("down")){
 					areas.add(randomArea(0,i*modifier));
 				}else{
 					areas.add(randomArea(i*modifier,0));
 				}
 			}
 		}
-		if(direction.equals("top") || direction.equals("bottom")){
+		if(direction.equals("up") || direction.equals("down")){
 			areas.add(new MidBossArea(0,5*modifier));
 			areas.add(new FinalBossArea(0,10*modifier));
 		}else{
 			areas.add(new MidBossArea(5*modifier,0));
 			areas.add(new FinalBossArea(10*modifier,0));
 		}
-
-	}
-	//generates branch with size number rooms, starting a x,y and going in direction given. boolean whether intial coordiante is incldued
-	// (e.g exclusive vs inclusive)
-	private void generateSideBranch(int x, int y,String direction,int size,boolean inclusive){
-		int modifier = 1;
-		if(direction.equals("left")||direction.equals("bottom")){
-			modifier=-1;
-		}
-		if(!inclusive){
-			if(direction.equals("top")||direction.equals("bottom")){
-				y+=1*modifier;
-			}
-			if(direction.equals("left")||direction.equals("right")){
-				x+=1*modifier;
-			}
-		}
-		for(int i=0; i<size-1; i++){
-
-				if(direction.equals("top") || direction.equals("bottom")){
-					if(!checkPresentRoom(x,y+i*modifier)){
-						areas.add(randomArea(x,y+(i*modifier)));
-					}
-				}else{
-					if(!checkPresentRoom(x+(i*modifier),y))
-					areas.add(randomArea(x+(i*modifier),y));
-				}
-		}
-		if(direction.equals("top") || direction.equals("bottom")){
-			if(!checkPresentRoom(x,y+(size-1)*modifier)){
-				areas.add(new MidBossArea(x,y+(size-1)*modifier));
-			}
-		}else{
-			if(!checkPresentRoom(x+(size-1)*modifier,y)){
-				areas.add(new MidBossArea(x+(size-1)*modifier,y));
-			}
-		}
-	}
-	//nos boss usually for small side rooms (1 or 2)
-	private void generateSideRooms(int x, int y, String direction, int size,boolean inclusive){
-		int modifier = 1;
-		System.out.println(x +" "+ y +" "+ direction+" " + size +" "+ inclusive);
-		if(direction.equals("left")||direction.equals("bottom")){
-			modifier=-1;
-		}
-		if(!inclusive){
-			if(direction.equals("top")||direction.equals("bottom")){
-				y+=1*modifier;
-			}
-			if(direction.equals("left")||direction.equals("right")){
-				x+=1*modifier;
-			}
-		}
-		for(int i=0; i<size-1; i++){
-			if(direction.equals("top") || direction.equals("bottom")){
-				if(!checkPresentRoom(x,y+i*modifier)){
-					areas.add(randomArea(x,y+(i*modifier)));
-				}
-			}else{
-				if(!checkPresentRoom(x+(i*modifier),y))
-				areas.add(randomArea(x+(i*modifier),y));
-			}
+		for(Area as : areas){
+				System.out.println(as.getXCoord()+" " + as.getYCoord());
 		}
 	}
 
@@ -193,8 +89,6 @@ public class Map extends Pane{
 			case 1: result= new WallyArea(x,y);
 					break;
 			case 2: result= new OpenArea(x,y);
-					break;
-			case 3: result= new PillarArea(x,y);
 					break;
 		}
 		return result;
@@ -254,57 +148,5 @@ public class Map extends Pane{
 				}
 			}
 		}
-	}
-	private String randomDirection(){
-		int random = (int)(Math.random()*4+1);
-		if(random ==1){ return "top";}
-		else if(random==2){ return "bottom";}
-		else if (random==3){return "right";}
-		else { return "left";}
-	}
-	//given coordinate, find random direction that has no rooms
-	private String openRandomDirection(int x, int y){
-		boolean rightEmpty=true;
-		boolean leftEmpty=true;
-		boolean topEmpty=true;
-		boolean bottomEmpty=true;
-		for(Area a : areas){
-			if(a.getXCoord()==x+1 && a.getYCoord()==y){
-				rightEmpty=false;
-			}
-			if(a.getXCoord()==x-1 && a.getYCoord()==y){
-				leftEmpty=false;
-			}
-			if(a.getXCoord()==x && a.getYCoord()==y+1){
-				topEmpty=false;
-			}
-			if(a.getXCoord()==x && a.getYCoord()==y-1){
-				bottomEmpty=false;
-			}
-		}
-		if(!rightEmpty && !leftEmpty && !topEmpty && !bottomEmpty){
-			return randomDirection();
-		}else{
-			while(true){
-				String dir = randomDirection();
-				if(dir.equals("right") && rightEmpty){ return "right";}
-				if(dir.equals("left") && leftEmpty){ return "left";}
-				if(dir.equals("top") && topEmpty){ return "top";}
-				if(dir.equals("bottom") && bottomEmpty){ return "bottom";}
-			}
-		}
-	}
-	private int randomInt(int low, int high){
-		int x = (int)(Math.random()*(high-low+1)+low);
-		return x;
-	}
-	//checks to see if a coordinate is already occupied
-	private boolean checkPresentRoom(int x, int y){
-		for (Area a : areas){
-			if(a.getXCoord()==x && a.getYCoord()==y){
-				return true;
-			}
-		}
-		return false;
 	}
 }
