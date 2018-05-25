@@ -33,16 +33,16 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 public class GameTester extends Application{
 	int timeCounter = 0;
-
+	
 	public static void main(String[] args){
 		launch(args);
 	}
-
+	
 	public void start(Stage stage){
 		Game game = new Game();
 		
 		stage.setScene(game);
-
+		
 		stage.show();
 	}
 }
