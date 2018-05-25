@@ -57,11 +57,11 @@ public class Door extends Pane implements Collidable{
 			getChildren().add(door);
 		}
 	}
-	
+
 	public Rectangle getHitbox(){
 		return door;
 	}
-	
+
 	//possible implement this so that the entire hitbox must go through for the door to work,
 	public boolean checkCollision(Rectangle hitbox){
 		if(door.intersects(hitbox.getX(),hitbox.getY(),hitbox.getWidth(),hitbox.getHeight())){
@@ -71,15 +71,12 @@ public class Door extends Pane implements Collidable{
 			return false;
 		}
 	}
-	
+
 	public boolean collides(Collidable c){
 		return checkCollision(c.getHitbox());
 	}
-	
+
 	public String getPosition(){
 		return position;
-	}
-	public boolean collides(Collidable c){
-		return checkCollision(c.getHitbox());
 	}
 }

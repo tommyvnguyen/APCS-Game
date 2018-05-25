@@ -43,7 +43,10 @@ public class Game extends Scene{
 	StatsPane statsPane;
 	BorderPane rootPane;
 	Map map;
-	
+															private final long[] frameTimes = new long[100];
+														private int frameTimeIndex = 0 ;
+														private boolean arrayFilled = false ;
+
 	Game(){
 		super(new BorderPane(), 800, 950);
 		rootPane = (BorderPane)getRoot();
@@ -51,44 +54,42 @@ public class Game extends Scene{
 		gamePane.setPrefSize(800,800);
 		gamePane.setStyle("-fx-border: single; -fx-border-color: black; -fx-border-width: 5px;");
 		rootPane.setCenter(gamePane);
-		
+
 		plyr = new Player(200,200,50,50,1,1,4);
 		enemies = new ArrayList<Enemy>();
-    																				private final long[] frameTimes = new long[100];
-																			private int frameTimeIndex = 0 ;
-																			private boolean arrayFilled = false ;
+
 
 		powerups = new ArrayList<Powerup>();
 		gamePane.getChildren().add(plyr);
 		timeCounter = 0;
 
-		
+
 		statsPane = new StatsPane(plyr);
 		statsPane.setPrefSize(800,150);
 		statsPane.setStyle("-fx-border: single; -fx-border-color: black; -fx-border-width: 5px; -fx-background-color: #3e4651;");
 		rootPane.setTop(statsPane);
-		
-		
+
+
 		map = new Map(20);
 		gamePane.getChildren().add(map);
-		// TESTING ----------------------------- 
+		// TESTING -----------------------------
 		powerups.add(new DamagePowerup(500,500));
 		gamePane.getChildren().add(powerups.get(0));
 		powerups.add(new PoisonPowerup(200,500));
 		gamePane.getChildren().add(powerups.get(1));
-		
+
 		Machine m1 = new Machine(1,1,plyr.getHitbox());
 		enemies.add(m1);
 		gamePane.getChildren().add(m1);
 		m1.getHitbox().setX(600);
 		m1.getHitbox().setY(400);
-		
+
 		//Vomiter v1 = new Vomiter(1,1,plyr.getHitbox());
 		//enemies.add(v1);
 		//gamePane.getChildren().add(v1);
 		//v1.getHitbox().setX(600);
 		//v1.getHitbox().setY(400);
-	
+
 		//Chaser e1 = new Chaser(1,1,plyr.getHitbox());
 		//enemies.add(e1);
 		//gamePane.getChildren().add(e1);
@@ -104,7 +105,7 @@ public class Game extends Scene{
 		//s1.getHitbox().setY(400);
 		//enemies.add(s1);
 		//gamePane.getChildren().add(s1);
-		
+
 		// --------------------------------------
 
 		AnimationTimer timer = new AnimationTimer(){
@@ -141,7 +142,7 @@ public class Game extends Scene{
 														        }
 														    };
 														    frameRateMeter.start();
-																pane.getChildren().add(new StackPane(label));
+																gamePane.getChildren().add(new StackPane(label));
 
 	}
 
@@ -150,7 +151,6 @@ public class Game extends Scene{
     //Enemy actions
 		for(int i = 0; i < enemies.size(); i++){
 			enemies.get(i).track();
-			enemies.get(i).fire();
       enemies.get(i).rangedTrackMove(map.getCurrentArea(),plyr.getHitbox(),300);
 		}
 		ArrayList<Enemy> hitList = new ArrayList<Enemy>();
@@ -159,17 +159,14 @@ public class Game extends Scene{
 				enemies.get(i).move();
 				if(enemies.get(i).collides(plyr)){
 
-	
-
-		
-		/*if(timeCounter%100 == 0 && enemies.size() < 1){
+		if(timeCounter%100 == 0 && enemies.size() < 1){
 			FlyingShooter newShooter = new FlyingShooter(1,1,plyr.getHitbox());
 			newShooter.setX(50);
 			newShooter.setY(50);
 			enemies.add(newShooter);
 			pane.getChildren().add(newShooter);
 
-		}*/
+		}
 
 					plyr.takeDamage();
 					if(!plyr.isImmune()){
@@ -182,7 +179,7 @@ public class Game extends Scene{
 					}
 				}
 
-				
+
 				//Enemy bullets collide w/ objects
 				if(enemies.get(i) instanceof Shooter){
 					Shooter shooter = (Shooter)enemies.get(i);
@@ -200,10 +197,10 @@ public class Game extends Scene{
 								System.out.println(plyr);
 								statsPane.update();
 							}
-							
-							
+
+
 						}
-						
+
 						if(bulletHitbox.getX() < 0 || bulletHitbox.getY() < 0 || bulletHitbox.getX() > 1600 || bulletHitbox.getY() > 900 && !(shooter.getBullets().get(j) instanceof Laser)){
 							shooter.getChildren().remove(j+1);
 							shooter.getBullets().remove(j);
@@ -221,7 +218,7 @@ public class Game extends Scene{
 				}
 			}
 			enemies.get(i).increaseTimeCounter();
-		
+
 		}
 
 		//playerBullets collide w/ objects
@@ -257,7 +254,7 @@ public class Game extends Scene{
 			gamePane.getChildren().remove(e);
 			enemies.remove(e);
 
-				
+
 		}
 		hitList.clear();
 
@@ -382,4 +379,3 @@ public class Game extends Scene{
 		}
 	}
 }
-
