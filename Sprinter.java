@@ -34,19 +34,19 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 public class Sprinter extends Enemy{
-	
+
 	Sprinter(double dy, double dx, Rectangle target){
 		super(0, 0, target);
-		
+
 		health = 50;
 		this.getChildren().add(hitbox);
 		this.spdMultiplier = 2;
 	}
-	
+
 	public void move(){
 		super.move();
 		System.out.println(hitbox.getX());
-		
+
 		if(timeCounter%100 == 50){
 			double angle = Math.toDegrees(Math.atan2(this.hitbox.getY() - target.getY(),this.hitbox.getX()-target.getX())) + 180;
 			double x = (target.getX() + target.getWidth()/2) - (this.hitbox.getWidth() + this.hitbox.getX()) + (this.hitbox.getHeight()/2 * Math.cos(Math.toRadians(angle)));
@@ -59,7 +59,7 @@ public class Sprinter extends Enemy{
 			xSpd = 0;
 			ySpd = 0;
 		}
-		
+
 	}
-	
+
 }

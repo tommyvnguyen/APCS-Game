@@ -35,24 +35,24 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 public class Machine extends Shooter{
 	boolean isFiring;
-	
+
 	Machine(double dy, double dx, Rectangle target){
 		super(0, 0, target);
-		
+
 		isFiring = false;
-		health = 60;
+		health = 50;
 		this.getChildren().add(hitbox);
 		this.spdMultiplier = 1;
 	}
-	
+
 	public void move(){
 		super.move();
-		
+
 		//double angle = Math.toDegrees(Math.atan2(this.hitbox.getY() - target.getY(),this.hitbox.getX()-target.getX())) + 180;
 		//double x = (target.getX() + target.getWidth()/2) - (this.hitbox.getWidth() + this.hitbox.getX()) + (this.hitbox.getHeight()/2 * Math.cos(Math.toRadians(angle)));
 		//double y = (target.getY() + target.getHeight()/2) - (this.hitbox.getHeight()/2 + this.hitbox.getY()) + (this.hitbox.getWidth()/2 * Math.sin(Math.toRadians(angle)));
 		//double d = Math.sqrt(Math.pow(x,2) + Math.pow(y,2));
-		
+
 		if(timeCounter % 450 == 300){
 			double directionChance = Math.random();
 			if(directionChance < 0.25){
@@ -72,13 +72,13 @@ public class Machine extends Shooter{
 			xSpd = 0;
 			ySpd = 0;
 		}
-		
+
 	}
-	
+
 	public void fire(){
 		if(timeCounter%450 < 300){
 			double attackChance = Math.random();
-			if(attackChance < 0.50){	
+			if(attackChance < 0.50){
 				if(timeCounter % 25 == 12){
 					double angle = Math.toDegrees(Math.atan2(this.hitbox.getY() - target.getY(),this.hitbox.getX()-target.getX())) + 180;
 					Laser laser = new Laser(this.getHitbox().getX() + this.getHitbox().getWidth()/2, this.getHitbox().getY() + this.getHitbox().getHeight()/2, angle);
@@ -97,10 +97,10 @@ public class Machine extends Shooter{
 						Laser laser = new Laser(this.getHitbox().getX() + this.getHitbox().getWidth()/2, this.getHitbox().getY() + this.getHitbox().getHeight()/2,(90*i));
 						getChildren().add(laser);
 						getBullets().add(laser);
-					}				
+					}
 				}
 			}
 		}
 	}
-	
+
 }

@@ -43,15 +43,15 @@ public class Player extends Sprite{
 	int health;
 	int maxHealth;
 	int meleeDmg;
-	
+
 	AnimationTimer timer;
 	boolean movingN,movingE,movingW,movingS;
 	boolean shootingN,shootingE,shootingW,shootingS;
-	
+	String hittingWall;
 	Projectile bulletType;
 	ArrayList<Projectile> bullets;
-	
-	
+
+
 	int delay =0;
 	int delayResetTimer=0;
 
@@ -66,13 +66,13 @@ public class Player extends Sprite{
 		movingN=false; movingE=false; movingW= false; movingS=false;
 		shootingN=false; shootingE=false; shootingW= false; shootingS=false;
 		spdMultiplier = multiplier;
-		
-		
+		hittingWall=null;
+
 		//this.hitbox = new Rectangle(10,10,10,10);
 		//this.hitbox.setFill(Color.RED);
 		//getChildren().add(this.hitbox);
 
-		
+
 		timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -87,54 +87,72 @@ public class Player extends Sprite{
         };
         timer.start();
         getChildren().add(hitbox);
-        
+
 
         bulletType = new SingleShot(0,0,1,1);
 
         bullets= new ArrayList<Projectile>();
-        
+
 	}
-	
+
+	public boolean getMovingN(){
+		return movingN;
+	}
+	public boolean getMovingE(){
+		return movingE;
+	}
+	public boolean getMovingW(){
+		return movingW;
+	}
+	public boolean getMovingS(){
+		return movingS;
+	}
+
 	public int getMaxHealth(){
 		return this.maxHealth;
 	}
-	
+
 	public int getHealth(){
 		return this.health;
 	}
-	
+
 	public int getMeleeDmg(){
 		return this.meleeDmg;
 	}
-	
+
 	public ArrayList<Projectile> getBullets(){
 		return this.bullets;
 	}
-	
+
 	public Projectile getBulletType(){
 		return this.bulletType;
 	}
-	
+
 	public void setMaxHealth(int maxHealth){
 		this.maxHealth = maxHealth;
 	}
-	
+
 	public void setHealth(int health){
 		this.health = health;
 	}
-	
+
 	public void setMeleeDmg(int meleeDmg){
 		this.meleeDmg = meleeDmg;
 	}
-	
+
 	public boolean isImmune(){
 		return immuneCounter > 0;
 	}
-	
+
 	public void setImmune(){
 		immuneCounter = 60;
 	}
-	
+	public void setHittingWall(String b){
+		hittingWall=b;
+	}
+	public String getHittingWall(){
+		return hittingWall;
+	}
 	private void countdownImmunity(){
 		if(immuneCounter > 0){
 			if(immuneCounter % 20 == 0){
@@ -145,29 +163,29 @@ public class Player extends Sprite{
 			immuneCounter--;
 		}
 	}
-	
+
 	public void takeDamage(){
 		if(getHealth() >= 1 && !(isImmune())){
 			setHealth(getHealth()-1);
 			if(getHealth() <= 0){
-				
+
 			}
 		}
 	}
-	
+
 	private void getInput(){
 	 	setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                    if(event.getCode().equals(KeyCode.W)) movingN = true;
-                   if(event.getCode().equals(KeyCode.S)) movingS = true; 
+                   if(event.getCode().equals(KeyCode.S)) movingS = true;
                    if(event.getCode().equals(KeyCode.D)) movingE = true;
                    if(event.getCode().equals(KeyCode.A)) movingW= true;
                    if(event.getCode().equals(KeyCode.UP)) shootingN=true;
                    if(event.getCode().equals(KeyCode.DOWN)) shootingS=true;
                    if(event.getCode().equals(KeyCode.RIGHT)) shootingE=true;
                    if(event.getCode().equals(KeyCode.LEFT)) shootingW=true;
-                   
+
             }
         });
 
@@ -175,7 +193,7 @@ public class Player extends Sprite{
             @Override
             public void handle(KeyEvent event) {
                if(event.getCode().equals(KeyCode.W)) movingN = false;
-               if(event.getCode().equals(KeyCode.S)) movingS = false; 
+               if(event.getCode().equals(KeyCode.S)) movingS = false;
                if(event.getCode().equals(KeyCode.D)) movingE = false;
                if(event.getCode().equals(KeyCode.A)) movingW= false;
             	if(event.getCode().equals(KeyCode.UP)) shootingN=false;
@@ -184,45 +202,67 @@ public class Player extends Sprite{
                 if(event.getCode().equals(KeyCode.LEFT)) shootingW=false;
             }
         });
-    } 
-	
+    }
+
 	public void move(){
-		if(movingN && !movingE && !movingW){ hitbox.setY(hitbox.getY()-ySpd*spdMultiplier); }
-		if(movingS && !movingE && !movingW){ hitbox.setY(hitbox.getY()+ySpd*spdMultiplier); }
-		if(movingE && !movingN && !movingS){ hitbox.setX(hitbox.getX()+xSpd*spdMultiplier); }
-		if(movingW && !movingN && !movingS){ hitbox.setX(hitbox.getX()-xSpd*spdMultiplier); }
-		if(movingN && movingE &&!movingW){ 
-			hitbox.setY(hitbox.getY()-(ySpd/Math.sqrt(2))*spdMultiplier);
-			hitbox.setX(hitbox.getX()+(xSpd/Math.sqrt(2))*spdMultiplier);
-		} 
-		if(movingN && movingW && !movingE){ 
-			hitbox.setY(hitbox.getY()-(ySpd/Math.sqrt(2))*spdMultiplier);
-			hitbox.setX(hitbox.getX()-(xSpd/Math.sqrt(2))*spdMultiplier);
+		//need this here in order to refresh the moving input, otherwise holding key breaks if you run into a wall
+		boolean wasMovingN=movingN;
+		boolean wasMovingW=movingW;
+		boolean wasMovingE=movingE;
+		boolean wasMovingS=movingS;
+		if(hittingWall!=null){
+			if(hittingWall.indexOf("right")!=-1){
+				movingE=false;
+			}
+			if(hittingWall.indexOf("left")!=-1){
+				movingW=false;
+			}
+			if(hittingWall.indexOf("top")!=-1){
+				movingN=false;
+			}
+			if(hittingWall.indexOf("bottom")!=-1){
+				movingS=false;
+			}
 		}
-		if(movingS && movingE && !movingW){ 
-			hitbox.setY(hitbox.getY()+(ySpd/Math.sqrt(2))*spdMultiplier);
-			hitbox.setX(hitbox.getX()+(xSpd/Math.sqrt(2))*spdMultiplier);
-		}
-		if(movingS && movingW && !movingE){ 
-			hitbox.setY(hitbox.getY()+(ySpd/Math.sqrt(2))*spdMultiplier);
-			hitbox.setX(hitbox.getX()-(xSpd/Math.sqrt(2))*spdMultiplier);
-		}
-		if (movingN && movingE && movingW){
-			hitbox.setY(hitbox.getY()-ySpd*spdMultiplier);
-		}
-		if (movingS && movingE && movingW){
-			hitbox.setY(hitbox.getY()+ySpd*spdMultiplier);
-		}
-		if (movingE && movingN && movingS){
-			hitbox.setX(hitbox.getX()+xSpd*spdMultiplier);
-		}
-		if (movingW && movingN && movingS){
-			hitbox.setX(hitbox.getX()-xSpd*spdMultiplier);
-		}
+			if(movingN && !movingE && !movingW){ hitbox.setY(hitbox.getY()-ySpd*spdMultiplier); }
+			if(movingS && !movingE && !movingW){ hitbox.setY(hitbox.getY()+ySpd*spdMultiplier); }
+			if(movingE && !movingN && !movingS){ hitbox.setX(hitbox.getX()+xSpd*spdMultiplier); }
+			if(movingW && !movingN && !movingS){ hitbox.setX(hitbox.getX()-xSpd*spdMultiplier); }
+			if(movingN && movingE &&!movingW){
+				hitbox.setY(hitbox.getY()-(ySpd/Math.sqrt(2))*spdMultiplier);
+				hitbox.setX(hitbox.getX()+(xSpd/Math.sqrt(2))*spdMultiplier);
+			}
+			if(movingN && movingW && !movingE){
+				hitbox.setY(hitbox.getY()-(ySpd/Math.sqrt(2))*spdMultiplier);
+				hitbox.setX(hitbox.getX()-(xSpd/Math.sqrt(2))*spdMultiplier);
+			}
+			if(movingS && movingE && !movingW){
+				hitbox.setY(hitbox.getY()+(ySpd/Math.sqrt(2))*spdMultiplier);
+				hitbox.setX(hitbox.getX()+(xSpd/Math.sqrt(2))*spdMultiplier);
+			}
+			if(movingS && movingW && !movingE){
+				hitbox.setY(hitbox.getY()+(ySpd/Math.sqrt(2))*spdMultiplier);
+				hitbox.setX(hitbox.getX()-(xSpd/Math.sqrt(2))*spdMultiplier);
+			}
+			if (movingN && movingE && movingW){
+				hitbox.setY(hitbox.getY()-ySpd*spdMultiplier);
+			}
+			if (movingS && movingE && movingW){
+				hitbox.setY(hitbox.getY()+ySpd*spdMultiplier);
+			}
+			if (movingE && movingN && movingS){
+				hitbox.setX(hitbox.getX()+xSpd*spdMultiplier);
+			}
+			if (movingW && movingN && movingS){
+				hitbox.setX(hitbox.getX()-xSpd*spdMultiplier);
+			}
+			movingN=wasMovingN;
+			movingS=wasMovingS;
+			movingE=wasMovingE;
+			movingW=wasMovingW;
 	}
-	
+
 	private void shoot(){
-	//replace "5" with projectile.getFireRate();
 		if(delay==bulletType.getFireRate()){delay=0;}
 		if(!(shootingN||shootingS||shootingW||shootingE)){
 			//delayResetTimer prevents repeated tapping vs holding down
@@ -271,28 +311,16 @@ public class Player extends Sprite{
 				bullets.add(shot);
 				delay++;
 			}
-			
-			
+
+
 		}else{
 			delay++;
 		}
 
 	}
-	//private Projectile makeBulletCopy(double x,double y, double vx, double vy){
-	//	Projectile copy = new Projectile(this,x,y,vx,vy);
-	//	ArrayList<Node> copiedNodes = new ArrayList<Node>();
-	//	for(Node n: bulletType.getChildren()){
-	//		
-	//	}
-	//	copy.getChildren().addAll(copiedNodes);
-	//	copy.setFireRate(bulletType.getFireRate());
-	//	copy.setDamage(bulletType.getDamage());
-	//	return copy;
-	//}
-	//
-	
+
 	public String toString(){
 		return "Max HP : " + getMaxHealth() + "\nHP : " + getHealth() + "\nDamage : " + bulletType.getDamage() + "\nMeleeDmg : " + getMeleeDmg() + "\nSpeed : " + getSpdMultiplier() + "\n\n";
 	}
-	
+
 }
