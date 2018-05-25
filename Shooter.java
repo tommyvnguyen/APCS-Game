@@ -77,7 +77,7 @@ public abstract class Shooter extends Enemy{
 
 
 			//System.out.println(shotDx + " " + shotDy);
-			SingleShot shot = new SingleShot(this.hitbox.getX(),this.hitbox.getY(), shotDx, shotDy);
+			SingleShot shot = new SingleShot(this.hitbox.getX()+this.hitbox.getWidth()/2,this.hitbox.getY()+this.hitbox.getHeight()/2, shotDx, shotDy);
 		//shot.getTransforms().add(new Rotate(Math.toDegrees(Math.atan2(this.hitbox.getY() - target.getY(),this.hitbox.getX()-target.getX()))+180, (this.hitbox.getWidth()/2 + this.hitbox.getX()), (this.hitbox.getHeight()/2 + this.hitbox.getY())));
 			this.getChildren().add(shot);
 			this.bullets.add(shot);

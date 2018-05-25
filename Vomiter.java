@@ -41,11 +41,27 @@ public class Vomiter extends Shooter{
 		super(dy, dx, target);
 
 		directionFacing = "FORWARD";
-		health = 100;
+		health = 150;
 		this.hitbox.setWidth(75);
 		this.hitbox.setHeight(75);
 		this.getChildren().add(hitbox);
 		this.spdMultiplier = 2.1;
+		try{
+			img = new Image("ToasterLaserBoss1.png");
+			imgview = new ImageView(img);
+			imgview.setFitWidth(75);
+			imgview.setFitHeight(75);
+			hitbox.setFill(Color.TRANSPARENT);
+			//health = new Image("healthkit.png");
+			setPrefWidth(imgview.getFitWidth());
+			setPrefHeight(imgview.getFitHeight());
+
+			getChildren().add(imgview);
+
+		}catch(Exception e){
+			System.out.println("error while creating image");
+			e.printStackTrace();
+		}
 	}
 
 	public void move(){

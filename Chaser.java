@@ -31,7 +31,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.util.Duration;
-
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import java.util.ArrayList;
 public class Chaser extends Enemy{
 
@@ -40,7 +41,23 @@ public class Chaser extends Enemy{
 
 		health = 5;
 		this.getChildren().add(hitbox);
-		this.spdMultiplier = 2;
+		this.spdMultiplier = 1.97;
+		try{
+			img = new Image("PB1.png");
+			imgview = new ImageView(img);
+			imgview.setFitWidth(50);
+			imgview.setFitHeight(50);
+			hitbox.setFill(Color.TRANSPARENT);
+			//health = new Image("healthkit.png");
+			setPrefWidth(imgview.getFitWidth());
+			setPrefHeight(imgview.getFitHeight());
+
+			getChildren().add(imgview);
+
+		}catch(Exception e){
+			System.out.println("error while creating image");
+			e.printStackTrace();
+		}
 	}
 
 	public void move(){

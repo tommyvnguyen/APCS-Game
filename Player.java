@@ -38,6 +38,9 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 public class Player extends Sprite{
 
 	int health;
@@ -63,19 +66,15 @@ public class Player extends Sprite{
 		maxHealth = 5;
 		health = maxHealth;
 		hitbox = new Rectangle(x,y,w,h);
+		hitbox.setFill(Color.TRANSPARENT);
 		movingN=false; movingE=false; movingW= false; movingS=false;
 		shootingN=false; shootingE=false; shootingW= false; shootingS=false;
 		spdMultiplier = multiplier;
 		hittingWall=null;
 
-		//this.hitbox = new Rectangle(10,10,10,10);
-		//this.hitbox.setFill(Color.RED);
-		//getChildren().add(this.hitbox);
-
-
 		timer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
+        @Override
+        public void handle(long now) {
                getInput();
 			   move();
 			   for(Projectile p : bullets){
@@ -83,8 +82,8 @@ public class Player extends Sprite{
 			   }
                shoot();
 			   countdownImmunity();
-            }
-        };
+      }
+  	};
         timer.start();
         getChildren().add(hitbox);
 
@@ -92,6 +91,22 @@ public class Player extends Sprite{
         bulletType = new SingleShot(0,0,1,1);
 
         bullets= new ArrayList<Projectile>();
+			try{
+				img = new Image("MainCharacter1.png");
+				imgview = new ImageView(img);
+				imgview.setFitWidth(50);
+				imgview.setFitHeight(50);
+				//health = new Image("healthkit.png");
+				setPrefWidth(imgview.getFitWidth());
+				setPrefHeight(imgview.getFitHeight());
+
+				getChildren().add(imgview);
+
+			}catch(Exception e){
+				System.out.println("error while creating image");
+				e.printStackTrace();
+			}
+
 
 	}
 

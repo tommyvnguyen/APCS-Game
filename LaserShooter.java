@@ -34,23 +34,38 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 public class LaserShooter extends Shooter{
-	
+
 	LaserShooter(double dy, double dx, Rectangle target){
 		super(dy, dx, target);
-		
-		health = 25;
+
+		health = 15;
 		this.getChildren().add(hitbox);
 		this.spdMultiplier = 0.5;
+		try{
+			img = new Image("Laser1.png");
+			imgview = new ImageView(img);
+			imgview.setFitWidth(50);
+			imgview.setFitHeight(50);
+			hitbox.setFill(Color.TRANSPARENT);
+			//health = new Image("healthkit.png");
+			setPrefWidth(imgview.getFitWidth());
+			setPrefHeight(imgview.getFitHeight());
+			getChildren().add(imgview);
+
+		}catch(Exception e){
+			System.out.println("error while creating image");
+			e.printStackTrace();
+		}
 	}
-	
+
 	public void move(){
 		super.move();
-		
+
 		double angle = Math.toDegrees(Math.atan2(this.hitbox.getY() - target.getY(),this.hitbox.getX()-target.getX())) + 180;
 		double x = (target.getX() + target.getWidth()/2) - (this.hitbox.getWidth() + this.hitbox.getX()) + (this.hitbox.getHeight()/2 * Math.cos(Math.toRadians(angle)));
 		double y = (target.getY() + target.getHeight()/2) - (this.hitbox.getHeight()/2 + this.hitbox.getY()) + (this.hitbox.getWidth()/2 * Math.sin(Math.toRadians(angle)));
 		double d = Math.sqrt(Math.pow(x,2) + Math.pow(y,2));
-		
+
 		if(timeCounter % 250 < 100){
 			track();
 			xSpd = x*spdMultiplier/d;
@@ -59,9 +74,9 @@ public class LaserShooter extends Shooter{
 			xSpd = 0;
 			ySpd = 0;
 		}
-		
+
 	}
-	
+
 	public void fire(){
 		if(timeCounter % 250 == 100){
 			double angle = Math.toDegrees(Math.atan2(this.hitbox.getY() - target.getY(),this.hitbox.getX()-target.getX())) + 180;
@@ -70,5 +85,5 @@ public class LaserShooter extends Shooter{
 			getBullets().add(laser);
 		}
 	}
-	
+
 }

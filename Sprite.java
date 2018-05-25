@@ -31,6 +31,9 @@ import javafx.util.Duration;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Rotate;
 import java.util.ArrayList;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 public abstract class Sprite extends Pane implements Collidable{
 
 	double xStart;
@@ -39,9 +42,9 @@ public abstract class Sprite extends Pane implements Collidable{
 	double ySpd;
 	double spdMultiplier;
 	//double trueSpd; // In the case that the sprite slows down or stops, trueSpd will be used to make sure that the sprite will go back to its normal speed
-
 	Rectangle hitbox;//Face is a drawn point on each sprite to show which way the sprite is facing.
-
+	Image img;
+	ImageView imgview;
 	public Sprite(double xStart, double yStart, double xSpd, double ySpd){
 
 		this.xSpd = xSpd;
@@ -139,5 +142,8 @@ public abstract class Sprite extends Pane implements Collidable{
 	public boolean collides(Collidable collidable){
 		return hitbox.getX() <= collidable.getHitbox().getX() + collidable.getHitbox().getWidth() && hitbox.getY() <= collidable.getHitbox().getY() + collidable.getHitbox().getHeight() && (hitbox.getX() + hitbox.getWidth() >= collidable.getHitbox().getX() && hitbox.getY() + hitbox.getHeight() >= collidable.getHitbox().getY());
 	}
-
+	public void updateSprite(){
+		imgview.setX(hitbox.getX());
+		imgview.setY(hitbox.getY());
+	}
 }

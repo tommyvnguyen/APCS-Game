@@ -35,20 +35,20 @@ import javafx.scene.transform.Rotate;
 import java.util.ArrayList;
 public abstract class Powerup extends Pane implements Collidable{
 	Rectangle hitbox;
-	
+
 	public Powerup(double xStart, double yStart){
 		hitbox = new Rectangle(xStart,yStart,25,25);
 		hitbox.setFill(Color.PURPLE);
 		getChildren().add(hitbox);
 	}
-	
+
 	public Rectangle getHitbox(){
 		return this.hitbox;
 	}
-	
+
 	public boolean collides(Collidable collidable){
-		return hitbox.getX() <= collidable.getHitbox().getX() + collidable.getHitbox().getWidth() && hitbox.getY() <= collidable.getHitbox().getY() + collidable.getHitbox().getHeight() && (hitbox.getX() + hitbox.getWidth() >= collidable.getHitbox().getX() && hitbox.getY() + hitbox.getHeight() >= collidable.getHitbox().getY()); 
+		return hitbox.getX() <= collidable.getHitbox().getX() + collidable.getHitbox().getWidth() && hitbox.getY() <= collidable.getHitbox().getY() + collidable.getHitbox().getHeight() && (hitbox.getX() + hitbox.getWidth() >= collidable.getHitbox().getX() && hitbox.getY() + hitbox.getHeight() >= collidable.getHitbox().getY());
 	}
-	
+
 	public boolean upgrade(Player plyr){return true;}
 }

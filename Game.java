@@ -73,10 +73,6 @@ public class Game extends Scene{
 		map = new Map(20);
 		gamePane.getChildren().add(map);
 		// TESTING -----------------------------
-		powerups.add(new DamagePowerup(500,500));
-		gamePane.getChildren().add(powerups.get(0));
-		powerups.add(new PoisonPowerup(200,500));
-		gamePane.getChildren().add(powerups.get(1));
 
 
 		AnimationTimer timer = new AnimationTimer(){
@@ -87,6 +83,11 @@ public class Game extends Scene{
 				checkDoors();
 				enemyCheckWalls();
 				spawnMobs();
+				plyr.updateSprite();
+				for(Enemy e : enemies){
+					//if(!(e instanceof Machine) && !(e instanceof LaserShooter))
+						e.updateSprite();
+				}
 			}
 		};
 		timer.start();
@@ -123,7 +124,7 @@ public class Game extends Scene{
     //Enemy actions
 		for(int i = 0; i < enemies.size(); i++){
 		//	enemies.get(i).track();
-			if(enemies.get(i) instanceof Shooter){
+			if(enemies.get(i) instanceof FlyingShooter){
 				enemies.get(i).rangedTrackMove(map.getCurrentArea(),plyr.getHitbox(),300);
 			}else{
 				enemies.get(i).move();
@@ -187,7 +188,7 @@ public class Game extends Scene{
 								if(shooter.getBullets().get(j) instanceof Laser){
 									Laser laser = (Laser)shooter.getBullets().get(j);
 									if(laser.getTimeCounter() >= 125){
-										shooter.getChildren().remove(j+1);
+										shooter.getChildren().remove(shooter.getBullets().get(j));
 										shooter.getBullets().remove(j);
 									}
 
@@ -234,7 +235,25 @@ public class Game extends Scene{
 		}
 		for(Enemy e : hitList){
 			double healthDropChance = Math.random();
-			if(healthDropChance >= .90){
+			double damageDropChance = Math.random();
+			double poisonDropChance=Math.random();
+			if(e instanceof Vomiter){
+				poisonDropChance=100;
+			}
+			if(e instanceof Chaser){
+				healthDropChance+=0.10;
+			}
+			if(damageDropChance >= 0.90){
+				DamagePowerup dup = new DamagePowerup(e.getHitbox().getX(),e.getHitbox().getY());
+				powerups.add(dup);
+				gamePane.getChildren().add(dup);
+			}
+			else if(poisonDropChance>=0.9){
+				PoisonPowerup dup = new PoisonPowerup(e.getHitbox().getX(),e.getHitbox().getY());
+				powerups.add(dup);
+				gamePane.getChildren().add(dup);
+			}
+			else	if(healthDropChance >= .80){
 				HealingPowerup health = new HealingPowerup(e.getHitbox().getX(),e.getHitbox().getY());
 				powerups.add(health);
 				gamePane.getChildren().add(health);
@@ -264,6 +283,7 @@ public class Game extends Scene{
 		String dir=map.checkDoorCollision(plyr.getHitbox());
 		if(dir!=null && map.getCurrentArea().getCompleted()){
 			map.moveRooms(dir);
+			clearPowerUps();
 			//might be a good idea to change the numbers to actual variable getters
 			if(dir.equals("right")){
 				plyr.setX(30);
@@ -401,7 +421,7 @@ public class Game extends Scene{
 				ls.getHitbox().setX(325); ls.getHitbox().setY(325);
 				enemies.add(ls);
 				gamePane.getChildren().add(ls);
-				ls = new LaserShooter(0,0,plyr.getHitbox());
+				ls = new LaserShooter(1,1,plyr.getHitbox());
 				ls.getHitbox().setX(425); ls.getHitbox().setY(325);
 				enemies.add(ls);
 				gamePane.getChildren().add(ls);
@@ -442,5 +462,11 @@ public class Game extends Scene{
 		}
 
 
+	}
+	private void clearPowerUps(){
+		for(int i=powerups.size()-1; i>=0; i--){
+			gamePane.getChildren().remove(powerups.get(i));
+			powerups.remove(i);
+		}
 	}
 }

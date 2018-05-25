@@ -40,9 +40,24 @@ public class Machine extends Shooter{
 		super(0, 0, target);
 
 		isFiring = false;
-		health = 50;
+		health = 150;
 		this.getChildren().add(hitbox);
 		this.spdMultiplier = 1;
+		try{
+			img = new Image("ToasterLaserBoss1.png");
+			imgview = new ImageView(img);
+			imgview.setFitWidth(50);
+			imgview.setFitHeight(50);
+			hitbox.setFill(Color.TRANSPARENT);
+			//health = new Image("healthkit.png");
+			setPrefWidth(imgview.getFitWidth());
+			setPrefHeight(imgview.getFitHeight());
+			getChildren().add(imgview);
+
+		}catch(Exception e){
+			System.out.println("error while creating image");
+			e.printStackTrace();
+		}
 	}
 
 	public void move(){

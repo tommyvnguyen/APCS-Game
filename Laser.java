@@ -30,7 +30,8 @@ import javafx.animation.Animation;
 import javafx.util.Duration;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Rotate;
-
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import java.util.ArrayList;
 public class Laser extends Projectile{
 	Rectangle pointer;
@@ -40,7 +41,7 @@ public class Laser extends Projectile{
 	public Laser(double x, double y, double angle){
 		super(x,y,0,0);
 		this.angle = angle;
-		
+
 		pointer = new Rectangle(x,y,2,1000);
 		pointer.setFill(Color.RED);
 		pointer.getTransforms().add(new Rotate(angle-90,this.xStart,this.yStart));
@@ -49,15 +50,15 @@ public class Laser extends Projectile{
 		fireRate = 10;
 		//this.toBack();
 	}
-	
+
 	public void increaseTimeCounter(){
 		timeCounter++;
 	}
-	
+
 	public int getTimeCounter(){
 		return timeCounter;
 	}
-	
+
 	public void move(){ //Used to animate the laser
 		if(timeCounter == 35){
 			this.hitbox = new Rectangle(xStart,yStart,5,1000);
@@ -76,7 +77,7 @@ public class Laser extends Projectile{
 			}
 		}
 	}
-	
+
 	public void move(Rectangle target){
 		System.out.println(timeCounter);
 		if(timeCounter == 25){
@@ -95,12 +96,12 @@ public class Laser extends Projectile{
 			}
 		}
 	}
-	
+
 	public boolean collides(Collidable collidable){
 		double currentAngle = Math.toDegrees(Math.atan2(this.hitbox.getY() - collidable.getHitbox().getY(),this.hitbox.getX()-collidable.getHitbox().getX())) + 180;
 		//System.out.println(angle);
-		//return hitbox.getX() <= collidable.getHitbox().getX() + collidable.getHitbox().getWidth() && (hitbox.getY() + hitbox.getX()*Math.tan(angle)) <= collidable.getHitbox().getY() + collidable.getHitbox().getHeight() && (hitbox.getX() + hitbox.getWidth() >= collidable.getHitbox().getX() && ((hitbox.getY() + hitbox.getHeight()) + hitbox.getX()*Math.tan(angle)) >= collidable.getHitbox().getY());  
+		//return hitbox.getX() <= collidable.getHitbox().getX() + collidable.getHitbox().getWidth() && (hitbox.getY() + hitbox.getX()*Math.tan(angle)) <= collidable.getHitbox().getY() + collidable.getHitbox().getHeight() && (hitbox.getX() + hitbox.getWidth() >= collidable.getHitbox().getX() && ((hitbox.getY() + hitbox.getHeight()) + hitbox.getX()*Math.tan(angle)) >= collidable.getHitbox().getY());
 		return currentAngle >= angle-10 && currentAngle <= angle + 10 && timeCounter >= 35;
 	}
-	
-}	
+
+}

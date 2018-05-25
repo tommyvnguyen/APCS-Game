@@ -30,12 +30,27 @@ import javafx.animation.Animation;
 import javafx.util.Duration;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Rotate;
-
-
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import java.util.ArrayList;
 public class DamagePowerup extends Powerup{
 	public DamagePowerup(double xStart, double yStart){
 		super(xStart,yStart);
+		try{
+        	Image  img = new Image("ToasterLaserBoss1.png");
+          ImgeView imgview = new ImageView(img);
+          imgview.setFitWidth(25);
+          imgview.setFitHeight(25);
+          hitbox.setFill(Color.TRANSPARENT);
+          //health = new Image("healthkit.png");
+          setPrefWidth(imgview.getFitWidth());
+          setPrefHeight(imgview.getFitHeight());
+          getChildren().add(imgview);
+
+      }catch(Exception e){
+          System.out.println("error while creating image");
+          e.printStackTrace();
+      }
 	}
 	public boolean upgrade(Player plyr){
 		plyr.getBulletType().setDamage(plyr.getBulletType().getDamage()+1);

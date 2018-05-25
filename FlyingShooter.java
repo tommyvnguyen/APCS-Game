@@ -30,7 +30,8 @@ import javafx.animation.Animation;
 import javafx.util.Duration;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Rotate;
-
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import java.util.ArrayList;
 public class FlyingShooter extends Shooter{
 
@@ -43,6 +44,22 @@ public class FlyingShooter extends Shooter{
 
 		health = 10;
 		this.getChildren().add(hitbox);
+		try{
+			img = new Image("Jelly1.png");
+			imgview = new ImageView(img);
+			imgview.setFitWidth(50);
+			imgview.setFitHeight(50);
+			hitbox.setFill(Color.TRANSPARENT);
+			//health = new Image("healthkit.png");
+			setPrefWidth(imgview.getFitWidth());
+			setPrefHeight(imgview.getFitHeight());
+
+			getChildren().add(imgview);
+
+		}catch(Exception e){
+			System.out.println("error while creating image");
+			e.printStackTrace();
+		}
 
 	}
 	//TimeCounter counts how many times the animationTimer has called its methods.
