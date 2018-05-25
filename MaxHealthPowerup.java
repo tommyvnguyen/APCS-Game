@@ -39,6 +39,8 @@ public class MaxHealthPowerup extends Powerup{
 	}
 	public boolean upgrade(Player plyr){
 		plyr.setMaxHealth(plyr.getMaxHealth() + 1);
+		plyr.setHealth(plyr.getHealth() + 1);
+		Notify.displayMessage(plyr, "Health up!", "HARDER");
 		return true;
 	}
 }

@@ -21,6 +21,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
 
 import javafx.scene.paint.Color;
 
@@ -31,18 +33,26 @@ import javafx.animation.AnimationTimer;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
-public class GameTester extends Application{
-	int timeCounter = 0;
-
-	public static void main(String[] args){
-		launch(args);
-	}
-
-	public void start(Stage stage){
-		Game game = new Game();
+public class Chaser extends Enemy{
+	
+	Chaser(double dy, double dx, Rectangle target){
+		super(dy, dx, target);
 		
-		stage.setScene(game);
-
-		stage.show();
+		health = 5;
+		this.getChildren().add(hitbox);
+		this.spdMultiplier = 2;
 	}
+	
+	public void move(){
+		super.move();
+		track();
+		double angle = Math.toDegrees(Math.atan2(this.hitbox.getY() - target.getY(),this.hitbox.getX()-target.getX())) + 180;
+		double x = (target.getX() + target.getWidth()/2) - (this.hitbox.getWidth() + this.hitbox.getX()) + (this.hitbox.getHeight()/2 * Math.cos(Math.toRadians(angle)));
+		double y = (target.getY() + target.getHeight()/2) - (this.hitbox.getHeight()/2 + this.hitbox.getY()) + (this.hitbox.getWidth()/2 * Math.sin(Math.toRadians(angle)));
+		double d = Math.sqrt(Math.pow(x,2) + Math.pow(y,2));
+		
+		xSpd = x*spdMultiplier/d;
+		ySpd = y*spdMultiplier/d;
+	}
+	
 }

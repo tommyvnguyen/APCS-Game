@@ -39,6 +39,7 @@ public class PoisonPowerup extends Powerup{
 	}
 	public boolean upgrade(Player plyr){
 		plyr.setMeleeDmg(plyr.getMeleeDmg() + 1);
+		Notify.displayMessage(plyr, "Poison Touch!", "I'm so ILL");
 		return true;
 	}
 }
