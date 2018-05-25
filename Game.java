@@ -78,20 +78,22 @@ public class Game extends Scene{
 		powerups.add(new PoisonPowerup(200,500));
 		gamePane.getChildren().add(powerups.get(1));
 
-		Machine m1 = new Machine(1,1,plyr.getHitbox());
-		enemies.add(m1);
-		gamePane.getChildren().add(m1);
-		m1.getHitbox().setX(600);
-		m1.getHitbox().setY(400);
-
 		if(timeCounter%100 == 0 && enemies.size() < 1){
 			FlyingShooter newShooter = new FlyingShooter(1,1,plyr.getHitbox());
 			newShooter.setX(50);
 			newShooter.setY(50);
 			enemies.add(newShooter);
 			gamePane.getChildren().add(newShooter);
-
 		}
+
+		Machine s1 = new Machine(1,1,plyr.getHitbox());
+		enemies.add(s1);
+		gamePane.getChildren().add(s1);
+		s1.getHitbox().setX(600);
+		s1.getHitbox().setY(400);
+
+
+
 
 		//Vomiter v1 = new Vomiter(1,1,plyr.getHitbox());
 		//enemies.add(v1);
@@ -99,16 +101,16 @@ public class Game extends Scene{
 		//v1.getHitbox().setX(600);
 		//v1.getHitbox().setY(400);
 
-		//Chaser e1 = new Chaser(1,1,plyr.getHitbox());
-		//enemies.add(e1);
-		//gamePane.getChildren().add(e1);
-		//e1.getHitbox().setX(600);
-		//e1.getHitbox().setY(400);
-		//Chaser e2 = new Chaser(1,1,plyr.getHitbox());
-		//enemies.add(e2);
-		//gamePane.getChildren().add(e2);
-		//e2.getHitbox().setX(200);
-		//e2.getHitbox().setY(400);
+		Chaser e1 = new Chaser(1,1,plyr.getHitbox());
+		enemies.add(e1);
+		gamePane.getChildren().add(e1);
+		e1.getHitbox().setX(600);
+		e1.getHitbox().setY(400);
+		Chaser e2 = new Chaser(1,1,plyr.getHitbox());
+		enemies.add(e2);
+		gamePane.getChildren().add(e2);
+		e2.getHitbox().setX(200);
+		e2.getHitbox().setY(400);
 		//FlyingShooter s1 = new FlyingShooter(1,1,plyr.getHitbox());
 		//s1.getHitbox().setX(400);
 		//s1.getHitbox().setY(400);
@@ -202,21 +204,27 @@ public class Game extends Scene{
 
 
 						}else{
+							boolean removed =false;
 							for(Rectangle wall : map.getCurrentArea().getWalls()){
-								if(bullet.getHitbox().intersects(wall.getX(),wall.getY(),wall.getWidth(),wall.getHeight()) && !(shooter.getBullets().get(j) instanceof Laser)){
+								if(bullet.getHitbox().intersects(wall.getX(),wall.getY(),wall.getWidth(),wall.getHeight()) && !(shooter.getBullets().get(j) instanceof Laser) && !removed){
 									shooter.getChildren().remove(shooter.getBullets().get(j));
 									shooter.getBullets().remove(j);
+									removed =true;
+								}
+
+							}
+							if(!removed){
+								if(shooter.getBullets().get(j) instanceof Laser){
+									Laser laser = (Laser)shooter.getBullets().get(j);
+									if(laser.getTimeCounter() >= 125){
+										shooter.getChildren().remove(j+1);
+										shooter.getBullets().remove(j);
+									}
+									laser.increaseTimeCounter();
 								}
 							}
 						}
-						if(shooter.getBullets().get(j) instanceof Laser){
-							Laser laser = (Laser)shooter.getBullets().get(j);
-							if(laser.getTimeCounter() >= 125){
-								shooter.getChildren().remove(j+1);
-								shooter.getBullets().remove(j);
-							}
-							laser.increaseTimeCounter();
-						}
+
 					}
 
 				}
@@ -227,25 +235,29 @@ public class Game extends Scene{
 
 		//playerBullets collide w/ objects
 		for(int i = plyr.getBullets().size()-1; i >=0 ; i--){
+
 			for(int j = enemies.size()-1; j >=0;  j--){
 				//System.out.println("Check");
-				if(plyr.getBullets().get(i).collides(enemies.get(j))){
-					//System.out.println(j + "--" + enemies.size() + "--" + root.getChildren().size());
+				if(plyr.getBullets().size()>0){
+					if(plyr.getBullets().get(i).collides(enemies.get(j))){
+						if(enemies.get(j).decreaseHealth(plyr.getBulletType().getDamage()) <= 0){
+							hitList.add(enemies.get(j));
+						}
+						plyr.getChildren().remove(plyr.getBullets().get(i));
+						plyr.getBullets().remove(i);
 
-					if(enemies.get(j).decreaseHealth(plyr.getBulletType().getDamage()) <= 0){
-						hitList.add(enemies.get(j));
-					}
-					plyr.getChildren().remove(plyr.getBullets().get(i));
-					plyr.getBullets().remove(i);
-
-					break;
-					//System.out.println(enemies.size() + " " + root.getChildren().size());
-				}else{
-					for(Rectangle wall : map.getCurrentArea().getWalls()){
-						if(plyr.getBullets().get(i).getHitbox().intersects(wall.getX(),wall.getY(),wall.getWidth(),wall.getHeight())){
-							plyr.getChildren().remove(plyr.getBullets().get(i));
-							plyr.getBullets().remove(i);
-							break;
+						break;
+					}else{
+						boolean removed = false;
+						for(Rectangle wall : map.getCurrentArea().getWalls()){
+								System.out.println("size:" +plyr.getBullets().size());
+								if(plyr.getBullets().size()>0){
+									if(plyr.getBullets().get(i).getHitbox().intersects(wall.getX(),wall.getY(),wall.getWidth(),wall.getHeight()) &&!removed){
+										plyr.getChildren().remove(plyr.getBullets().get(i));
+										plyr.getBullets().remove(i);
+										removed = true;
+									}
+								}
 						}
 					}
 				}
