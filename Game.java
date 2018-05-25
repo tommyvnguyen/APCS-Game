@@ -38,22 +38,37 @@ public class Game extends Scene{
 	Player plyr;
 	ArrayList<Enemy> enemies;
 	ArrayList<Powerup> powerups;
-
+	AnimationTimer timer;
 	Pane gamePane;
 	StatsPane statsPane;
 	BorderPane rootPane;
 	Map map;
-															private final long[] frameTimes = new long[100];
-														private int frameTimeIndex = 0 ;
-														private boolean arrayFilled = false ;
-
+	Menu menu;
+	int score;
+	private void startGame(){
+		timer.start();
+		rootPane.setCenter(gamePane);
+	}
 	Game(){
 		super(new BorderPane(), 800, 950);
+		menu = new Menu();
 		rootPane = (BorderPane)getRoot();
 		gamePane = new Pane();
 		gamePane.setPrefSize(800,800);
 		gamePane.setStyle("-fx-border: single; -fx-border-color: black; -fx-border-width: 5px;");
-		rootPane.setCenter(gamePane);
+
+		rootPane.setCenter(menu);
+		score = -1;
+		AnimationTimer tempTimer = new AnimationTimer(){
+		@Override
+			public void handle(long now){
+				if(menu.getStartGame()){
+					startGame();
+					menu.setStartGame(false);
+				}
+			}
+		};
+		tempTimer.start();
 
 		plyr = new Player(200,200,50,50,1,1,4);
 		enemies = new ArrayList<Enemy>();
@@ -75,7 +90,7 @@ public class Game extends Scene{
 		// TESTING -----------------------------
 
 
-		AnimationTimer timer = new AnimationTimer(){
+		 timer = new AnimationTimer(){
 			@Override
 			public void handle(long now){
 				run();
@@ -84,39 +99,24 @@ public class Game extends Scene{
 				enemyCheckWalls();
 				spawnMobs();
 				plyr.updateSprite();
+				checkDeath();
 				for(Enemy e : enemies){
-					//if(!(e instanceof Machine) && !(e instanceof LaserShooter))
 						e.updateSprite();
+						if((e instanceof FlyingShooter) || e instanceof Vomiter ){
+							Shooter s = (Shooter)e;
+							for(Projectile p : s.getBullets()){
+								p.updateSprite();
+							}
+						}
+				}
+				for(Projectile p : plyr.getBullets()){
+					p.updateSprite();
 				}
 			}
 		};
 		timer.start();
 		onKeyPressedProperty().bind(plyr.onKeyPressedProperty());
 		onKeyReleasedProperty().bind(plyr.onKeyReleasedProperty());
-
-
-																Label label = new Label();
-														    AnimationTimer frameRateMeter = new AnimationTimer() {
-
-														        @Override
-														        public void handle(long now) {
-														            long oldFrameTime = frameTimes[frameTimeIndex] ;
-														            frameTimes[frameTimeIndex] = now ;
-														            frameTimeIndex = (frameTimeIndex + 1) % frameTimes.length ;
-														            if (frameTimeIndex == 0) {
-														                arrayFilled = true ;
-														            }
-														            if (arrayFilled) {
-														                long elapsedNanos = now - oldFrameTime ;
-														                long elapsedNanosPerFrame = elapsedNanos / frameTimes.length ;
-														                double frameRate = 1_000_000_000.0 / elapsedNanosPerFrame ;
-														                label.setText(String.format("Current frame rate: %.3f", frameRate));
-														            }
-														        }
-														    };
-														    frameRateMeter.start();
-																gamePane.getChildren().add(new StackPane(label));
-
 	}
 
 	public void run(){
@@ -237,13 +237,14 @@ public class Game extends Scene{
 			double healthDropChance = Math.random();
 			double damageDropChance = Math.random();
 			double poisonDropChance=Math.random();
+			double speedDropChance = Math.random();
 			if(e instanceof Vomiter){
 				poisonDropChance=100;
 			}
 			if(e instanceof Chaser){
 				healthDropChance+=0.10;
 			}
-			if(damageDropChance >= 0.90){
+			if(damageDropChance >= 0.95){
 				DamagePowerup dup = new DamagePowerup(e.getHitbox().getX(),e.getHitbox().getY());
 				powerups.add(dup);
 				gamePane.getChildren().add(dup);
@@ -253,7 +254,12 @@ public class Game extends Scene{
 				powerups.add(dup);
 				gamePane.getChildren().add(dup);
 			}
-			else	if(healthDropChance >= .80){
+			else if(speedDropChance>=0.9){
+				SpdPowerup spd = new SpdPowerup(e.getHitbox().getX(),e.getHitbox().getY());
+				powerups.add(spd);
+				gamePane.getChildren().add(spd);
+			}
+			else	if(healthDropChance >= 0.7){
 				HealingPowerup health = new HealingPowerup(e.getHitbox().getX(),e.getHitbox().getY());
 				powerups.add(health);
 				gamePane.getChildren().add(health);
@@ -459,6 +465,7 @@ public class Game extends Scene{
 		}
 		if(!map.getCurrentArea().getCompleted()&&enemies.size()==0){
 			map.getCurrentArea().setCompleted(true);
+			score++;
 		}
 
 
@@ -468,5 +475,29 @@ public class Game extends Scene{
 			gamePane.getChildren().remove(powerups.get(i));
 			powerups.remove(i);
 		}
+	}
+	private void checkDeath(){
+		if(plyr.getHealth()<=0){
+			//timer.stop();
+			rootPane.setCenter(menu);
+			menu.receiveScore(score);
+			timer.stop();
+			resetGame();
+		}
+	}
+	private void resetGame(){
+		score=-1;
+		gamePane.getChildren().removeAll(gamePane.getChildren());
+		map= new Map(20);
+		gamePane.getChildren().add(map);
+		while(enemies.size()>0){
+			enemies.remove(0);
+		}
+		plyr.setHealth(plyr.getMaxHealth());
+		plyr.setMeleeDmg(0);
+		plyr.setSpdMultiplier(4);
+		plyr.getBulletType().setDamage(1);
+		gamePane.getChildren().add(plyr);
+		statsPane.update();
 	}
 }

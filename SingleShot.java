@@ -30,7 +30,8 @@ import javafx.animation.Animation;
 import javafx.util.Duration;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Rotate;
-
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import java.util.ArrayList;
 public class SingleShot extends Projectile{
 
@@ -42,9 +43,23 @@ public class SingleShot extends Projectile{
 		hitbox.setHeight(10);
 		hitbox.setFill(Color.BLUE);
 		getChildren().add(hitbox);
+		try{
+					img = new Image("crumbprojectile.png");
+				 	imgview = new ImageView(img);
+					imgview.setFitWidth(10);
+					imgview.setFitHeight(10);
+					hitbox.setFill(Color.TRANSPARENT);
+					setPrefWidth(imgview.getFitWidth());
+					setPrefHeight(imgview.getFitHeight());
+					imgview.setX(xStart); imgview.setY(yStart);
+					getChildren().add(imgview);
+			}catch(Exception e){
+					System.out.println("error while creating image");
+					e.printStackTrace();
+			}
 
 	}
-	
 
-	
+
+
 }

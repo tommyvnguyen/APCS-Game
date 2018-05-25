@@ -47,7 +47,7 @@ public class Vomiter extends Shooter{
 		this.getChildren().add(hitbox);
 		this.spdMultiplier = 2.1;
 		try{
-			img = new Image("ToasterLaserBoss1.png");
+			img = new Image("VomitBoss1.png");
 			imgview = new ImageView(img);
 			imgview.setFitWidth(75);
 			imgview.setFitHeight(75);

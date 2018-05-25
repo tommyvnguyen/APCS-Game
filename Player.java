@@ -60,6 +60,7 @@ public class Player extends Sprite{
 
 	int immuneCounter;
 
+
 	public Player(double x, double y, double w, double h, double xv, double yv, double multiplier){
 
 		super(xv,yv);

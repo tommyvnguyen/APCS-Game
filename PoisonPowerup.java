@@ -30,12 +30,27 @@ import javafx.animation.Animation;
 import javafx.util.Duration;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Rotate;
-
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 public class PoisonPowerup extends Powerup{
 	public PoisonPowerup(double xStart, double yStart){
 		super(xStart,yStart);
+		try{
+					Image  img = new Image("PoisonPU.png");
+					ImageView imgview = new ImageView(img);
+					imgview.setFitWidth(25);
+					imgview.setFitHeight(25);
+					hitbox.setFill(Color.TRANSPARENT);
+					setPrefWidth(imgview.getFitWidth());
+					setPrefHeight(imgview.getFitHeight());
+					imgview.setX(xStart); imgview.setY(yStart);
+					getChildren().add(imgview);
+			}catch(Exception e){
+					System.out.println("error while creating image");
+					e.printStackTrace();
+			}
 	}
 	public boolean upgrade(Player plyr){
 		plyr.setMeleeDmg(plyr.getMeleeDmg() + 1);
