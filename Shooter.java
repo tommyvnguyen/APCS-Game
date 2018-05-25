@@ -41,7 +41,7 @@ public abstract class Shooter extends Enemy{
 
 	AnimationTimer timer;
 	ArrayList<Projectile> bullets;
-	
+
 	public Shooter(double dy, double dx, Rectangle target){
 		super(dy, dx, target);
 		timer = new AnimationTimer() {
@@ -58,24 +58,26 @@ public abstract class Shooter extends Enemy{
 		//May need to receive ArrayList<Sprite>, so that fire() can add a projectile object to it.
 		//The timer will loop through the arraylist and call each move() in it.
 	}
-	
-		
+
+
 	public ArrayList<Projectile> getBullets(){
 		return this.bullets;
 	}
-	
-	
+
+
 	public void fire(){
 		if(timeCounter % 60 == 0){
 			double angle = Math.toDegrees(Math.atan2(this.hitbox.getY() - target.getY(),this.hitbox.getX()-target.getX())) + 180;
 			double x = (target.getX() + target.getWidth()/2) - (this.hitbox.getWidth() + this.hitbox.getX()) + (this.hitbox.getHeight()/2 * Math.cos(Math.toRadians(angle)));
 			double y = (target.getY() + target.getHeight()/2) - (this.hitbox.getHeight()/2 + this.hitbox.getY()) + (this.hitbox.getWidth()/2 * Math.sin(Math.toRadians(angle)));
 			double d = Math.sqrt(Math.pow(x,2) + Math.pow(y,2));
+
 			double shotDx = x*7/d; 
 			double shotDy = y*7/d;
 		
+
 			//System.out.println(shotDx + " " + shotDy);
-			SingleShot shot = new SingleShot(this.hitbox.getWidth() + this.hitbox.getX(), this.hitbox.getHeight()/2 + this.hitbox.getY(), shotDx, shotDy);
+			SingleShot shot = new SingleShot(this.hitbox.getX(),this.hitbox.getY(), shotDx, shotDy);
 		//shot.getTransforms().add(new Rotate(Math.toDegrees(Math.atan2(this.hitbox.getY() - target.getY(),this.hitbox.getX()-target.getX()))+180, (this.hitbox.getWidth()/2 + this.hitbox.getX()), (this.hitbox.getHeight()/2 + this.hitbox.getY())));
 			this.getChildren().add(shot);
 			this.bullets.add(shot);

@@ -41,13 +41,11 @@ public class SpawnArea extends Area{
 		Rectangle topWall = new Rectangle(0,0,getPrefWidth(),10);
 		topWall.setFill(Color.BROWN);
 		Rectangle rightWall= new Rectangle(getPrefWidth()-10,0,10,getPrefHeight());
-		rightWall.setFill(Color.GREEN);
+		rightWall.setFill(Color.BROWN);
 		Rectangle bottomWall = new Rectangle(0,getPrefHeight()-10,getPrefWidth(),10);
 		bottomWall.setFill(Color.BROWN);
-		Rectangle midBlock = new Rectangle (400,400,30,30);
-		midBlock.setFill(Color.PINK);
-		getChildren().addAll(leftWall,rightWall,topWall,bottomWall,midBlock);
-
+		getChildren().addAll(leftWall,rightWall,topWall,bottomWall);
+		Collections.addAll(walls,leftWall,rightWall,topWall,bottomWall);
 
 	}
 }

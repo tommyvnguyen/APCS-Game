@@ -31,13 +31,14 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.util.Duration;
-
+import javafx.scene.control.Label;
 import java.util.ArrayList;
 public class Game extends Scene{
 	int timeCounter;
 	Player plyr;
 	ArrayList<Enemy> enemies;
 	ArrayList<Powerup> powerups;
+
 	Pane gamePane;
 	StatsPane statsPane;
 	BorderPane rootPane;
@@ -53,9 +54,14 @@ public class Game extends Scene{
 		
 		plyr = new Player(200,200,50,50,1,1,4);
 		enemies = new ArrayList<Enemy>();
+    																				private final long[] frameTimes = new long[100];
+																			private int frameTimeIndex = 0 ;
+																			private boolean arrayFilled = false ;
+
 		powerups = new ArrayList<Powerup>();
 		gamePane.getChildren().add(plyr);
 		timeCounter = 0;
+
 		
 		statsPane = new StatsPane(plyr);
 		statsPane.setPrefSize(800,150);
@@ -100,29 +106,71 @@ public class Game extends Scene{
 		//gamePane.getChildren().add(s1);
 		
 		// --------------------------------------
+
 		AnimationTimer timer = new AnimationTimer(){
 			@Override
 			public void handle(long now){
 				run();
+				checkWalls();
+				checkDoors();
+				enemyCheckWalls();
 			}
 		};
 		timer.start();
 		onKeyPressedProperty().bind(plyr.onKeyPressedProperty());
 		onKeyReleasedProperty().bind(plyr.onKeyReleasedProperty());
+
+
+																Label label = new Label();
+														    AnimationTimer frameRateMeter = new AnimationTimer() {
+
+														        @Override
+														        public void handle(long now) {
+														            long oldFrameTime = frameTimes[frameTimeIndex] ;
+														            frameTimes[frameTimeIndex] = now ;
+														            frameTimeIndex = (frameTimeIndex + 1) % frameTimes.length ;
+														            if (frameTimeIndex == 0) {
+														                arrayFilled = true ;
+														            }
+														            if (arrayFilled) {
+														                long elapsedNanos = now - oldFrameTime ;
+														                long elapsedNanosPerFrame = elapsedNanos / frameTimes.length ;
+														                double frameRate = 1_000_000_000.0 / elapsedNanosPerFrame ;
+														                label.setText(String.format("Current frame rate: %.3f", frameRate));
+														            }
+														        }
+														    };
+														    frameRateMeter.start();
+																pane.getChildren().add(new StackPane(label));
+
 	}
-	
+
 	public void run(){
+
+    //Enemy actions
+		for(int i = 0; i < enemies.size(); i++){
+			enemies.get(i).track();
+			enemies.get(i).fire();
+      enemies.get(i).rangedTrackMove(map.getCurrentArea(),plyr.getHitbox(),300);
+		}
 		ArrayList<Enemy> hitList = new ArrayList<Enemy>();
-		//if(timeCounter%100 == 0 && enemies.size() < 2){
-		//	Chaser newEnemy = new Chaser(1,1,plyr.getHitbox());
-		//	enemies.add(newEnemy);
-		//	gamePane.getChildren().add(newEnemy);
-		//}
-		
 		for(int i = 0; i < enemies.size(); i++){
 			if(enemies.get(i).getTimeCounter() > 50){
 				enemies.get(i).move();
 				if(enemies.get(i).collides(plyr)){
+
+	
+
+		
+		/*if(timeCounter%100 == 0 && enemies.size() < 1){
+			FlyingShooter newShooter = new FlyingShooter(1,1,plyr.getHitbox());
+			newShooter.setX(50);
+			newShooter.setY(50);
+			enemies.add(newShooter);
+			pane.getChildren().add(newShooter);
+
+		}*/
+
 					plyr.takeDamage();
 					if(!plyr.isImmune()){
 						if(enemies.get(i).decreaseHealth(plyr.getMeleeDmg()) <= 0){
@@ -133,6 +181,7 @@ public class Game extends Scene{
 						System.out.println(plyr);
 					}
 				}
+
 				
 				//Enemy bullets collide w/ objects
 				if(enemies.get(i) instanceof Shooter){
@@ -168,25 +217,26 @@ public class Game extends Scene{
 							laser.increaseTimeCounter();
 						}
 					}
+
 				}
 			}
 			enemies.get(i).increaseTimeCounter();
 		
 		}
-		
+
 		//playerBullets collide w/ objects
 		for(int i = 0; i < plyr.getBullets().size(); i++){
 			for(int j = 0; j < enemies.size(); j++){
 				//System.out.println("Check");
 				if(plyr.getBullets().get(i).collides(enemies.get(j))){
 					//System.out.println(j + "--" + enemies.size() + "--" + root.getChildren().size());
-						
+
 					if(enemies.get(j).decreaseHealth(plyr.getBulletType().getDamage()) <= 0){
 						hitList.add(enemies.get(j));
 					}
 					plyr.getChildren().remove(plyr.getBullets().get(i));
 					plyr.getBullets().remove(i);
-					
+
 					break;
 					//System.out.println(enemies.size() + " " + root.getChildren().size());
 				}
@@ -210,7 +260,7 @@ public class Game extends Scene{
 				
 		}
 		hitList.clear();
-		
+
 		//Player collide w/ objects
 		for(int i = 0; i < powerups.size(); i++){
 			if(plyr.collides(powerups.get(i))){
@@ -221,42 +271,115 @@ public class Game extends Scene{
 				}
 			}
 		}
-		
+
 		timeCounter++;
 	}
-	
-	//private void checkDoors(){
-	//	String dir=map.checkDoorCollision(plyr.getHitbox());
-	//	if(dir!=null) System.out.println(dir);
-	//	if(dir!=null){
-	//		map.moveRooms(dir);
-	//		//might be a good idea to change the numbers to actual variable getters
-	//		if(dir.equals("right")){
-	//			plyr.setX(30);
-	//			plyr.setY(400);
-	//		}
-	//		if(dir.equals("left")){
-	//			plyr.setX(720);
-	//			plyr.setY(400);
-	//		}
-	//		if(dir.equals("top")){
-	//			plyr.setX(400);
-	//			plyr.setY(720);
-	//		}
-	//		if(dir.equals("bottom")){
-	//			plyr.setX(400);
-	//			plyr.setY(30);
-	//		}
-	//	}
-	//}	
-	//
-	//private void checkWalls(){
-	//	plyr.setHittingWall(null);
-	//	if(plyr.getHitbox().getX()<0){
-	//		plyr.setHittingWall("left");
-	//	}
-	//	if(plyr.getHitbox().getX()>800-plyr.getHitbox().getWidth()){
-	//		plyr.setHittingWall("right");
-	//	}
-	//}
+
+	private void checkDoors(){
+		String dir=map.checkDoorCollision(plyr.getHitbox());
+		if(dir!=null){
+			map.moveRooms(dir);
+			//might be a good idea to change the numbers to actual variable getters
+			if(dir.equals("right")){
+				plyr.setX(30);
+				plyr.setY(400);
+			}
+			if(dir.equals("left")){
+				plyr.setX(720);
+				plyr.setY(400);
+			}
+			if(dir.equals("top")){
+				plyr.setX(400);
+				plyr.setY(720);
+			}
+			if(dir.equals("bottom")){
+				plyr.setX(400);
+				plyr.setY(30);
+			}
+		}
+	}
+	private void checkWalls(){
+		String wallsHit="";
+		for(Rectangle r : map.getCurrentArea().getWalls()){
+			if(plyr.getHitbox().getY()+plyr.getHitbox().getHeight()>r.getY() && plyr.getHitbox().getY()<r.getY()+r.getHeight()){
+					if(plyr.getHitbox().getX()-plyr.getXSpd()*plyr.getSpdMultiplier()< r.getX()+r.getWidth() && plyr.getHitbox().getX()>=r.getX()+r.getWidth()){
+						wallsHit+="left";
+						if(plyr.getMovingW()){
+							plyr.setX(r.getX()+r.getWidth());
+						}
+					}
+					if(plyr.getHitbox().getX()+plyr.getHitbox().getWidth()+plyr.getXSpd()*plyr.getSpdMultiplier()> r.getX() && plyr.getHitbox().getX()+plyr.getHitbox().getWidth()<=r.getX()){
+						wallsHit+="right";
+						if(plyr.getMovingE()){
+							plyr.setX(r.getX()-plyr.getHitbox().getWidth());
+						}
+					}
+			}
+			if(plyr.getHitbox().getX()+plyr.getHitbox().getWidth()>r.getX() && plyr.getHitbox().getX()<r.getX()+r.getWidth()){
+					if(plyr.getHitbox().getY()-plyr.getYSpd()*plyr.getSpdMultiplier()< r.getY()+r.getHeight() && plyr.getHitbox().getY()>=r.getY()+r.getHeight()){
+						wallsHit+="top";
+						if(plyr.getMovingN()){
+							plyr.setY(r.getY()+r.getHeight());
+						}
+					}
+					if(plyr.getHitbox().getY()+plyr.getHitbox().getHeight()+plyr.getYSpd()*plyr.getSpdMultiplier()> r.getY() && plyr.getHitbox().getY()+plyr.getHitbox().getHeight()<=r.getY()){
+						wallsHit+="bottom";
+						if(plyr.getMovingS()){
+							plyr.setY(r.getY()-plyr.getHitbox().getHeight());
+						}
+					}
+			}
+		}
+		if(wallsHit.equals("")){
+			plyr.setHittingWall(null);
+		}else{
+			plyr.setHittingWall(wallsHit);
+		}
+
+	}
+	private void enemyCheckWalls(){
+		for(Enemy e: enemies){
+			String wallsHit="";
+			for(Rectangle r : map.getCurrentArea().getWalls()){
+				if(e.getHitbox().getY()+e.getHitbox().getHeight()>=r.getY() && e.getHitbox().getY()<=r.getY()+r.getHeight()){
+						if(e.getHitbox().getX()-Math.abs(e.getXSpd())*e.getSpdMultiplier()<= r.getX()+r.getWidth() && e.getHitbox().getX()>=r.getX()+r.getWidth()){
+							wallsHit+="left";
+							e.getHitbox().setX(r.getWidth()+r.getX());
+						}
+						if(e.getHitbox().getX()+e.getHitbox().getWidth()+e.getXSpd()*e.getSpdMultiplier()>= r.getX() && e.getHitbox().getX()+e.getHitbox().getWidth()<=r.getX()){
+							wallsHit+="right";
+							e.getHitbox().setX(r.getX()-e.getHitbox().getWidth());
+						}
+				}
+				if(e.getHitbox().getX()+e.getHitbox().getWidth()>=r.getX() && e.getHitbox().getX()<=r.getX()+r.getWidth()){
+						if(e.getHitbox().getY()-Math.abs(e.getYSpd())*e.getSpdMultiplier()<= r.getY()+r.getHeight() && (e.getHitbox().getY()>=r.getY()+r.getHeight())){
+							wallsHit+="top";
+							e.getHitbox().setY(r.getHeight()+r.getY());
+						}
+						if(e.getHitbox().getY()+e.getHitbox().getHeight()+Math.abs(e.getYSpd())*e.getSpdMultiplier()>= r.getY() && e.getHitbox().getY()+e.getHitbox().getHeight()<=r.getY()){
+							wallsHit+="bottom";
+							e.getHitbox().setY(r.getY()-e.getHitbox().getHeight());
+						}
+				}
+				int exactCorners=0;
+				if(e.getHitbox().getY()-Math.abs(e.getYSpd())*e.getSpdMultiplier()== r.getY()+r.getHeight() && (e.getHitbox().getY()==r.getY()+r.getHeight())){
+					exactCorners++;
+				}
+				if(e.getHitbox().getY()+e.getHitbox().getHeight()+Math.abs(e.getYSpd())*e.getSpdMultiplier()>= r.getY() && e.getHitbox().getY()+e.getHitbox().getHeight()<=r.getY()){
+					exactCorners++;
+				}
+				if(e.getHitbox().getX()-Math.abs(e.getXSpd())*e.getSpdMultiplier()<= r.getX()+r.getWidth() && e.getHitbox().getX()>=r.getX()+r.getWidth()){
+					exactCorners++;
+				}
+				if(e.getHitbox().getX()+e.getHitbox().getWidth()+e.getXSpd()*e.getSpdMultiplier()>= r.getX() && e.getHitbox().getX()+e.getHitbox().getWidth()<=r.getX()){
+					exactCorners++;
+				}
+				if(exactCorners>=2){
+					wallsHit="";
+				}
+			}
+			e.setHittingWall(wallsHit);
+		}
+	}
 }
+
