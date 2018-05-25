@@ -86,13 +86,13 @@ public class Machine extends Shooter{
 					getBullets().add(laser);
 				}
 			}else{
-				if(timeCounter % 20 == 0){
+				if(timeCounter % 150 == 0){
 					for(int i = 0; i < 4; i++){
 						Laser laser = new Laser(this.getHitbox().getX() + this.getHitbox().getWidth()/2, this.getHitbox().getY() + this.getHitbox().getHeight()/2, 45+(90*i));
 						getChildren().add(laser);
 						getBullets().add(laser);
 					}
-				}else if(timeCounter % 20 == 10){
+				}else if(timeCounter % 150 == 75){
 					for(int i = 0; i < 4; i++){
 						Laser laser = new Laser(this.getHitbox().getX() + this.getHitbox().getWidth()/2, this.getHitbox().getY() + this.getHitbox().getHeight()/2,(90*i));
 						getChildren().add(laser);

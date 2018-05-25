@@ -78,13 +78,13 @@ public class Game extends Scene{
 		powerups.add(new PoisonPowerup(200,500));
 		gamePane.getChildren().add(powerups.get(1));
 
-		if(timeCounter%100 == 0 && enemies.size() < 1){
+		/*if(timeCounter%100 == 0 && enemies.size() < 1){
 			FlyingShooter newShooter = new FlyingShooter(1,1,plyr.getHitbox());
 			newShooter.setX(50);
 			newShooter.setY(50);
 			enemies.add(newShooter);
 			gamePane.getChildren().add(newShooter);
-		}
+		}*/
 
 		Machine s1 = new Machine(1,1,plyr.getHitbox());
 		enemies.add(s1);
@@ -235,9 +235,8 @@ public class Game extends Scene{
 
 		//playerBullets collide w/ objects
 		for(int i = plyr.getBullets().size()-1; i >=0 ; i--){
-
-			for(int j = enemies.size()-1; j >=0;  j--){
-				//System.out.println("Check");
+			boolean removed=false;
+			for(int j = enemies.size()-1; j >=0 && !removed;  j--){
 				if(plyr.getBullets().size()>0){
 					if(plyr.getBullets().get(i).collides(enemies.get(j))){
 						if(enemies.get(j).decreaseHealth(plyr.getBulletType().getDamage()) <= 0){
@@ -245,23 +244,21 @@ public class Game extends Scene{
 						}
 						plyr.getChildren().remove(plyr.getBullets().get(i));
 						plyr.getBullets().remove(i);
-
-						break;
-					}else{
-						boolean removed = false;
-						for(Rectangle wall : map.getCurrentArea().getWalls()){
-								System.out.println("size:" +plyr.getBullets().size());
-								if(plyr.getBullets().size()>0){
-									if(plyr.getBullets().get(i).getHitbox().intersects(wall.getX(),wall.getY(),wall.getWidth(),wall.getHeight()) &&!removed){
-										plyr.getChildren().remove(plyr.getBullets().get(i));
-										plyr.getBullets().remove(i);
-										removed = true;
-									}
-								}
-						}
+						removed =true;
 					}
 				}
 			}
+			if(!removed){
+				for(Rectangle wall : map.getCurrentArea().getWalls()){
+						if(plyr.getBullets().size()>0){
+							if(plyr.getBullets().get(i).getHitbox().intersects(wall.getX(),wall.getY(),wall.getWidth(),wall.getHeight()) &&!removed){
+								plyr.getChildren().remove(plyr.getBullets().get(i));
+								plyr.getBullets().remove(i);
+								removed = true;
+							}
+						}
+				}
+			}	
 		}
 		for(Enemy e : hitList){
 			double healthDropChance = Math.random();
