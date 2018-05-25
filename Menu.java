@@ -34,7 +34,7 @@ import javafx.scene.image.Image;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
-
+import javafx.scene.text.*;
 
 
 public class Menu extends Pane{
@@ -49,8 +49,8 @@ public class Menu extends Pane{
 		setPrefHeight(800);
 		setPrefWidth(800);
 
-		Text title = new Text("Toasty McToaster");
-		title.setFont(new Font(100));
+		Text title = new Text("THIS GUY'S TOAST");
+		title.setFont(new Font(95));
 		title.setTextAlignment(TextAlignment.JUSTIFY);
 		title.setLayoutX(0);
 		title.setFill(Color.BLACK);
@@ -78,9 +78,20 @@ public class Menu extends Pane{
 		scoresBtn.setPrefHeight(100);
 		StackPane scorePane = new StackPane();
 		scorePane.getChildren().add(scoresBtn);
+    Button helpBtn = new Button("Help/Controls");
+		helpBtn.setOnAction(new EventHandler <ActionEvent> (){
+			@Override
+			public void handle(ActionEvent event){
+				showHelp();
+			}
+		});
+		helpBtn.setPrefWidth(300);
+		helpBtn.setPrefHeight(100);
+		StackPane helpPane = new StackPane();
+		helpPane.getChildren().add(helpBtn);
 		menuLayers = new VBox();
 		menuLayers.setPrefWidth(800);
-		menuLayers.getChildren().addAll(titlePane,startPane,scorePane);
+		menuLayers.getChildren().addAll(titlePane,startPane,scorePane,helpPane);
 
 		getChildren().add(menuLayers);
 	}
@@ -112,6 +123,7 @@ public class Menu extends Pane{
 		}
 		getChildren().removeAll(getChildren());
 		getChildren().add(menuLayers);
+    hs.refreshScores();
   }
   private void showScores(){
 		getChildren().removeAll(getChildren());
@@ -126,4 +138,23 @@ public class Menu extends Pane{
 		});
 		getChildren().add(backBtn);
 	}
+  private void showHelp(){
+    getChildren().removeAll(getChildren());
+    String s= "You start in a room. You must travel around room to room defeating enemies and collecting powerups which drop randomly. \n";
+    s+="Eventually, youll find the find the final boss, the Toaster. \n\n";
+    s+="Controls- \nW - Up \nA - Left \nS - Down \nD - Right \nArrow keys - Shoot";
+    Text help = new Text(s);
+    help.setFont(new Font(20));
+    help.setY(100);
+    help.setX(50);
+    help.setWrappingWidth(700);
+    Button backBtn = new Button("Return to menu");
+    backBtn.setOnAction(new EventHandler <ActionEvent> (){
+			@Override
+			public void handle(ActionEvent event){
+				resetToMenu(null,0);
+			}
+		});
+		getChildren().addAll(backBtn,help);
+  }
 }
